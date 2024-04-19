@@ -1,6 +1,6 @@
 import { prismaClient } from "../application/database.js"
 import { ResponseError } from "../error/response-error.js"
-import { loginUserValidation, registerUserValidation } from "../validation/user-validation.js"
+import { loginUserValidation, registerUserValidation, getUserValidation } from "../validation/user-validation.js"
 import { validate } from "../validation/validation.js"
 import bcrypt from "bcrypt";
 import { v4 as uuid } from "uuid";
@@ -68,7 +68,30 @@ const login = async (request) => {
     });
 }
 
+const get = async (request) => {
+    const username = validate(getUserValidation, request);
+
+    const user = await prismaClient.user.findUnique({
+        where: {
+            username: username
+        },
+        select: {
+            username: true,
+            nama: true,
+            alamat: true,
+            nik: true
+        }
+    })
+
+    if (!user){
+        throw new ResponseError(404, "User tidak ditemukan");
+    }
+
+    return user;
+}
+
 export default {
     register,
-    login
+    login,
+    get
 }

@@ -25,14 +25,7 @@ describe('POST /api/users', () => {
         expect(result.body.data.username).toBe("damai01");
         expect(result.body.data.password).toBeUndefined();
     }) 
- })
-
- describe('POST /api/users', () => { 
-    afterEach(async () => {
-        await removeTestUser();
-    })
-
-    it('username dan NIK harus unik', async () => {
+    it('username dan NIK unik', async () => {
         const result1 = await supertest(app)
         .post('/api/users')
         .send({
@@ -56,7 +49,7 @@ describe('POST /api/users', () => {
     })
  })
 
-describe('POST /api/users/login', () => { 
+ describe('POST /api/users/login', () => { 
     beforeEach(async () => {
         await createTestUser();
     })
@@ -74,15 +67,6 @@ describe('POST /api/users/login', () => {
         expect(result.body.data.token).toBeDefined();
         expect(result.body.data.token).not.toBe("testtoken");
     })
- })
-
- describe('POST /api/users/login', () => { 
-    beforeEach(async () => {
-        await createTestUser();
-    })
-    afterEach(async ()=>{
-        await removeTestUser();
-    })
     it("tidak bisa login jika request invalid", async () => {
         const result = await supertest(app)
         .post('/api/users/login')
@@ -93,15 +77,6 @@ describe('POST /api/users/login', () => {
         expect(result.status).toBe(400);
         expect(result.body.errors).toBeDefined();
     })
- })
-
- describe('POST /api/users/login', () => { 
-    beforeEach(async () => {
-        await createTestUser();
-    })
-    afterEach(async ()=>{
-        await removeTestUser();
-    })
     it("tidak bisa login jika password salah", async () => {
         const result = await supertest(app)
         .post('/api/users/login')
@@ -111,15 +86,6 @@ describe('POST /api/users/login', () => {
         })
         expect(result.status).toBe(401);
         expect(result.body.errors).toBeDefined();
-    })
- })
-
- describe('POST /api/users/login', () => { 
-    beforeEach(async () => {
-        await createTestUser();
-    })
-    afterEach(async ()=>{
-        await removeTestUser();
     })
     it("tidak bisa login jika username salah", async () => {
         const result = await supertest(app)
@@ -132,3 +98,32 @@ describe('POST /api/users/login', () => {
         expect(result.body.errors).toBeDefined();
     })
  })
+
+
+ describe('GET /api/users/current', function () {
+    beforeEach(async () => {
+        await createTestUser();
+    });
+
+    afterEach(async () => {
+        await removeTestUser();
+    });
+
+    it('bisa mendapatkan current user', async () => {
+        const result = await supertest(app)
+            .get('/api/users/current')
+            .set('Authorization', 'testtoken');
+
+        expect(result.status).toBe(200);
+        expect(result.body.data.username).toBe('damai01');
+        expect(result.body.data.nama).toBe('damai');
+    });
+    it('menolak get jika token invalid', async () => {
+        const result = await supertest(app)
+            .get('/api/users/current')
+            .set('Authorization', 'faketoken');
+
+        expect(result.status).toBe(401);
+        expect(result.body.errors).toBeDefined();
+    });
+});
