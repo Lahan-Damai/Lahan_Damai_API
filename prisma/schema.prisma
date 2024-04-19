@@ -16,6 +16,7 @@ datasource db {
 
 model User {  
   nik      String  @id @default(uuid()) @db.VarChar(16)
+  username String  @unique @db.VarChar(30)
   nama     String  @db.VarChar(100)
   alamat   String 
   password String  @db.VarChar(100)
