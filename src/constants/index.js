@@ -1,4 +1,2 @@
-module.exports = {
-  PORT: '3001',
-  SERVER_URL: 'http://localhost:3001',
-}
+export const PORT = '3001';
+export const SERVER_URL = 'http://localhost:3001';

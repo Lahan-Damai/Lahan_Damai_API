@@ -1,0 +1,96 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {  
+  nik      String  @id @default(uuid()) @db.VarChar(16)
+  nama     String  @db.VarChar(100)
+  alamat   String 
+  password String  @db.VarChar(100)
+  token    String? @db.VarChar(100)
+  
+  laporans Laporan[]
+  threads  Thread[]
+  replies  Reply[]
+
+  @@map("users")
+}
+
+
+model Laporan {
+  id             Int     @id @default(autoincrement())
+  judul          String  @db.VarChar(150)
+  userNIK        String  @db.VarChar(16)
+  deskripsi      String
+  foto           String?
+  latitude       Float
+  longitude      Float
+  prosesLaporan  String  @db.VarChar(10)
+
+  user           User    @relation(fields: [userNIK], references: [nik])
+
+  @@map("laporans")
+}
+
+
+model Thread {
+  id              Int       @id @default(autoincrement())
+  judul           String    @db.VarChar(150)
+  userNIK         String    @db.VarChar(16)
+  isi             String    
+  tanggalUpload   DateTime
+  
+  replies         Reply[]
+  user            User      @relation(fields: [userNIK], references: [nik])
+
+  @@map("threads")
+}
+
+model Reply {
+  id              Int      @id @default(autoincrement())
+  isi             String   @db.VarChar(255)
+  userNIK         String   @db.VarChar(16)
+  threadId        Int
+  parentId        Int?
+  replies         Reply[]  @relation("ReplyToReply")
+  tanggalUpload   DateTime 
+
+  user            User     @relation(fields: [userNIK], references: [nik])
+  thread          Thread   @relation(fields: [threadId], references: [id])
+  parent          Reply?   @relation("ReplyToReply", fields: [parentId], references: [id])
+
+  @@map("replies")
+}
+
+
+model PostEdukasi {
+  id            Int @id @default(autoincrement())
+  judul         String  @db.VarChar(150)
+  deskripsi     String  @db.VarChar(255)
+  isi           String
+  publisher     String  @db.VarChar(50)
+  tanggalUpload DateTime
+
+  @@map("post_edukasi")
+}
+
+model Ahli {
+  id      Int @id @default(autoincrement())
+  nama    String @db.VarChar(100)
+  bidang  String @db.VarChar(50)
+  nomorWA String @db.VarChar(20)
+
+  @@map("ahli")
+}

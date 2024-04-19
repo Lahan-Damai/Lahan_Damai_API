@@ -1,17 +1,7 @@
-const { PORT } = require('./constants/index')
-const express = require("express");
+import {app} from "./application/app.js";
+import { PORT } from './constants/index.js';
 
-const app = express()
 
-const appStarts = () => {
-    try {
-        app.listen(PORT, () => {
-            console.log(`running at http://localhost:${PORT}`)
-        })
-    }
-    catch (error) {
-        console.log(`Error: ${error.message}`)
-    }
-}
-
-appStarts()
+app.listen(PORT, () => {
+    console.log(`running at http://localhost:${PORT}`)
+})
