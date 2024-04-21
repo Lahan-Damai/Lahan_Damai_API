@@ -109,19 +109,20 @@ describe('POST /api/users', () => {
         await removeTestUser();
     });
 
-    it('bisa mendapatkan current user', async () => {
+    it('bisa mendapatkan current user dengan token valid', async () => {
         const result = await supertest(app)
             .get('/api/users/current')
-            .set('Authorization', 'testtoken');
+            .set('Cookie', 'token=testtoken');
 
         expect(result.status).toBe(200);
         expect(result.body.data.username).toBe('damai01');
         expect(result.body.data.nama).toBe('damai');
     });
+
     it('menolak get jika token invalid', async () => {
         const result = await supertest(app)
             .get('/api/users/current')
-            .set('Authorization', 'faketoken');
+            .set('Cookie', 'token=faketoken'); 
 
         expect(result.status).toBe(401);
         expect(result.body.errors).toBeDefined();

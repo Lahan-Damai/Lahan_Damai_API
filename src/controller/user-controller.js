@@ -14,6 +14,7 @@ const register = async (req, res, next) => {
 const login = async (req, res, next) => {
     try {
         const result = await userService.login(req.body);
+        res.cookie('token', result.token, {httpOnly:true});
         res.status(200).json({
             data:result
         })
