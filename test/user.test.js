@@ -1,7 +1,7 @@
 import { prismaClient } from "../src/application/database.js"
 import supertest from "supertest";
 import {app} from "../src/application/app.js";
-import { createTestUser, removeTestUser } from "./test-util.js";
+import { createTestUser, removeTestUser, getTestUser } from "./test-util.js";
 
 
 describe('POST /api/users', () => { 
@@ -126,5 +126,34 @@ describe('POST /api/users', () => {
 
         expect(result.status).toBe(401);
         expect(result.body.errors).toBeDefined();
+    });
+});
+
+
+describe('DELETE /api/users/logout', function () {
+    beforeEach(async () => {
+        await createTestUser();
+    });
+    afterEach(async () => {
+        await removeTestUser();
+    });
+
+    it('bisa logout', async () => {
+        const result = await supertest(app)
+            .delete('/api/users/logout')
+            .set('Cookie', 'token=testtoken');
+
+        expect(result.status).toBe(200);
+        const user = await getTestUser();
+        expect(result.body.data.username).toBe(user.username);
+        expect(user.token).toBeNull();
+    });
+
+    it('harusnya nolak jika token invalid', async () => {
+        const result = await supertest(app)
+            .delete('/api/users/logout')
+            .set('Cookie', 'token=faketoken');
+
+        expect(result.status).toBe(401);
     });
 });

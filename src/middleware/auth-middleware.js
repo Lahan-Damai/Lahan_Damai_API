@@ -1,9 +1,7 @@
 import {prismaClient} from "../application/database.js";
 
 export const authMiddleware = async (req, res, next) => {
-    console.log(req.headers);
     const token = req.cookies.token;
-    console.log(req);
     if (!token) {
         res.status(401).json({
             errors: "Unauthorized"
