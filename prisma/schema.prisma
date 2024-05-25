@@ -35,12 +35,12 @@ model User {
 model Laporan {
   id             Int     @id @default(autoincrement())
   judul          String  @db.VarChar(150)
-  user_nik        String  @db.VarChar(16)
+  user_nik       String  @db.VarChar(16)
   deskripsi      String
   foto           Bytes?
   latitude       Float
   longitude      Float
-  proses_laporan  String  @db.VarChar(10)
+  proses_laporan String  @db.VarChar(10)
 
   user           User    @relation(fields: [user_nik], references: [nik])
 
@@ -51,9 +51,9 @@ model Laporan {
 model Thread {
   id              Int       @id @default(autoincrement())
   judul           String    @db.VarChar(150)
-  user_nik         String    @db.VarChar(16)
+  user_nik        String    @db.VarChar(16)
   isi             String    
-  tanggal_upload   DateTime
+  tanggal_upload  DateTime
   
   replies         Reply[]
   user            User      @relation(fields: [user_nik], references: [nik])

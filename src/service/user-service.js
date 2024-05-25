@@ -70,8 +70,8 @@ const login = async (request) => {
 }
 
 const get = async (request) => {
+    // console.log(request)
     const username = validate(getUserValidation, request);
-
     const user = await prismaClient.user.findUnique({
         where: {
             username: username
@@ -92,6 +92,7 @@ const get = async (request) => {
 }
 
 const logout = async (username) => {
+    console.log(username)
     username = validate(getUserValidation, username);
 
     const user = await prismaClient.user.findUnique({

@@ -1,7 +1,7 @@
 import { prismaClient } from "../application/database.js"
 
 const getMapLaporan = async (request) => {
-
+    
     const koordinatLaporan = await prismaClient.laporan.findMany({
         select: {
             id: true,
