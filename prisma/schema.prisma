@@ -12,6 +12,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {  
@@ -21,6 +22,7 @@ model User {
   alamat   String 
   password String  @db.VarChar(100)
   token    String? @db.VarChar(100)
+  role     String  @default("user") @db.VarChar(20) 
   
   laporans Laporan[]
   threads  Thread[]
@@ -33,14 +35,14 @@ model User {
 model Laporan {
   id             Int     @id @default(autoincrement())
   judul          String  @db.VarChar(150)
-  userNIK        String  @db.VarChar(16)
+  user_nik        String  @db.VarChar(16)
   deskripsi      String
-  foto           String?
+  foto           Bytes?
   latitude       Float
   longitude      Float
-  prosesLaporan  String  @db.VarChar(10)
+  proses_laporan  String  @db.VarChar(10)
 
-  user           User    @relation(fields: [userNIK], references: [nik])
+  user           User    @relation(fields: [user_nik], references: [nik])
 
   @@map("laporans")
 }
@@ -49,12 +51,12 @@ model Laporan {
 model Thread {
   id              Int       @id @default(autoincrement())
   judul           String    @db.VarChar(150)
-  userNIK         String    @db.VarChar(16)
+  user_nik         String    @db.VarChar(16)
   isi             String    
-  tanggalUpload   DateTime
+  tanggal_upload   DateTime
   
   replies         Reply[]
-  user            User      @relation(fields: [userNIK], references: [nik])
+  user            User      @relation(fields: [user_nik], references: [nik])
 
   @@map("threads")
 }
@@ -62,15 +64,15 @@ model Thread {
 model Reply {
   id              Int      @id @default(autoincrement())
   isi             String   @db.VarChar(255)
-  userNIK         String   @db.VarChar(16)
-  threadId        Int
-  parentId        Int?
+  user_nik         String   @db.VarChar(16)
+  thread_id        Int
+  parent_id        Int?
   replies         Reply[]  @relation("ReplyToReply")
-  tanggalUpload   DateTime 
+  tanggal_upload   DateTime 
 
-  user            User     @relation(fields: [userNIK], references: [nik])
-  thread          Thread   @relation(fields: [threadId], references: [id])
-  parent          Reply?   @relation("ReplyToReply", fields: [parentId], references: [id])
+  user            User     @relation(fields: [user_nik], references: [nik])
+  thread          Thread   @relation(fields: [thread_id], references: [id])
+  parent          Reply?   @relation("ReplyToReply", fields: [parent_id], references: [id])
 
   @@map("replies")
 }
@@ -82,7 +84,7 @@ model PostEdukasi {
   deskripsi     String  @db.VarChar(255)
   isi           String
   publisher     String  @db.VarChar(50)
-  tanggalUpload DateTime
+  tanggal_upload DateTime
 
   @@map("post_edukasi")
 }
@@ -91,7 +93,7 @@ model Ahli {
   id      Int @id @default(autoincrement())
   nama    String @db.VarChar(100)
   bidang  String @db.VarChar(50)
-  nomorWA String @db.VarChar(20)
+  nomor_WA String @db.VarChar(20)
 
   @@map("ahli")
 }
