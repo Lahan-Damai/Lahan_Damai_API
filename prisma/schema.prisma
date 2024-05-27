@@ -37,7 +37,7 @@ model Laporan {
   judul          String  @db.VarChar(150)
   user_nik       String  @db.VarChar(16)
   deskripsi      String
-  foto           Bytes?
+  foto           String?
   latitude       Float
   longitude      Float
   proses_laporan String  @db.VarChar(10)

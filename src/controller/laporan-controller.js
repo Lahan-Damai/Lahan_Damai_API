@@ -23,7 +23,19 @@ const getDetailLaporan = async (req, res, next) => {
     }
 }
 
+const createLaporanSengketa = async (req, res, next) => {
+    try {
+        const result = await laporanService.createLaporan(req);
+        res.status(200).json({
+            data: result
+        });
+    } catch (e) {
+        next(e);
+    }
+}
+
 export default {
     getKoordinatSengketa,
-    getDetailLaporan
+    getDetailLaporan,
+    createLaporanSengketa
 }
