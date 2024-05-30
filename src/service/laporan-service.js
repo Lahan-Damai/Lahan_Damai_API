@@ -18,7 +18,7 @@ const getMapLaporan = async (request) => {
 
 const getLaporan = async (request) => {
     const idLaporan = parseInt(request.params.id);
-    const koordinatLaporan = await prismaClient.laporan.findUnique({
+    const laporan = await prismaClient.laporan.findUnique({
         where: {
             id: idLaporan
         },
@@ -34,7 +34,7 @@ const getLaporan = async (request) => {
         }
     })
 
-    return koordinatLaporan;
+    return laporan;
 }
 
 const createLaporan = async (request) => {

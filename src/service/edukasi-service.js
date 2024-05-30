@@ -74,7 +74,7 @@ const update = async (request) => {
             judul: updatedPost.judul,
             deskripsi: updatedPost.deskripsi,
             isi: updatedPost.isi,
-            publisher: updatedPost.body,
+            publisher: updatedPost.publisher,
         }
     })
 
