@@ -1,4 +1,4 @@
-import { createAhliEdukasiValidation, updateAhliEdukasiValidation } from "../validation/laporan-validation.js";
+import { createAhliEdukasiValidation, updateAhliEdukasiValidation } from "../validation/konsultasi-validation.js";
 import { prismaClient } from "../application/database.js"
 import { validate } from "../validation/validation.js"
 
@@ -31,7 +31,7 @@ const updateAhli = async (id) => {
     const idAhli = parseInt(request.params.id)    
     const ahli = await prismaClient.postEdukasi.findUnique({
         where: {
-            id: idPost
+            id: idAhli
         },
         select: {
             id: true,
