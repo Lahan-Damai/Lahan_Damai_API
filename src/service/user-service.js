@@ -70,8 +70,8 @@ const login = async (request) => {
 }
 
 const get = async (request) => {
+    // console.log(request)
     const username = validate(getUserValidation, request);
-
     const user = await prismaClient.user.findUnique({
         where: {
             username: username
@@ -91,8 +91,36 @@ const get = async (request) => {
     return user;
 }
 
+const logout = async (username) => {
+    console.log(username)
+    username = validate(getUserValidation, username);
+
+    const user = await prismaClient.user.findUnique({
+        where: {
+            username: username
+        }
+    })
+
+    if (!user) {
+        throw new ResponseError(404, "user tidak ditemukan");
+    }
+
+    return prismaClient.user.update({
+        where: {
+            username: username
+        },
+        data: {
+            token: null
+        },
+        select: {
+            username: true
+        }
+    })
+}
+
 export default {
     register,
     login,
+    logout,
     get
 }

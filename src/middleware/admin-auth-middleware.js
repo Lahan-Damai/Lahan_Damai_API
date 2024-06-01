@@ -1,6 +1,6 @@
 import {prismaClient} from "../application/database.js";
 
-export const authMiddleware = async (req, res, next) => {
+export const authAdminMiddleware = async (req, res, next) => {
     const token = req.cookies.token;
     if (!token) {
         res.status(401).json({
@@ -12,12 +12,11 @@ export const authMiddleware = async (req, res, next) => {
                 token: token
             }
         });
-        if (!user) {
+        if (!user || user.role != "admin") {
             res.status(401).json({
                 errors: "Unauthorized"
             }).end();
         } else {
-            req.user = user;
             next();
         }
     }
