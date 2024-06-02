@@ -5,7 +5,7 @@
 ### **API Endpoints**
 
 #### **1. Register User**
-- **URL**: `/api/users/`
+- **URL**: `/api/users/register`
 - **Method**: `POST`
 - **Body**:
   ```json
