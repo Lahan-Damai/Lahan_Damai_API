@@ -10,11 +10,12 @@
 - **Body**:
   ```json
   {
-    "username": "string",
+    "email": "string",
     "nama": "string",
     "alamat": "string",
     "nik": "string",
-    "password": "string"
+    "password": "string",
+    "tanggal_lahir": "string"
   }
   ```
 - **Success Response**:
@@ -38,7 +39,7 @@
 - **Body**:
   ```json
   {
-    "username": "string",
+    "email": "string",
     "password": "string"
   }
   ```
@@ -68,10 +69,11 @@
     ```json
     {
       "data": {
-        "username": "string",
+        "email": "string",
         "nama": "string",
         "alamat": "string",
-        "nik": "string"
+        "nik": "string",
+        "tanggal_lahir": "string
       }
     }
     ```

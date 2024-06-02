@@ -11,14 +11,14 @@ const register = async (request) => {
     const countUser = await prismaClient.user.count({
         where: {
             OR: [
-                { username: user.username },
+                { email: user.email },
                 { nik: user.nik },
               ],
         }
     });
 
     if (countUser === 1) {
-        throw new ResponseError(400, "Username atau NIK sudah ada");
+        throw new ResponseError(400, "email atau NIK sudah ada");
     }
 
     user.password = await bcrypt.hash(user.password, 10);
@@ -26,7 +26,7 @@ const register = async (request) => {
     return prismaClient.user.create({
         data: user,
         select: {
-            username: true,
+            email: true,
             nama: true
         }
     });
@@ -37,21 +37,21 @@ const login = async (request) => {
 
     const user = await prismaClient.user.findUnique({
         where: {
-            username: loginRequest.username
+            email: loginRequest.email
         },
         select: {
-            username: true,
+            email: true,
             password: true
         }
     });
 
     if (!user) {
-        throw new ResponseError(401, "Username or password wrong");
+        throw new ResponseError(401, "email or password wrong");
     }
 
     const isPasswordValid = await bcrypt.compare(loginRequest.password, user.password);
     if (!isPasswordValid) {
-        throw new ResponseError(401, "Username or password wrong");
+        throw new ResponseError(401, "email or password wrong");
     }
 
     const token = uuid().toString();
@@ -61,7 +61,7 @@ const login = async (request) => {
             token: token
         },
         where: {
-            username: user.username
+            email: user.email
         },
         select: {
             token: true
@@ -71,13 +71,13 @@ const login = async (request) => {
 
 const get = async (request) => {
     // console.log(request)
-    const username = validate(getUserValidation, request);
+    const email = validate(getUserValidation, request);
     const user = await prismaClient.user.findUnique({
         where: {
-            username: username
+            email: email
         },
         select: {
-            username: true,
+            email: true,
             nama: true,
             alamat: true,
             nik: true
@@ -91,13 +91,13 @@ const get = async (request) => {
     return user;
 }
 
-const logout = async (username) => {
-    console.log(username)
-    username = validate(getUserValidation, username);
+const logout = async (email) => {
+    console.log(email)
+    email = validate(getUserValidation, email);
 
     const user = await prismaClient.user.findUnique({
         where: {
-            username: username
+            email: email
         }
     })
 
@@ -107,13 +107,13 @@ const logout = async (username) => {
 
     return prismaClient.user.update({
         where: {
-            username: username
+            email: email
         },
         data: {
             token: null
         },
         select: {
-            username: true
+            email: true
         }
     })
 }
