@@ -16,13 +16,15 @@ datasource db {
 }
 
 model User {  
-  nik      String  @id @default(uuid()) @db.VarChar(16)
-  username String  @unique @db.VarChar(30)
-  nama     String  @db.VarChar(100)
-  alamat   String 
-  password String  @db.VarChar(100)
-  token    String? @db.VarChar(100)
-  role     String  @default("user") @db.VarChar(20) 
+  nik           String  @id @default(uuid()) @db.VarChar(16)
+  email         String  @unique @db.VarChar(64)
+  nama          String  @db.VarChar(100)
+  alamat        String 
+  password      String  @db.VarChar(100)
+  token         String? @db.VarChar(100)
+  role          String  @default("user") @db.VarChar(20)
+  tanggal_lahir DateTime?
+  foto          String? 
   
   laporans Laporan[]
   threads  Thread[]
@@ -31,20 +33,28 @@ model User {
   @@map("users")
 }
 
-
 model Laporan {
   id             Int     @id @default(autoincrement())
-  judul          String  @db.VarChar(150)
+  no_sertifikat  String  @unique @db.VarChar(150)
   user_nik       String  @db.VarChar(16)
   deskripsi      String
-  foto           String?
+  proses_laporan String  @db.VarChar(10)
   latitude       Float
   longitude      Float
-  proses_laporan String  @db.VarChar(10)
 
   user           User    @relation(fields: [user_nik], references: [nik])
+  fotos          FotoLaporan[]
 
   @@map("laporans")
+}
+
+model FotoLaporan {
+  id            Int     @id @default(autoincrement())
+  url           String
+  laporan_id    Int
+  laporan       Laporan @relation(fields: [laporan_id], references: [id])
+
+  @@map("foto_laporan")
 }
 
 

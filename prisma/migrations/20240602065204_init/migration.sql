@@ -1,12 +1,14 @@
 -- CreateTable
 CREATE TABLE "users" (
     "nik" VARCHAR(16) NOT NULL,
-    "username" VARCHAR(30) NOT NULL,
+    "email" VARCHAR(64) NOT NULL,
     "nama" VARCHAR(100) NOT NULL,
     "alamat" TEXT NOT NULL,
     "password" VARCHAR(100) NOT NULL,
     "token" VARCHAR(100),
     "role" VARCHAR(20) NOT NULL DEFAULT 'user',
+    "tanggal_lahir" TIMESTAMP(3),
+    "foto" TEXT,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("nik")
 );
@@ -14,15 +16,23 @@ CREATE TABLE "users" (
 -- CreateTable
 CREATE TABLE "laporans" (
     "id" SERIAL NOT NULL,
-    "judul" VARCHAR(150) NOT NULL,
+    "no_sertifikat" VARCHAR(150) NOT NULL,
     "user_nik" VARCHAR(16) NOT NULL,
     "deskripsi" TEXT NOT NULL,
-    "foto" BYTEA,
+    "proses_laporan" VARCHAR(10) NOT NULL,
     "latitude" DOUBLE PRECISION NOT NULL,
     "longitude" DOUBLE PRECISION NOT NULL,
-    "proses_laporan" VARCHAR(10) NOT NULL,
 
     CONSTRAINT "laporans_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "foto_laporan" (
+    "id" SERIAL NOT NULL,
+    "url" TEXT NOT NULL,
+    "laporan_id" INTEGER NOT NULL,
+
+    CONSTRAINT "foto_laporan_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -71,10 +81,13 @@ CREATE TABLE "ahli" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "users_username_key" ON "users"("username");
+CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- AddForeignKey
 ALTER TABLE "laporans" ADD CONSTRAINT "laporans_user_nik_fkey" FOREIGN KEY ("user_nik") REFERENCES "users"("nik") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "foto_laporan" ADD CONSTRAINT "foto_laporan_laporan_id_fkey" FOREIGN KEY ("laporan_id") REFERENCES "laporans"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "threads" ADD CONSTRAINT "threads_user_nik_fkey" FOREIGN KEY ("user_nik") REFERENCES "users"("nik") ON DELETE RESTRICT ON UPDATE CASCADE;
