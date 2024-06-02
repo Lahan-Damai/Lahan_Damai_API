@@ -1,8 +1,6 @@
 <h1 style="text-align: center;">SENGKETA-LAHAN API</h1>
 
-### Install dependency : `npm install`
-
-### Menjalankan proyek : `npm run dev`
+### URL = https://lahandamaiapi-production.up.railway.app/
 
 ### **API Endpoints**
 
