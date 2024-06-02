@@ -4,7 +4,6 @@ import { createLaporanValidation } from "../validation/laporan-validation.js";
 import { bucket } from "../application/storage.js";
 
 const getMapLaporan = async (request) => {
-    
     const koordinatLaporan = await prismaClient.laporan.findMany({
         select: {
             id: true,
@@ -16,8 +15,8 @@ const getMapLaporan = async (request) => {
     return koordinatLaporan;
 }
 
-const getLaporan = async (request) => {
-    const idLaporan = parseInt(request.params.id);
+const getLaporan = async (id) => {
+    const idLaporan = parseInt(id);
     const laporan = await prismaClient.laporan.findUnique({
         where: {
             id: idLaporan

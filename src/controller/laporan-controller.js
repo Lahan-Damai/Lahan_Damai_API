@@ -14,7 +14,7 @@ const getKoordinatSengketa = async (req, res, next) => {
 
 const getDetailLaporan = async (req, res, next) => {
     try {
-        const result = await laporanService.getLaporan(req);
+        const result = await laporanService.getLaporan(req.params.id);
         res.status(200).json({
             data: result
         });

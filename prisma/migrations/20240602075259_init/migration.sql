@@ -71,17 +71,42 @@ CREATE TABLE "post_edukasi" (
 );
 
 -- CreateTable
+CREATE TABLE "ulasan_ahli" (
+    "id" SERIAL NOT NULL,
+    "ahli_id" INTEGER NOT NULL,
+    "rating" DOUBLE PRECISION NOT NULL,
+    "isi" VARCHAR(255) NOT NULL,
+    "nama_user" VARCHAR(100) NOT NULL,
+
+    CONSTRAINT "ulasan_ahli_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "ahli" (
     "id" SERIAL NOT NULL,
     "nama" VARCHAR(100) NOT NULL,
     "bidang" VARCHAR(50) NOT NULL,
     "nomor_WA" VARCHAR(20) NOT NULL,
+    "deskripsi" VARCHAR(255) NOT NULL,
+    "rating" DOUBLE PRECISION NOT NULL,
+    "lama_kerja" DOUBLE PRECISION NOT NULL,
 
     CONSTRAINT "ahli_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "user_favorite_ahli" (
+    "email_user" VARCHAR(64) NOT NULL,
+    "id_ahli" INTEGER NOT NULL,
+
+    CONSTRAINT "user_favorite_ahli_pkey" PRIMARY KEY ("email_user","id_ahli")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "laporans_no_sertifikat_key" ON "laporans"("no_sertifikat");
 
 -- AddForeignKey
 ALTER TABLE "laporans" ADD CONSTRAINT "laporans_user_nik_fkey" FOREIGN KEY ("user_nik") REFERENCES "users"("nik") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -100,3 +125,12 @@ ALTER TABLE "replies" ADD CONSTRAINT "replies_thread_id_fkey" FOREIGN KEY ("thre
 
 -- AddForeignKey
 ALTER TABLE "replies" ADD CONSTRAINT "replies_parent_id_fkey" FOREIGN KEY ("parent_id") REFERENCES "replies"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ulasan_ahli" ADD CONSTRAINT "ulasan_ahli_ahli_id_fkey" FOREIGN KEY ("ahli_id") REFERENCES "ahli"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "user_favorite_ahli" ADD CONSTRAINT "user_favorite_ahli_email_user_fkey" FOREIGN KEY ("email_user") REFERENCES "users"("email") ON DELETE NO ACTION ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "user_favorite_ahli" ADD CONSTRAINT "user_favorite_ahli_id_ahli_fkey" FOREIGN KEY ("id_ahli") REFERENCES "ahli"("id") ON DELETE NO ACTION ON UPDATE CASCADE;

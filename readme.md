@@ -24,14 +24,14 @@
     ```json
     {
       "data": {
-        "username": "string",
+        "email": "string",
         "nama": "string"
       }
     }
     ```
 - **Error Response**:
   - **Code**: `400 Bad Request`
-  - **Content**: `Username atau NIK sudah ada`
+  - **Content**: `email atau NIK sudah ada`
 
 #### **2. Login User**
 - **URL**: `/api/users/login`
@@ -56,7 +56,7 @@
   - **Cookie**: `token` (httpOnly)
 - **Error Response**:
   - **Code**: `401 Unauthorized`
-  - **Content**: `Username or password wrong`
+  - **Content**: `email or password wrong`
 
 #### **3. Get Current User**
 - **URL**: `/api/users/current`

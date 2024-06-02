@@ -16,19 +16,21 @@ datasource db {
 }
 
 model User {  
-  nik           String  @id @default(uuid()) @db.VarChar(16)
-  email         String  @unique @db.VarChar(64)
-  nama          String  @db.VarChar(100)
-  alamat        String 
-  password      String  @db.VarChar(100)
-  token         String? @db.VarChar(100)
-  role          String  @default("user") @db.VarChar(20)
-  tanggal_lahir DateTime?
-  foto          String? 
+  nik                 String  @id @default(uuid()) @db.VarChar(16)
+  email               String  @unique @db.VarChar(64)
+  nama                String  @db.VarChar(100)
+  alamat              String 
+  password            String  @db.VarChar(100)
+  token               String? @db.VarChar(100)
+  role                String  @default("user") @db.VarChar(20)
+  tanggal_lahir       DateTime?
+  foto                String? 
   
-  laporans Laporan[]
-  threads  Thread[]
-  replies  Reply[]
+  laporans            Laporan[]
+  threads             Thread[]
+  replies             Reply[]
+  user_favorite_ahli  UserFavoriteAhli[]
+
 
   @@map("users")
 }
@@ -99,11 +101,43 @@ model PostEdukasi {
   @@map("post_edukasi")
 }
 
-model Ahli {
-  id      Int @id @default(autoincrement())
-  nama    String @db.VarChar(100)
-  bidang  String @db.VarChar(50)
-  nomor_WA String @db.VarChar(20)
+model UlasanAhli {
+  id          Int    @id @default(autoincrement())
+  ahli_id     Int
+  rating      Float
+  isi         String @db.VarChar(255)
+  nama_user   String @db.VarChar(100)
+  ahli        Ahli   @relation(fields: [ahli_id], references: [id])
 
+  @@map("ulasan_ahli")
+}
+
+
+model Ahli {
+  id          Int @id @default(autoincrement())
+  nama        String @db.VarChar(100)
+  bidang      String @db.VarChar(50)
+  nomor_WA    String @db.VarChar(20)
+  deskripsi   String @db.VarChar(255)
+  rating      Float
+  lama_kerja  Float
+
+  ulasan      UlasanAhli[]
+  user_favorite_ahli UserFavoriteAhli[]
+  
   @@map("ahli")
+}
+
+
+
+
+model UserFavoriteAhli {
+  email_user    String  @db.VarChar(64)
+  id_ahli       Int
+  
+  user          User    @relation(fields: [email_user], references: [email], onDelete: NoAction)
+  ahli          Ahli   @relation(fields: [id_ahli], references: [id], onDelete: NoAction)
+
+  @@id([email_user, id_ahli])
+  @@map("user_favorite_ahli")
 }
