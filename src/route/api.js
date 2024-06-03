@@ -13,7 +13,7 @@ userRouter.get('/api/users/current', userController.get);
 userRouter.delete('/api/users/logout', userController.logout);
 userRouter.post('/api/laporan/create', multerMiddleware, laporanController.createLaporanSengketa);
 userRouter.get('/api/map/get', laporanController.getKoordinatSengketa);
-userRouter.get('/api/map/get/:id', laporanController.getDetailLaporan);
+userRouter.get('/api/laporan/get', laporanController.getLaporan);
 userRouter.get('/api/edukasi/:id', edukasiController.getPostEdukasi);
 userRouter.get('/api/konsultasi/ahli/', konsultasiController.getAllAhli);
 userRouter.get('/api/konsultasi/ahli/:bidang', konsultasiController.getAllAhliByBidang);

@@ -13,7 +13,7 @@ const createLaporanValidation = Joi.object({
 
 const createFotoLaporanValidation = Joi.object({
     url: Joi.string().required(),
-    laporan_id: Joi.number().integer().positive(),
+    no_sertifikat: Joi.string().max(150).required(),
 });
 
 

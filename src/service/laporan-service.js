@@ -15,28 +15,38 @@ const getMapLaporan = async (request) => {
     return koordinatLaporan;
 }
 
-const getLaporan = async (id) => {
-    const idLaporan = parseInt(id);
+const getLaporan = async (no_sertifikat) => {
     const laporan = await prismaClient.laporan.findUnique({
         where: {
-            id: idLaporan
+            no_sertifikat: no_sertifikat
         },
         select: {
-            id: true,
             latitude: true,
             longitude: true,
             no_sertifikat: true,
             user_nik: true,
             deskripsi: true,
-            foto: true,
             proses_laporan: true 
         }
     })
 
+    laporan.laporan_photos = await getLaporanPhotos(no_sertifikat);
+
     return laporan;
 }
 
-const addPhotosToLaporan = async (id_laporan, req) => {
+const getLaporanPhotos = async (no_sertifikat) => {
+    return prismaClient.fotoLaporan.findMany({
+        where: {
+            no_sertifikat: no_sertifikat
+        },
+        select: {
+            url: true
+        }
+    }).then(laporanPhotos => laporanPhotos.map(laporanPhoto => laporanPhoto.url));
+}
+
+const addPhotosToLaporan = async (no_sertifikat, req) => {
     let fotoUrls = [];
 
     if (req.files) {
@@ -65,7 +75,7 @@ const addPhotosToLaporan = async (id_laporan, req) => {
         for (const fotoUrl of fotoUrls) {
             const fotoLaporanData = {
                 url: fotoUrl,
-                laporan_id: id_laporan  
+                no_sertifikat: no_sertifikat  
             };
             const fotoLaporan = validate(createFotoLaporanValidation, fotoLaporanData);
             await prismaClient.fotoLaporan.create({
@@ -91,7 +101,6 @@ const createLaporan = async (request) => {
     const result = await prismaClient.laporan.create({
         data: laporan,
         select: {
-            id: true,
             latitude: true,
             longitude: true,
             no_sertifikat: true,
@@ -101,8 +110,8 @@ const createLaporan = async (request) => {
         }
     });
 
-    const id_laporan = result.id;
-    addPhotosToLaporan(id_laporan, request);
+    const no_sertifikat = result.no_sertifikat;
+    addPhotosToLaporan(no_sertifikat, request);
 
     return result;
 }; 

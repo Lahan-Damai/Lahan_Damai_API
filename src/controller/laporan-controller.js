@@ -12,9 +12,9 @@ const getKoordinatSengketa = async (req, res, next) => {
     }
 }
 
-const getDetailLaporan = async (req, res, next) => {
+const getLaporan = async (req, res, next) => {
     try {
-        const result = await laporanService.getLaporan(req.params.id);
+        const result = await laporanService.getLaporan(req.body.no_sertifikat);
         res.status(200).json({
             data: result
         });
@@ -36,6 +36,6 @@ const createLaporanSengketa = async (req, res, next) => {
 
 export default {
     getKoordinatSengketa,
-    getDetailLaporan,
+    getLaporan,
     createLaporanSengketa
 }

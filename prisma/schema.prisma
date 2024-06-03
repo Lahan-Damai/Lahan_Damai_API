@@ -37,8 +37,7 @@ model User {
 }
 
 model Laporan {
-  id             Int     @id @default(autoincrement())
-  no_sertifikat  String  @unique @db.VarChar(150)
+  no_sertifikat  String  @id @db.VarChar(150)
   user_nik       String  @db.VarChar(16)
   deskripsi      String
   proses_laporan String  @db.VarChar(10)
@@ -54,9 +53,9 @@ model Laporan {
 model FotoLaporan {
   id            Int     @id @default(autoincrement())
   url           String
-  laporan_id    Int
-  laporan       Laporan @relation(fields: [laporan_id], references: [id])
-
+  no_sertifikat String
+  laporan       Laporan @relation(fields: [no_sertifikat], references: [no_sertifikat])
+  
   @@map("foto_laporan")
 }
 

@@ -46,7 +46,7 @@ const login = async (request) => {
     });
 
     if (!user) {
-        throw new ResponseError(401, "email or password wrong");
+        throw new ResponseError(401, "user doesn't exist");
     }
 
     const isPasswordValid = await bcrypt.compare(loginRequest.password, user.password);
