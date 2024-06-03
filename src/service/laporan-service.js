@@ -36,7 +36,7 @@ const getLaporan = async (id) => {
     return laporan;
 }
 
-const addPhotosToLaporan = async (id_laporan) => {
+const addPhotosToLaporan = async (id_laporan, req) => {
     let fotoUrls = [];
 
     if (req.files) {
@@ -73,55 +73,10 @@ const addPhotosToLaporan = async (id_laporan) => {
             })
         }
     }
-
-    return await prismaClient.fotoLaporan.findMany({
-        where: {
-            laporan_id: id_laporan
-        },
-        select: {
-            id: true,
-            url: true
-        }
-    })
 }
+
 const createLaporan = async (request) => {
-    let fotoUrls = [];
 
-    if (req.files) {
-        for (const file of req.files) {
-            const blob = bucket.file(file.originalname);
-            const blobStream = blob.createWriteStream();
-
-            await new Promise((resolve, reject) => {
-                blobStream.on('error', (err) => {
-                    reject(err);
-                });
-
-                blobStream.on('finish', () => {
-                    const fotoUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
-                    fotoUrls.push(fotoUrl);
-                    resolve();
-                });
-
-                blobStream.end(file.buffer);
-            });
-        }
-    }
-
-
-    if (fotoUrls.length > 0) {
-        for (const fotoUrl of fotoUrls) {
-            const fotoLaporanData = {
-                url: fotoUrl,
-                laporan_id: id_laporan  
-            };
-            const fotoLaporan = validate(createFotoLaporanValidation, fotoLaporanData);
-            await prismaClient.fotoLaporan.create({
-                data: fotoLaporan
-            })
-        }
-    }
-    
     const laporanData = {
         no_sertifikat: request.body.no_sertifikat,
         user_nik: request.body.user_nik,
@@ -133,7 +88,7 @@ const createLaporan = async (request) => {
 
     const laporan = validate(createLaporanValidation, laporanData);
 
-    return await prismaClient.laporan.create({
+    const result = await prismaClient.laporan.create({
         data: laporan,
         select: {
             id: true,
@@ -145,9 +100,12 @@ const createLaporan = async (request) => {
             proses_laporan: true
         }
     });
-};
 
+    const id_laporan = result.id;
+    addPhotosToLaporan(id_laporan, request);
 
+    return result;
+}; 
 
 export default {
     getMapLaporan,

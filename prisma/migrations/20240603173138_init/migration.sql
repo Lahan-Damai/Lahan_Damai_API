@@ -76,7 +76,7 @@ CREATE TABLE "ulasan_ahli" (
     "ahli_id" INTEGER NOT NULL,
     "rating" DOUBLE PRECISION NOT NULL,
     "isi" VARCHAR(255) NOT NULL,
-    "nama_user" VARCHAR(100) NOT NULL,
+    "user_nik" VARCHAR(100) NOT NULL,
 
     CONSTRAINT "ulasan_ahli_pkey" PRIMARY KEY ("id")
 );
@@ -86,9 +86,8 @@ CREATE TABLE "ahli" (
     "id" SERIAL NOT NULL,
     "nama" VARCHAR(100) NOT NULL,
     "bidang" VARCHAR(50) NOT NULL,
-    "nomor_WA" VARCHAR(20) NOT NULL,
+    "nomor_wa" VARCHAR(20) NOT NULL,
     "deskripsi" VARCHAR(255) NOT NULL,
-    "rating" DOUBLE PRECISION NOT NULL,
     "lama_kerja" DOUBLE PRECISION NOT NULL,
 
     CONSTRAINT "ahli_pkey" PRIMARY KEY ("id")
@@ -128,6 +127,9 @@ ALTER TABLE "replies" ADD CONSTRAINT "replies_parent_id_fkey" FOREIGN KEY ("pare
 
 -- AddForeignKey
 ALTER TABLE "ulasan_ahli" ADD CONSTRAINT "ulasan_ahli_ahli_id_fkey" FOREIGN KEY ("ahli_id") REFERENCES "ahli"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ulasan_ahli" ADD CONSTRAINT "ulasan_ahli_user_nik_fkey" FOREIGN KEY ("user_nik") REFERENCES "users"("nik") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "user_favorite_ahli" ADD CONSTRAINT "user_favorite_ahli_email_user_fkey" FOREIGN KEY ("email_user") REFERENCES "users"("email") ON DELETE NO ACTION ON UPDATE CASCADE;

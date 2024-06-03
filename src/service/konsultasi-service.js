@@ -1,4 +1,4 @@
-import { createAhliEdukasiValidation, updateAhliEdukasiValidation } from "../validation/konsultasi-validation.js";
+import { createAhliEdukasiValidation, updateAhliEdukasiValidation, createUlasanAhliValidation } from "../validation/konsultasi-validation.js";
 import { prismaClient } from "../application/database.js"
 import { validate } from "../validation/validation.js"
 
@@ -14,22 +14,38 @@ const createAhli = async (request) => {
 }
 
 const getAllAhli = async () => {
-    const post = await prismaClient.postEdukasi.findMany({
+    const post = await prismaClient.ahli.findMany({
         select: {
             id: true,
             nama: true,
             bidang: true,
-            no_WA: true
+            no_wa: true
         }
     })
 
     return post;
 }
 
-const updateAhli = async (id) => {
-    const changes = request.body 
-    const idAhli = parseInt(request.params.id)    
-    const ahli = await prismaClient.postEdukasi.findUnique({
+const getAllAhliByBidang = async (bidang) => {
+    const post = await prismaClient.ahli.findMany({
+        where: {
+            bidang: bidang
+        },
+        select: {
+            id: true,
+            nama: true,
+            bidang: true,
+            no_wa: true
+        }
+    })
+
+    return post;
+}
+
+
+const getAhli = async (id) => {
+    const idAhli = parseInt(id);
+    const ahli = await prismaClient.ahli.findUnique({
         where: {
             id: idAhli
         },
@@ -37,7 +53,24 @@ const updateAhli = async (id) => {
             id: true,
             nama: true,
             bidang: true,
-            no_WA: true     
+            no_wa: true
+        }
+    })
+    return ahli;
+}
+
+const updateAhli = async (request) => {
+    const changes = request.body 
+    const idAhli = parseInt(request.params.id)    
+    const ahli = await prismaClient.ahli.findUnique({
+        where: {
+            id: idAhli
+        },
+        select: {
+            id: true,
+            nama: true,
+            bidang: true,
+            no_wa: true     
         }
     })
     if (!changes.nama) {
@@ -46,20 +79,20 @@ const updateAhli = async (id) => {
     if (!changes.bidang) {
         changes.bidang = ahli.bidang
     }
-    if (!changes.no_WA) {
-        changes.no_WA = ahli.no_WA
+    if (!changes.no_wa) {
+        changes.no_wa = ahli.no_wa
     }
 
     const updatedAhli = validate(updateAhliEdukasiValidation, changes);
 
-    await prismaClient.postEdukasi.update({
+    await prismaClient.ahli.update({
         where: {
-            id: idPost
+            id: idAhli
         },
         data: {
             nama: updatedAhli.nama,
             bidang: updatedAhli.bidang,
-            no_WA: updatedAhli.no_WA,
+            no_wa: updatedAhli.no_wa,
         }
     })
 
@@ -69,7 +102,7 @@ const updateAhli = async (id) => {
 
 const removeAhli = async (id) => {
     const idAhli = parseInt(id);
-    await prismaClient.postEdukasi.delete({
+    await prismaClient.ahli.delete({
         where: {
             id: idAhli
         },
@@ -82,9 +115,60 @@ const removeAhli = async (id) => {
     return "success";
 }
 
+
+const createUlasanAhli = async (request) => {
+    const ulasan = validate(createUlasanAhliValidation, request);
+
+    return prismaClient.ulasanAhli.create({
+        data: ulasan,
+        select: {
+            id: true,
+            ahli_id: true,
+            rating: true,
+            user_nik: true,
+            isi: true
+        }
+    });
+}   
+
+const getRatingAhli = async (id) => {
+    const idAhli = parseInt(id);
+    const rating = await prismaClient.ulasanAhli.aggregate({
+        _avg: {
+            rating: true
+        },
+        where: {
+            ahli_id: idAhli
+        }
+    })
+    return rating;
+}
+
+const getUlasanAhli = async (id) => {
+    const idAhli = parseInt(id);
+    const ulasan = await prismaClient.ulasanAhli.findMany({
+        where: {
+            ahli_id: idAhli
+        },
+        select: {
+            id: true,
+            ahli_id: true,
+            rating: true,
+            user_nik: true,
+            isi: true
+        }
+    })
+    return ulasan;
+}
+
 export default {
     createAhli,
     getAllAhli,
     updateAhli,
-    removeAhli
+    removeAhli,
+    getAllAhliByBidang,
+    getAhli,
+    createUlasanAhli,
+    getUlasanAhli,
+    getRatingAhli,
 }

@@ -30,6 +30,7 @@ model User {
   threads             Thread[]
   replies             Reply[]
   user_favorite_ahli  UserFavoriteAhli[]
+  ulasan_ahli         UlasanAhli[]
 
 
   @@map("users")
@@ -106,8 +107,9 @@ model UlasanAhli {
   ahli_id     Int
   rating      Float
   isi         String @db.VarChar(255)
-  nama_user   String @db.VarChar(100)
+  user_nik    String @db.VarChar(100)
   ahli        Ahli   @relation(fields: [ahli_id], references: [id])
+  user        User   @relation(fields: [user_nik], references: [nik])
 
   @@map("ulasan_ahli")
 }
@@ -117,9 +119,8 @@ model Ahli {
   id          Int @id @default(autoincrement())
   nama        String @db.VarChar(100)
   bidang      String @db.VarChar(50)
-  nomor_WA    String @db.VarChar(20)
+  nomor_wa    String @db.VarChar(20)
   deskripsi   String @db.VarChar(255)
-  rating      Float
   lama_kerja  Float
 
   ulasan      UlasanAhli[]
