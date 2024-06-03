@@ -49,7 +49,8 @@
     ```json
     {
       "data": {
-        "token": "string"
+        "token": "string",
+        "nama": "string",
       }
     }
     ```
@@ -73,7 +74,7 @@
         "nama": "string",
         "alamat": "string",
         "nik": "string",
-        "tanggal_lahir": "string
+        "tanggal_lahir": "string"
       }
     }
     ```
