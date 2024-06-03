@@ -64,7 +64,8 @@ const login = async (request) => {
             email: user.email
         },
         select: {
-            token: true
+            token: true,
+            nama: true
         }
     });
 }

@@ -1,6 +1,6 @@
 import { validate } from "../validation/validation.js"
 import { prismaClient } from "../application/database.js"
-import { createLaporanValidation } from "../validation/laporan-validation.js";
+import { createLaporanValidation, createFotoLaporanValidation } from "../validation/laporan-validation.js";
 import { bucket } from "../application/storage.js";
 
 const getMapLaporan = async (request) => {
@@ -25,7 +25,7 @@ const getLaporan = async (id) => {
             id: true,
             latitude: true,
             longitude: true,
-            judul: true,
+            no_sertifikat: true,
             user_nik: true,
             deskripsi: true,
             foto: true,
@@ -36,35 +36,99 @@ const getLaporan = async (id) => {
     return laporan;
 }
 
-const createLaporan = async (request) => {
-    let fotoUrl = null;
+const addPhotosToLaporan = async (id_laporan) => {
+    let fotoUrls = [];
 
-    if (request.file) {
-        const blob = bucket.file(request.file.originalname);
-        const blobStream = blob.createWriteStream();
+    if (req.files) {
+        for (const file of req.files) {
+            const blob = bucket.file(file.originalname);
+            const blobStream = blob.createWriteStream();
 
-        await new Promise((resolve, reject) => {
-            blobStream.on('error', (err) => {
-                reject(err);
+            await new Promise((resolve, reject) => {
+                blobStream.on('error', (err) => {
+                    reject(err);
+                });
+
+                blobStream.on('finish', () => {
+                    const fotoUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
+                    fotoUrls.push(fotoUrl);
+                    resolve();
+                });
+
+                blobStream.end(file.buffer);
             });
-
-            blobStream.on('finish', () => {
-                fotoUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
-                resolve();
-            });
-
-            blobStream.end(request.file.buffer);
-        });
+        }
     }
 
+
+    if (fotoUrls.length > 0) {
+        for (const fotoUrl of fotoUrls) {
+            const fotoLaporanData = {
+                url: fotoUrl,
+                laporan_id: id_laporan  
+            };
+            const fotoLaporan = validate(createFotoLaporanValidation, fotoLaporanData);
+            await prismaClient.fotoLaporan.create({
+                data: fotoLaporan
+            })
+        }
+    }
+
+    return await prismaClient.fotoLaporan.findMany({
+        where: {
+            laporan_id: id_laporan
+        },
+        select: {
+            id: true,
+            url: true
+        }
+    })
+}
+const createLaporan = async (request) => {
+    let fotoUrls = [];
+
+    if (req.files) {
+        for (const file of req.files) {
+            const blob = bucket.file(file.originalname);
+            const blobStream = blob.createWriteStream();
+
+            await new Promise((resolve, reject) => {
+                blobStream.on('error', (err) => {
+                    reject(err);
+                });
+
+                blobStream.on('finish', () => {
+                    const fotoUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
+                    fotoUrls.push(fotoUrl);
+                    resolve();
+                });
+
+                blobStream.end(file.buffer);
+            });
+        }
+    }
+
+
+    if (fotoUrls.length > 0) {
+        for (const fotoUrl of fotoUrls) {
+            const fotoLaporanData = {
+                url: fotoUrl,
+                laporan_id: id_laporan  
+            };
+            const fotoLaporan = validate(createFotoLaporanValidation, fotoLaporanData);
+            await prismaClient.fotoLaporan.create({
+                data: fotoLaporan
+            })
+        }
+    }
+    
     const laporanData = {
-        judul: request.body.judul,
+        no_sertifikat: request.body.no_sertifikat,
         user_nik: request.body.user_nik,
         deskripsi: request.body.deskripsi,
         latitude: parseFloat(request.body.latitude),
         longitude: parseFloat(request.body.longitude),
-        proses_laporan: request.body.proses_laporan,
-        foto: fotoUrl
+        proses_laporan: request.body.proses_laporan
     };
 
     const laporan = validate(createLaporanValidation, laporanData);
@@ -75,10 +139,9 @@ const createLaporan = async (request) => {
             id: true,
             latitude: true,
             longitude: true,
-            judul: true,
+            no_sertifikat: true,
             user_nik: true,
             deskripsi: true,
-            foto: true,
             proses_laporan: true
         }
     });
@@ -89,5 +152,6 @@ const createLaporan = async (request) => {
 export default {
     getMapLaporan,
     getLaporan,
-    createLaporan
+    createLaporan,
+    addPhotosToLaporan
 }
