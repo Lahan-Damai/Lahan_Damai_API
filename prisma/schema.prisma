@@ -44,7 +44,7 @@ model Laporan {
   latitude       Float
   longitude      Float
 
-  user           User    @relation(fields: [user_nik], references: [nik])
+  user           User    @relation(fields: [user_nik], references: [nik], onDelete: Cascade)
   fotos          FotoLaporan[]
 
   @@map("laporans")
@@ -54,7 +54,7 @@ model FotoLaporan {
   id            Int     @id @default(autoincrement())
   url           String
   no_sertifikat String
-  laporan       Laporan @relation(fields: [no_sertifikat], references: [no_sertifikat])
+  laporan       Laporan @relation(fields: [no_sertifikat], references: [no_sertifikat], onDelete: Cascade)
   
   @@map("foto_laporan")
 }
@@ -113,7 +113,6 @@ model UlasanAhli {
   @@map("ulasan_ahli")
 }
 
-
 model Ahli {
   id          Int @id @default(autoincrement())
   nama        String @db.VarChar(100)
@@ -127,9 +126,6 @@ model Ahli {
   
   @@map("ahli")
 }
-
-
-
 
 model UserFavoriteAhli {
   email_user    String  @db.VarChar(64)

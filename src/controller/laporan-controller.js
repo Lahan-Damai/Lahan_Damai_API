@@ -12,7 +12,7 @@ const getKoordinatSengketa = async (req, res, next) => {
     }
 }
 
-const getLaporan = async (req, res, next) => {
+const getLaporanSengketa = async (req, res, next) => {
     try {
         const result = await laporanService.getLaporan(req.body.no_sertifikat);
         res.status(200).json({
@@ -34,8 +34,56 @@ const createLaporanSengketa = async (req, res, next) => {
     }
 }
 
+const deleteLaporanSengketa = async (req, res, next) => {
+    try {
+        const result = await laporanService.deleteLaporan(req.body.no_sertifikat);
+        res.status(200).json({
+            data: result
+        });
+    } catch (e) {
+        next(e);
+    }
+}
+
+const updateLaporanSengketa = async (req, res, next) => {
+    try {
+        const result = await laporanService.updateLaporan(req);
+        res.status(200).json({
+            data: result
+        });
+    } catch (e) {
+        next(e);
+    }
+}
+
+const deleteLaporanPhotos = async (req, res, next) => {
+    try {
+        const result = await laporanService.deleteLaporanPhotos(req.body.no_sertifikat);
+        res.status(200).json({
+            data: result
+        });
+    } catch (e) {
+        next(e);
+    }
+}
+
+const addLaporanPhotos = async (req, res, next) => {
+    try {
+        const result = await laporanService.addPhotosToLaporan(req.body.no_sertifikat, req);
+        res.status(200).json({
+            data: result
+        });
+    } catch (e) {
+        next(e);
+    }
+}
+
 export default {
     getKoordinatSengketa,
-    getLaporan,
-    createLaporanSengketa
+    getLaporanSengketa,
+    createLaporanSengketa,
+    deleteLaporanSengketa,
+    updateLaporanSengketa,
+    deleteLaporanPhotos,
+    addLaporanPhotos
 }

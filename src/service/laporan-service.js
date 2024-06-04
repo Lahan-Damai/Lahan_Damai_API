@@ -1,6 +1,6 @@
 import { validate } from "../validation/validation.js"
 import { prismaClient } from "../application/database.js"
-import { createLaporanValidation, createFotoLaporanValidation } from "../validation/laporan-validation.js";
+import { createLaporanValidation, createFotoLaporanValidation, updateLaporanValidation } from "../validation/laporan-validation.js";
 import { bucket } from "../application/storage.js";
 
 const getMapLaporan = async (request) => {
@@ -69,27 +69,24 @@ const addPhotosToLaporan = async (no_sertifikat, req) => {
             });
         }
     }
-
-
+    
     if (fotoUrls.length > 0) {
-        for (const fotoUrl of fotoUrls) {
-            const fotoLaporanData = {
+        await prismaClient.fotoLaporan.createMany({
+            data: fotoUrls.map(fotoUrl => ({
                 url: fotoUrl,
-                no_sertifikat: no_sertifikat  
-            };
-            const fotoLaporan = validate(createFotoLaporanValidation, fotoLaporanData);
-            await prismaClient.fotoLaporan.create({
-                data: fotoLaporan
-            })
-        }
+                no_sertifikat: no_sertifikat
+            }))
+        });
     }
+    return "success";
 }
 
 const createLaporan = async (request) => {
+    const no_sertifikat = request.body.no_sertifikat;
 
     const laporanData = {
-        no_sertifikat: request.body.no_sertifikat,
-        user_nik: request.body.user_nik,
+        no_sertifikat: no_sertifikat,
+        user_nik: request.user.nik,
         deskripsi: request.body.deskripsi,
         latitude: parseFloat(request.body.latitude),
         longitude: parseFloat(request.body.longitude),
@@ -110,15 +107,89 @@ const createLaporan = async (request) => {
         }
     });
 
-    const no_sertifikat = result.no_sertifikat;
     addPhotosToLaporan(no_sertifikat, request);
 
     return result;
 }; 
 
+const deleteLaporan = async (no_sertifikat) => {
+    await prismaClient.laporan.delete({
+        where: {
+            no_sertifikat: no_sertifikat
+        }
+    })
+}
+
+const updateLaporan = async (request) => {
+    const no_sertifikat = request.body.no_sertifikat;
+    const changes = request.body;
+    const { latitude, longitude, no_sertifikat: existingno_sertifikat, user_nik, deskripsi, proses_laporan } =
+        await prismaClient.laporan.findUnique({
+            where: { no_sertifikat },
+            select: {
+                latitude: true,
+                longitude: true,
+                no_sertifikat: true,
+                user_nik: true,
+                deskripsi: true,
+                proses_laporan: true,
+            },
+        });
+
+    changes.latitude = changes.latitude ?? latitude;
+    changes.longitude = changes.longitude ?? longitude;
+    changes.no_sertifikat = changes.no_sertifikat ?? existingno_sertifikat;
+    changes.user_nik = changes.user_nik ?? user_nik;
+    changes.deskripsi = changes.deskripsi ?? deskripsi;
+    changes.proses_laporan = changes.proses_laporan ?? proses_laporan;
+
+    const updatedLaporan = validate(updateLaporanValidation, changes);
+
+    const result = await prismaClient.laporan.update({
+        where: { no_sertifikat },
+        data: updatedLaporan,
+        select: {
+            latitude: true,
+            longitude: true,
+            no_sertifikat: true,
+            user_nik: true,
+            deskripsi: true,
+            proses_laporan: true
+        }
+    });
+
+    return result;
+};
+
+const deleteLaporanPhotos = async (no_sertifikat) => {
+    const laporanPhotos = await prismaClient.fotoLaporan.findMany({
+        where: {
+            no_sertifikat: no_sertifikat
+        }
+    });
+
+    for (const laporanPhoto of laporanPhotos) {
+        const url = laporanPhoto.url;
+        const filename = url.split('/').pop();
+        const blob = bucket.file(filename);
+        await blob.delete();
+    }
+
+    await prismaClient.fotoLaporan.deleteMany({
+        where: {
+            no_sertifikat: no_sertifikat
+        }
+    });
+
+}
+
+
 export default {
     getMapLaporan,
     getLaporan,
     createLaporan,
-    addPhotosToLaporan
+    addPhotosToLaporan,
+    deleteLaporan,
+    updateLaporan,
+    deleteLaporanPhotos
 }

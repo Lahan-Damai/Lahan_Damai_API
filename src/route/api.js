@@ -13,7 +13,9 @@ userRouter.get('/api/users/current', userController.get);
 userRouter.delete('/api/users/logout', userController.logout);
 userRouter.post('/api/laporan/create', multerMiddleware, laporanController.createLaporanSengketa);
 userRouter.get('/api/map/get', laporanController.getKoordinatSengketa);
-userRouter.get('/api/laporan/get', laporanController.getLaporan);
+userRouter.get('/api/laporan/get', laporanController.getLaporanSengketa);
+userRouter.delete('/api/laporan/delete/', laporanController.deleteLaporanSengketa);
+userRouter.put('/api/laporan/update/', multerMiddleware, laporanController.updateLaporanSengketa);
 userRouter.get('/api/edukasi/:id', edukasiController.getPostEdukasi);
 userRouter.get('/api/konsultasi/ahli/', konsultasiController.getAllAhli);
 userRouter.get('/api/konsultasi/ahli/:bidang', konsultasiController.getAllAhliByBidang);
@@ -21,6 +23,8 @@ userRouter.get('/api/konsultasi/ahli/:id', konsultasiController.getAhli);
 userRouter.get('/api/konsultasi/ahli/:id/ulasan', konsultasiController.getUlasanAhli);
 userRouter.get('/api/konsultasi/ahli/:id/rating', konsultasiController.getRatingAhli);
 userRouter.post('/api/konsultasi/ahli/:id/ulasan', konsultasiController.createUlasanAhli);
+userRouter.delete('/api/laporan/photos/delete', laporanController.deleteLaporanPhotos);
+userRouter.put('/api/laporan/photos/add', multerMiddleware, laporanController.addLaporanPhotos);
 
 export {
     userRouter

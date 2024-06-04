@@ -15,7 +15,6 @@ CREATE TABLE "users" (
 
 -- CreateTable
 CREATE TABLE "laporans" (
-    "id" SERIAL NOT NULL,
     "no_sertifikat" VARCHAR(150) NOT NULL,
     "user_nik" VARCHAR(16) NOT NULL,
     "deskripsi" TEXT NOT NULL,
@@ -23,14 +22,14 @@ CREATE TABLE "laporans" (
     "latitude" DOUBLE PRECISION NOT NULL,
     "longitude" DOUBLE PRECISION NOT NULL,
 
-    CONSTRAINT "laporans_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "laporans_pkey" PRIMARY KEY ("no_sertifikat")
 );
 
 -- CreateTable
 CREATE TABLE "foto_laporan" (
     "id" SERIAL NOT NULL,
     "url" TEXT NOT NULL,
-    "laporan_id" INTEGER NOT NULL,
+    "no_sertifikat" TEXT NOT NULL,
 
     CONSTRAINT "foto_laporan_pkey" PRIMARY KEY ("id")
 );
@@ -104,14 +103,11 @@ CREATE TABLE "user_favorite_ahli" (
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
--- CreateIndex
-CREATE UNIQUE INDEX "laporans_no_sertifikat_key" ON "laporans"("no_sertifikat");
+-- AddForeignKey
+ALTER TABLE "laporans" ADD CONSTRAINT "laporans_user_nik_fkey" FOREIGN KEY ("user_nik") REFERENCES "users"("nik") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "laporans" ADD CONSTRAINT "laporans_user_nik_fkey" FOREIGN KEY ("user_nik") REFERENCES "users"("nik") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "foto_laporan" ADD CONSTRAINT "foto_laporan_laporan_id_fkey" FOREIGN KEY ("laporan_id") REFERENCES "laporans"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "foto_laporan" ADD CONSTRAINT "foto_laporan_no_sertifikat_fkey" FOREIGN KEY ("no_sertifikat") REFERENCES "laporans"("no_sertifikat") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "threads" ADD CONSTRAINT "threads_user_nik_fkey" FOREIGN KEY ("user_nik") REFERENCES "users"("nik") ON DELETE RESTRICT ON UPDATE CASCADE;
