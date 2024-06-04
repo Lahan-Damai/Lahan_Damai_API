@@ -30,32 +30,32 @@ model User {
   threads             Thread[]
   replies             Reply[]
   user_favorite_ahli  UserFavoriteAhli[]
+  ulasan_ahli         UlasanAhli[]
 
 
   @@map("users")
 }
 
 model Laporan {
-  id             Int     @id @default(autoincrement())
-  no_sertifikat  String  @unique @db.VarChar(150)
+  no_sertifikat  String  @id @db.VarChar(150)
   user_nik       String  @db.VarChar(16)
   deskripsi      String
   proses_laporan String  @db.VarChar(10)
   latitude       Float
   longitude      Float
 
-  user           User    @relation(fields: [user_nik], references: [nik])
+  user           User    @relation(fields: [user_nik], references: [nik], onDelete: Cascade)
   fotos          FotoLaporan[]
 
   @@map("laporans")
 }
 
 model FotoLaporan {
-  id            Int     @id @default(autoincrement())
   url           String
-  laporan_id    Int
-  laporan       Laporan @relation(fields: [laporan_id], references: [id])
-
+  no_sertifikat String
+  laporan       Laporan @relation(fields: [no_sertifikat], references: [no_sertifikat], onDelete: Cascade)
+  
+  @@id([url, no_sertifikat])
   @@map("foto_laporan")
 }
 
@@ -106,20 +106,19 @@ model UlasanAhli {
   ahli_id     Int
   rating      Float
   isi         String @db.VarChar(255)
-  nama_user   String @db.VarChar(100)
+  user_nik    String @db.VarChar(100)
   ahli        Ahli   @relation(fields: [ahli_id], references: [id])
+  user        User   @relation(fields: [user_nik], references: [nik])
 
   @@map("ulasan_ahli")
 }
-
 
 model Ahli {
   id          Int @id @default(autoincrement())
   nama        String @db.VarChar(100)
   bidang      String @db.VarChar(50)
-  nomor_WA    String @db.VarChar(20)
+  nomor_wa    String @db.VarChar(20)
   deskripsi   String @db.VarChar(255)
-  rating      Float
   lama_kerja  Float
 
   ulasan      UlasanAhli[]
@@ -127,9 +126,6 @@ model Ahli {
   
   @@map("ahli")
 }
-
-
-
 
 model UserFavoriteAhli {
   email_user    String  @db.VarChar(64)

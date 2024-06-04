@@ -38,8 +38,8 @@ const get = async (id) => {
 }
 
 const update = async (request) => {
-    const changes = request.body 
-    const idPost = parseInt(request.params.id)
+    const changes = request.body ;
+    const idPost = parseInt(request.params.id);
     const post = await prismaClient.postEdukasi.findUnique({
         where: {
             id: idPost
@@ -50,19 +50,19 @@ const update = async (request) => {
             isi: true,
             publisher: true,     
         }
-    })
+    });
     if (!changes.judul) {
-        changes.judul = post.judul
-    }
+        changes.judul = post.judul;
+    };
     if (!changes.deskripsi) {
-        changes.deskripsi = post.deskripsi
-    }
+        changes.deskripsi = post.deskripsi;
+    };
     if (!changes.isi) {
-        changes.isi = post.isi
-    }
+        changes.isi = post.isi;
+    };
     if (!changes.publisher) {
-        changes.publisher = post.publisher
-    }
+        changes.publisher = post.publisher;
+    };
     
     const updatedPost = validate(updatePostEdukasiValidation, changes);
 
