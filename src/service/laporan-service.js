@@ -51,7 +51,7 @@ const addPhotosToLaporan = async (no_sertifikat, req) => {
 
     if (req.files) {
         for (const file of req.files) {
-            const blob = bucket.file(file.originalname);
+            const blob = bucket.file(`${no_sertifikat}-${file.originalname}`);
             const blobStream = blob.createWriteStream();
 
             await new Promise((resolve, reject) => {

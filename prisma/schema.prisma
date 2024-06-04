@@ -51,11 +51,11 @@ model Laporan {
 }
 
 model FotoLaporan {
-  id            Int     @id @default(autoincrement())
   url           String
   no_sertifikat String
   laporan       Laporan @relation(fields: [no_sertifikat], references: [no_sertifikat], onDelete: Cascade)
   
+  @@id([url, no_sertifikat])
   @@map("foto_laporan")
 }
 

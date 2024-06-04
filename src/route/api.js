@@ -15,7 +15,7 @@ userRouter.post('/api/laporan/create', multerMiddleware, laporanController.creat
 userRouter.get('/api/map/get', laporanController.getKoordinatSengketa);
 userRouter.get('/api/laporan/get', laporanController.getLaporanSengketa);
 userRouter.delete('/api/laporan/delete/', laporanController.deleteLaporanSengketa);
-userRouter.put('/api/laporan/update/', multerMiddleware, laporanController.updateLaporanSengketa);
+userRouter.put('/api/laporan/update/', laporanController.updateLaporanSengketa);
 userRouter.get('/api/edukasi/:id', edukasiController.getPostEdukasi);
 userRouter.get('/api/konsultasi/ahli/', konsultasiController.getAllAhli);
 userRouter.get('/api/konsultasi/ahli/:bidang', konsultasiController.getAllAhliByBidang);
