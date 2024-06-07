@@ -12,6 +12,18 @@ const getPostEdukasi = async (req, res, next) => {
     }
 }
 
+const getPostEdukasiAll = async (req, res, next) => {
+    
+    try {
+        const result = await edukasiService.getAll();
+        res.status(200).json({
+            data: result
+        });
+    } catch (e) {
+        next(e);
+    }
+}
+
 const createPostEdukasi = async (req, res, next) => {
     try {
         const result = await edukasiService.create(req.body);
@@ -25,7 +37,7 @@ const createPostEdukasi = async (req, res, next) => {
 
 const updatePostEdukasi = async (req, res, next) => {
     try {
-        const result = await edukasiService.update(req);
+        const result = await edukasiService.update(req.body, req.params.id);
         res.status(200).json({
             data: result
         });
@@ -50,5 +62,6 @@ export default {
     getPostEdukasi,
     createPostEdukasi,
     updatePostEdukasi,
-    deletePostEdukasi
+    deletePostEdukasi,
+    getPostEdukasiAll
 }

@@ -30,55 +30,51 @@ const get = async (id) => {
             deskripsi: true,
             isi: true,
             publisher: true,     
-            tanggal_upload: true
+            tanggal_upload: true,
+            sumber: true,
         }
     })
 
     return post;
 }
 
-const update = async (request) => {
-    const changes = request.body ;
-    const idPost = parseInt(request.params.id);
-    const post = await prismaClient.postEdukasi.findUnique({
-        where: {
-            id: idPost
-        },
+const getAll = async () => {
+    
+    console.log("ajsdflkaflalsdf")
+    const posts = await prismaClient.postEdukasi.findMany({
         select: {
+            id: true,
             judul: true,
             deskripsi: true,
             isi: true,
             publisher: true,     
+            tanggal_upload: true,
+            sumber: true,
         }
     });
-    if (!changes.judul) {
-        changes.judul = post.judul;
-    };
-    if (!changes.deskripsi) {
-        changes.deskripsi = post.deskripsi;
-    };
-    if (!changes.isi) {
-        changes.isi = post.isi;
-    };
-    if (!changes.publisher) {
-        changes.publisher = post.publisher;
-    };
-    
-    const updatedPost = validate(updatePostEdukasiValidation, changes);
+    return posts;
+}
 
-    await prismaClient.postEdukasi.update({
+const update = async (request, id) => {
+    const idPost = parseInt(id);
+    const data = validate(updatePostEdukasiValidation, request);
+    const post = await prismaClient.postEdukasi.update({
         where: {
             id: idPost
         },
-        data: {
-            judul: updatedPost.judul,
-            deskripsi: updatedPost.deskripsi,
-            isi: updatedPost.isi,
-            publisher: updatedPost.publisher,
+        data: data,
+        select: {
+            id: true,
+            judul: true,
+            deskripsi: true,
+            isi: true,
+            publisher: true,     
+            tanggal_upload: true,
+            sumber: true,
         }
     })
 
-    return "success";
+    return post;
 }
 
 
@@ -101,5 +97,6 @@ export default {
     create,
     get,
     update,
-    remove
+    remove,
+    getAll
 }

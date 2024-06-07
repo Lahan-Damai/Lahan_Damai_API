@@ -94,7 +94,8 @@ model PostEdukasi {
   deskripsi      String  @db.VarChar(255)
   isi            String
   publisher      String  @db.VarChar(50)
-  tanggal_upload DateTime
+  tanggal_upload DateTime @default(now())
+  sumber         String 
 
   @@map("post_edukasi")
 }
