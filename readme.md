@@ -516,3 +516,233 @@
 
 
 </details>
+
+<details> 
+<summary> <h1> Forum </h1></summary>
+
+### 1. Membuat Thread Forum
+**Endpoint:** `/api/forum/create`  
+**Method:** `POST`  
+**Deskripsi:** Membuat thread baru di forum.  
+**Headers:**
+- `Authorization: Bearer <token>`
+
+**Request Body:**
+```json
+{
+  "judul": "string",
+  "isi": "string"
+}
+```
+
+**Responses:**
+- `200 OK`: Berhasil membuat thread.
+```json
+{
+  "data": {
+    "id": "integer",
+    "judul": "string",
+    "isi": "string",
+    "user_nik": "string"
+  }
+}
+```
+- `400 Bad Request`: Permintaan tidak valid.
+- `500 Internal Server Error`: Kesalahan server.
+
+### 2. Membuat Balasan Thread Forum
+**Endpoint:** `/api/forum/reply/add`  
+**Method:** `POST`  
+**Deskripsi:** Membuat balasan baru di thread forum.  
+**Headers:**
+- `Authorization: Bearer <token>`
+
+**Request Body:**
+```json
+{
+  "thread_id": "integer",
+  "isi": "string"
+}
+```
+
+**Responses:**
+- `200 OK`: Berhasil membuat balasan.
+```json
+{
+  "data": {
+    "id": "integer",
+    "isi": "string",
+    "user_nik": "string"
+  }
+}
+```
+- `400 Bad Request`: Permintaan tidak valid.
+- `500 Internal Server Error`: Kesalahan server.
+
+### 3. Mendapatkan Thread Forum
+**Endpoint:** `/api/forum/:id/get`  
+**Method:** `GET`  
+**Deskripsi:** Mendapatkan detail dari sebuah thread forum berdasarkan ID.  
+**Parameters:**
+- `id` (path parameter): ID dari thread yang ingin diambil.
+
+**Responses:**
+- `200 OK`: Berhasil mendapatkan thread.
+```json
+{
+  "data": {
+    "id": "integer",
+    "judul": "string",
+    "isi": "string",
+    "user_nik": "string"
+  }
+}
+```
+- `404 Not Found`: Thread tidak ditemukan.
+- `500 Internal Server Error`: Kesalahan server.
+
+### 4. Mendapatkan Balasan Thread Forum
+**Endpoint:** `/api/forum/:id/replies/get`  
+**Method:** `GET`  
+**Deskripsi:** Mendapatkan semua balasan dari sebuah thread forum berdasarkan ID thread.  
+**Parameters:**
+- `id` (path parameter): ID dari thread yang balasannya ingin diambil.
+
+**Responses:**
+- `200 OK`: Berhasil mendapatkan balasan.
+```json
+{
+  "data": [
+    {
+      "id": "integer",
+      "isi": "string",
+      "user_nik": "string"
+    },
+    ...
+  ]
+}
+```
+- `404 Not Found`: Thread tidak ditemukan.
+- `500 Internal Server Error`: Kesalahan server.
+
+### 5. Mendapatkan Semua Thread Forum
+**Endpoint:** `/api/forum/get`  
+**Method:** `GET`  
+**Deskripsi:** Mendapatkan semua thread forum.
+
+**Responses:**
+- `200 OK`: Berhasil mendapatkan semua thread.
+```json
+{
+  "data": [
+    {
+      "id": "integer",
+      "judul": "string",
+      "isi": "string",
+      "user_nik": "string"
+    },
+    ...
+  ]
+}
+```
+- `500 Internal Server Error`: Kesalahan server.
+
+### 6. Menghapus Thread Forum
+**Endpoint:** `/api/forum/:id/delete`  
+**Method:** `DELETE`  
+**Deskripsi:** Menghapus sebuah thread forum berdasarkan ID.  
+**Headers:**
+- `Authorization: Bearer <token>`
+
+**Parameters:**
+- `id` (path parameter): ID dari thread yang ingin dihapus.
+
+**Responses:**
+- `200 OK`: Berhasil menghapus thread.
+```json
+{
+  "data": "success"
+}
+```
+- `403 Forbidden`: Tidak memiliki izin untuk menghapus thread.
+- `404 Not Found`: Thread tidak ditemukan.
+- `500 Internal Server Error`: Kesalahan server.
+
+### 7. Menghapus Balasan Thread Forum
+**Endpoint:** `/api/forum/reply/:id/delete`  
+**Method:** `DELETE`  
+**Deskripsi:** Menghapus sebuah balasan di thread forum berdasarkan ID balasan.  
+**Headers:**
+- `Authorization: Bearer <token>`
+
+**Parameters:**
+- `id` (path parameter): ID dari balasan yang ingin dihapus.
+
+**Responses:**
+- `200 OK`: Berhasil menghapus balasan.
+```json
+{
+  "data": "success"
+}
+```
+- `403 Forbidden`: Tidak memiliki izin untuk menghapus balasan.
+- `404 Not Found`: Balasan tidak ditemukan.
+- `500 Internal Server Error`: Kesalahan server.
+
+### 8. Memperbarui Thread Forum
+**Endpoint:** `/api/forum/:id/update`  
+**Method:** `PUT`  
+**Deskripsi:** Memperbarui sebuah thread forum berdasarkan ID.  
+**Headers:**
+- `Authorization: Bearer <token>`
+
+**Parameters:**
+- `id` (path parameter): ID dari thread yang ingin diperbarui.
+
+**Request Body:**
+```json
+{
+  "judul": "string",
+  "isi": "string"
+}
+```
+
+**Responses:**
+- `200 OK`: Berhasil memperbarui thread.
+```json
+{
+  "data": "success"
+}
+```
+- `403 Forbidden`: Tidak memiliki izin untuk memperbarui thread.
+- `404 Not Found`: Thread tidak ditemukan.
+- `500 Internal Server Error`: Kesalahan server.
+
+### 9. Memperbarui Balasan Thread Forum
+**Endpoint:** `/api/forum/reply/:id/update`  
+**Method:** `PUT`  
+**Deskripsi:** Memperbarui sebuah balasan di thread forum berdasarkan ID balasan.  
+**Headers:**
+- `Authorization: Bearer <token>`
+
+**Parameters:**
+- `id` (path parameter): ID dari balasan yang ingin diperbarui.
+
+**Request Body:**
+```json
+{
+  "isi": "string"
+}
+```
+
+**Responses:**
+- `200 OK`: Berhasil memperbarui balasan.
+```json
+{
+  "data": "success"
+}
+```
+- `403 Forbidden`: Tidak memiliki izin untuk memperbarui balasan.
+- `404 Not Found`: Balasan tidak ditemukan.
+- `500 Internal Server Error`: Kesalahan server.
+</details>
