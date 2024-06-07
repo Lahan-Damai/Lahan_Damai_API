@@ -78,6 +78,17 @@ const addLaporanPhotos = async (req, res, next) => {
     }
 }
 
+const getAllLaporanSengketa = async (req, res, next) => {
+    try {
+        const result = await laporanService.getAllLaporan();
+        res.status(200).json({
+            data: result
+        });
+    } catch (e) {
+        next(e);
+    }
+}
+
 export default {
     getKoordinatSengketa,
     getLaporanSengketa,
@@ -85,5 +96,6 @@ export default {
     deleteLaporanSengketa,
     updateLaporanSengketa,
     deleteLaporanPhotos,
-    addLaporanPhotos
+    addLaporanPhotos,
+    getAllLaporanSengketa
 }

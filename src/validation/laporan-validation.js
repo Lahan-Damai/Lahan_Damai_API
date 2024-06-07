@@ -8,6 +8,7 @@ const createLaporanValidation = Joi.object({
     user_nik: Joi.string().max(16).required(),
     deskripsi: Joi.string().required(),
     proses_laporan: Joi.string().required(),
+    tanggal_lapor: Joi.date().iso(),
 });
 
 const createFotoLaporanValidation = Joi.object({
@@ -22,6 +23,7 @@ const updateLaporanValidation = Joi.object({
     user_nik: Joi.string().max(16).required(),
     deskripsi: Joi.string().required(),
     proses_laporan: Joi.string().required(),
+    tanggal_lapor: Joi.date().iso(),
 });
 
 

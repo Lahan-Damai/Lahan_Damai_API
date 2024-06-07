@@ -106,12 +106,30 @@
   "latitude": "float",
   "longitude": "float",
   "proses_laporan": "string",
-  "foto": [<file1>, <file2>, ...]
+  "foto": [<file1>, <file2>, ...],
+  "tanggal_lapor": "string"
 }
 ```
 
+    **Note:**
+    - `tanggal_lapor` defaultnya adalah tanggal sekarang. Jika tidak diberikan maka akan diisi dengan tanggal saat ini.
+
+
 **Responses:**
 - `200 OK`: Laporan berhasil dibuat.
+```json
+{
+  "data": {
+    "latitude": "string",
+    "longitude": "string",
+    "no_sertifikat": "string",
+    "user_nik": "string",
+    "deskripsi": "string",
+    "proses_laporan": "string",
+    "tanggal_lapor": "string"
+  }
+}
+```
 - `400 Bad Request`: Permintaan tidak valid.
 - `500 Internal Server Error`: Kesalahan server.
 
@@ -130,7 +148,7 @@
 {
   "data": [
     {
-      "id": "string",
+      "no_sertifikat": "string",
       "latitude": "float",
       "longitude": "float"
     },
@@ -167,6 +185,7 @@
     "user_nik": "string",
     "deskripsi": "string",
     "proses_laporan": "string",
+    "tanggal_lapor": "string",
     "laporan_photos": ["url1", "url2", ...]
   }
 }
@@ -192,6 +211,12 @@
 
 **Responses:**
 - `200 OK`: Laporan berhasil dihapus.
+```json
+{
+  "data": "success"
+}
+
+```
 - `404 Not Found`: Laporan tidak ditemukan.
 - `500 Internal Server Error`: Kesalahan server.
 
@@ -211,11 +236,25 @@
   "deskripsi": "string",
   "latitude": "float",
   "longitude": "float",
-  "proses_laporan": "string"
+  "proses_laporan": "string",
+  "tanggal_lapor": "string"
 }
 ```
 
 **Responses:**
+```json
+{
+  "data": {
+    "no_sertifikat": "string",
+    "deskripsi": "string",
+    "latitude": "string",
+    "longitude": "string",
+    "proses_laporan": "string",
+    "tanggal_lapor": "string", 
+    "user_nik": "string"
+  }
+}
+```
 - `200 OK`: Laporan berhasil diperbarui.
 - `404 Not Found`: Laporan tidak ditemukan.
 - `400 Bad Request`: Permintaan tidak valid.
@@ -238,13 +277,18 @@
 ```
 
 **Responses:**
+```json
+{
+  "data": "success"
+}
+```
 - `200 OK`: Foto laporan berhasil dihapus.
 - `404 Not Found`: Laporan atau foto tidak ditemukan.
 - `500 Internal Server Error`: Kesalahan server.
 
 ---
 
-### 7. Add Laporan Photos
+### 7. Add Photos to Laporan
 - **url:** `/api/laporan/photos/add`  
 - **Method:** `PUT`  
 - **Description:** Menambahkan foto ke laporan berdasarkan nomor sertifikat.  
@@ -261,10 +305,44 @@
 ```
 
 **Responses:**
+```json
+{
+  "data": "success"
+}
+```
 - `200 OK`: Foto berhasil ditambahkan.
 - `404 Not Found`: Laporan tidak ditemukan.
 - `400 Bad Request`: Permintaan tidak valid.
 - `500 Internal Server Error`: Kesalahan server.
+
+### 8. Get All Laporan Sengketa
+**Endpoint:** `/api/laporan/get/all`  
+**Method:** `GET`  
+**Description:** Mendapatkan semua laporan sengketa yang tersimpan, diurutkan berdasarkan tanggal lapor dari yang terbaru.  
+**Headers:**  
+- `Authorization: Bearer <token>`
+
+**Responses:**
+- `200 OK`: Berhasil mendapatkan semua laporan sengketa.
+```json
+{
+  "data": [
+    {
+      "latitude": "string",
+      "longitude": "string",
+      "no_sertifikat": "string",
+      "user_nik": "string",
+      "deskripsi": "string",
+      "proses_laporan": "string",
+      "tanggal_lapor": "string"
+    },
+    ...
+  ]
+}
+```
+- `500 Internal Server Error`: Kesalahan server.
+
+---
 
 </details>
 

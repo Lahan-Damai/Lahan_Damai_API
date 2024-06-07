@@ -6,7 +6,7 @@ import { bucket } from "../application/storage.js";
 const getMapLaporan = async (request) => {
     const koordinatLaporan = await prismaClient.laporan.findMany({
         select: {
-            id: true,
+            no_sertifikat: true,
             latitude: true,
             longitude: true,
         }
@@ -26,7 +26,8 @@ const getLaporan = async (no_sertifikat) => {
             no_sertifikat: true,
             user_nik: true,
             deskripsi: true,
-            proses_laporan: true 
+            proses_laporan: true,
+            tanggal_lapor: true 
         }
     })
 
@@ -90,7 +91,8 @@ const createLaporan = async (request) => {
         deskripsi: request.body.deskripsi,
         latitude: parseFloat(request.body.latitude),
         longitude: parseFloat(request.body.longitude),
-        proses_laporan: request.body.proses_laporan
+        proses_laporan: request.body.proses_laporan,
+        tanggal_lapor: request.body.tanggal_lapor ? request.body.tanggal_lapor : new Date()
     };
 
     const laporan = validate(createLaporanValidation, laporanData);
@@ -103,7 +105,8 @@ const createLaporan = async (request) => {
             no_sertifikat: true,
             user_nik: true,
             deskripsi: true,
-            proses_laporan: true
+            proses_laporan: true,
+            tanggal_lapor: true
         }
     });
 
@@ -117,13 +120,14 @@ const deleteLaporan = async (no_sertifikat) => {
         where: {
             no_sertifikat: no_sertifikat
         }
-    })
+    });
+    return "success";
 }
 
 const updateLaporan = async (request) => {
     const no_sertifikat = request.body.no_sertifikat;
     const changes = request.body;
-    const { latitude, longitude, no_sertifikat: existingno_sertifikat, user_nik, deskripsi, proses_laporan } =
+    const { latitude, longitude, no_sertifikat: existingno_sertifikat, user_nik, deskripsi, proses_laporan, tanggal_lapor } =
         await prismaClient.laporan.findUnique({
             where: { no_sertifikat },
             select: {
@@ -133,6 +137,7 @@ const updateLaporan = async (request) => {
                 user_nik: true,
                 deskripsi: true,
                 proses_laporan: true,
+                tanggal_lapor: true
             },
         });
 
@@ -142,6 +147,7 @@ const updateLaporan = async (request) => {
     changes.user_nik = changes.user_nik ?? user_nik;
     changes.deskripsi = changes.deskripsi ?? deskripsi;
     changes.proses_laporan = changes.proses_laporan ?? proses_laporan;
+    changes.tanggal_lapor = changes.tanggal_lapor ?? tanggal_lapor;
 
     const updatedLaporan = validate(updateLaporanValidation, changes);
 
@@ -154,7 +160,8 @@ const updateLaporan = async (request) => {
             no_sertifikat: true,
             user_nik: true,
             deskripsi: true,
-            proses_laporan: true
+            proses_laporan: true,
+            tanggal_lapor: true
         }
     });
 
@@ -181,6 +188,25 @@ const deleteLaporanPhotos = async (no_sertifikat) => {
         }
     });
 
+    return "success";
+}
+
+const getAllLaporan = async () => {
+    const laporans = await prismaClient.laporan.findMany({
+        orderBy: {
+            tanggal_lapor: 'desc'
+        },
+        select: {
+            latitude: true,
+            longitude: true,
+            no_sertifikat: true,
+            user_nik: true,
+            deskripsi: true,
+            proses_laporan: true,
+            tanggal_lapor: true
+        }
+    });
+    return laporans;
 }
 
 
@@ -191,5 +217,6 @@ export default {
     addPhotosToLaporan,
     deleteLaporan,
     updateLaporan,
-    deleteLaporanPhotos
+    deleteLaporanPhotos,
+    getAllLaporan
 }
