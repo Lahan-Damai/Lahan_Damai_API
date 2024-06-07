@@ -43,6 +43,7 @@ model Laporan {
   proses_laporan String  @db.VarChar(10)
   latitude       Float
   longitude      Float
+  tanggal_lapor  DateTime @default(now())
 
   user           User    @relation(fields: [user_nik], references: [nik], onDelete: Cascade)
   fotos          FotoLaporan[]
@@ -65,37 +66,34 @@ model Thread {
   judul           String    @db.VarChar(150)
   user_nik        String    @db.VarChar(16)
   isi             String    
-  tanggal_upload  DateTime
+  tanggal_upload  DateTime  @default(now())
   
   replies         Reply[]
-  user            User      @relation(fields: [user_nik], references: [nik])
+  user            User      @relation(fields: [user_nik], references: [nik], onDelete: Cascade)
 
   @@map("threads")
 }
 
 model Reply {
-  id              Int      @id @default(autoincrement())
-  isi             String   @db.VarChar(255)
-  user_nik         String   @db.VarChar(16)
+  id               Int       @id @default(autoincrement())
+  isi              String    @db.VarChar(255)
+  user_nik         String    @db.VarChar(16)
   thread_id        Int
-  parent_id        Int?
-  replies         Reply[]  @relation("ReplyToReply")
-  tanggal_upload   DateTime 
+  tanggal_upload   DateTime  @default(now())
 
-  user            User     @relation(fields: [user_nik], references: [nik])
-  thread          Thread   @relation(fields: [thread_id], references: [id])
-  parent          Reply?   @relation("ReplyToReply", fields: [parent_id], references: [id])
+  user            User     @relation(fields: [user_nik], references: [nik], onDelete: Cascade)
+  thread          Thread   @relation(fields: [thread_id], references: [id], onDelete: Cascade)
 
   @@map("replies")
 }
 
 
 model PostEdukasi {
-  id            Int @id @default(autoincrement())
-  judul         String  @db.VarChar(150)
-  deskripsi     String  @db.VarChar(255)
-  isi           String
-  publisher     String  @db.VarChar(50)
+  id             Int @id @default(autoincrement())
+  judul          String  @db.VarChar(150)
+  deskripsi      String  @db.VarChar(255)
+  isi            String
+  publisher      String  @db.VarChar(50)
   tanggal_upload DateTime
 
   @@map("post_edukasi")
@@ -107,8 +105,8 @@ model UlasanAhli {
   rating      Float
   isi         String @db.VarChar(255)
   user_nik    String @db.VarChar(100)
-  ahli        Ahli   @relation(fields: [ahli_id], references: [id])
-  user        User   @relation(fields: [user_nik], references: [nik])
+  ahli        Ahli   @relation(fields: [ahli_id], references: [id], onDelete: Cascade)
+  user        User   @relation(fields: [user_nik], references: [nik], onDelete: Cascade)
 
   @@map("ulasan_ahli")
 }
@@ -131,8 +129,8 @@ model UserFavoriteAhli {
   email_user    String  @db.VarChar(64)
   id_ahli       Int
   
-  user          User    @relation(fields: [email_user], references: [email], onDelete: NoAction)
-  ahli          Ahli   @relation(fields: [id_ahli], references: [id], onDelete: NoAction)
+  user          User    @relation(fields: [email_user], references: [email], onDelete: Cascade)
+  ahli          Ahli   @relation(fields: [id_ahli], references: [id], onDelete: Cascade)
 
   @@id([email_user, id_ahli])
   @@map("user_favorite_ahli")
