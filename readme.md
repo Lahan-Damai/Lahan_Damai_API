@@ -85,6 +85,17 @@
 - **Error Response**:
   - **Code**: `404 Not Found`
   - **Content**: `User tidak ditemukan`
+
+
+### 4. Get All User
+- **URL**: `/api/users/get/all`
+- **Method**: `GET`
+- **Headers**:
+  - **Authorization**: Bearer <token>
+- **Success Response**:
+  - **Code**: `200 OK`
+  - **Content**:
+    
 </details>
 
 <details> 
