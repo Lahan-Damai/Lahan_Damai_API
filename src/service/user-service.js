@@ -17,7 +17,7 @@ const register = async (request) => {
         }
     });
 
-    if (countUser === 1) {
+    if (countUser >= 1) {
         throw new ResponseError(400, "email atau NIK sudah ada");
     }
 
@@ -95,7 +95,6 @@ const get = async (request) => {
 }
 
 const logout = async (email) => {
-    console.log(email)
     email = validate(getUserValidation, email);
 
     const user = await prismaClient.user.findUnique({
@@ -121,9 +120,14 @@ const logout = async (email) => {
     })
 }
 
+const getAllUsers = async () => {
+    return prismaClient.user.findMany();
+}
+
 export default {
     register,
     login,
     logout,
-    get
+    get,
+    getAllUsers
 }

@@ -1,4 +1,4 @@
-import { validate } from "../validation/validation.js"
+    import { validate } from "../validation/validation.js"
 import { prismaClient } from "../application/database.js"
 import { createLaporanValidation, createFotoLaporanValidation, updateLaporanValidation } from "../validation/laporan-validation.js";
 import { bucket } from "../application/storage.js";
@@ -27,24 +27,21 @@ const getLaporan = async (no_sertifikat) => {
             user_nik: true,
             deskripsi: true,
             proses_laporan: true,
-            tanggal_lapor: true 
+            tanggal_lapor: true,
+            fotos: {
+                select: {
+                    url: true
+                }
+            }
         }
-    })
+    });
 
-    laporan.laporan_photos = await getLaporanPhotos(no_sertifikat);
+    const transformedLaporans = {
+        ...laporan,
+        fotos: laporan.fotos.map(foto => foto.url)
+    }  
 
-    return laporan;
-}
-
-const getLaporanPhotos = async (no_sertifikat) => {
-    return prismaClient.fotoLaporan.findMany({
-        where: {
-            no_sertifikat: no_sertifikat
-        },
-        select: {
-            url: true
-        }
-    }).then(laporanPhotos => laporanPhotos.map(laporanPhoto => laporanPhoto.url));
+    return transformedLaporans;
 }
 
 const addPhotosToLaporan = async (no_sertifikat, req) => {
@@ -202,11 +199,23 @@ const getAllLaporan = async () => {
             user_nik: true,
             deskripsi: true,
             proses_laporan: true,
-            tanggal_lapor: true
+            tanggal_lapor: true,
+            fotos: {
+                select: {
+                    url: true
+                }
+            }
         }
     });
-    return laporans;
-}
+
+    const transformedLaporans = laporans.map(laporan => ({
+        ...laporan,
+        fotos: laporan.fotos.map(photo => photo.url)
+    }));
+
+    return transformedLaporans;
+};
+
 
 
 export default {

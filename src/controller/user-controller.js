@@ -47,9 +47,21 @@ const logout = async (req, res, next) => {
     }
 }
 
+const getAllUsers = async (req, res, next) => {
+    try {
+        const result = await userService.getAllUsers();
+        res.status(200).json({
+            data: result
+        })
+    } catch (e) {
+        next(e);
+    }
+}
+
 export default {
     register,
     login,
     get,
-    logout
+    logout,
+    getAllUsers
 }
