@@ -4,6 +4,7 @@ import { errorMiddleware } from "../middleware/error-middleware.js";
 import { userRouter } from "../route/api.js";
 import { adminRouter } from "../route/admin-api.js";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 
 const app = express()
 
