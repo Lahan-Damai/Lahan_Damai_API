@@ -91,8 +91,7 @@ const createLaporan = async (request) => {
         deskripsi: request.body.deskripsi,
         latitude: parseFloat(request.body.latitude),
         longitude: parseFloat(request.body.longitude),
-        proses_laporan: request.body.proses_laporan,
-        tanggal_lapor: request.body.tanggal_lapor ? request.body.tanggal_lapor : new Date()
+        proses_laporan: request.body.proses_laporan
     };
 
     const laporan = validate(createLaporanValidation, laporanData);

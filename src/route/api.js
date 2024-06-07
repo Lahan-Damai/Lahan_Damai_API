@@ -20,7 +20,7 @@ userRouter.delete('/api/laporan/delete/', laporanController.deleteLaporanSengket
 userRouter.put('/api/laporan/update/', laporanController.updateLaporanSengketa);
 userRouter.delete('/api/laporan/photos/delete', laporanController.deleteLaporanPhotos);
 userRouter.put('/api/laporan/photos/add', multerMiddleware, laporanController.addLaporanPhotos);
-userRouter.get('api/laporan/get/all', laporanController.getAllLaporanSengketa);
+userRouter.get('/api/laporan/get/all', laporanController.getAllLaporanSengketa);
 
 userRouter.get('/api/edukasi/:id/get', edukasiController.getPostEdukasi);
 userRouter.get('/api/edukasi/get', edukasiController.getPostEdukasiAll);
