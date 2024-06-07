@@ -39,8 +39,6 @@ const get = async (id) => {
 }
 
 const getAll = async () => {
-    
-    console.log("ajsdflkaflalsdf")
     const posts = await prismaClient.postEdukasi.findMany({
         select: {
             id: true,

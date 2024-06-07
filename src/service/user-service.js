@@ -35,6 +35,7 @@ const register = async (request) => {
 const login = async (request) => {
     const loginRequest = validate(loginUserValidation, request);
 
+
     const user = await prismaClient.user.findUnique({
         where: {
             email: loginRequest.email
