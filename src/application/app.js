@@ -9,7 +9,7 @@ import cors from "cors";
 const app = express()
 
 app.use(cors({
-    origin: ["http://localhost:3001", "https://lahandamaiapi-production.up.railway.app/"],
+    origin: ["http://localhost:3001", "https://lahandamaiapi-production.up.railway.app/", "http://localhost:5173"],
     credentials: true,
   }));
 
