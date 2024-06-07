@@ -65,7 +65,8 @@ const login = async (request) => {
         },
         select: {
             token: true,
-            nama: true
+            nama: true,
+            role: true,
         }
     });
 }
