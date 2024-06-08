@@ -26,7 +26,7 @@ const getPostEdukasiAll = async (req, res, next) => {
 
 const createPostEdukasi = async (req, res, next) => {
     try {
-        const result = await edukasiService.create(req.body);
+        const result = await edukasiService.create(req);
         res.status(200).json({
             data: result
         });

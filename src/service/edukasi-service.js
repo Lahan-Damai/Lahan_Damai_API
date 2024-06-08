@@ -20,6 +20,7 @@ const create = async (request) => {
     });
 
     addPhotosToArtikel(result.id, request);
+    return result;
 }
 
 const addPhotosToArtikel = async (id_artikel, req) => {
