@@ -58,10 +58,37 @@ const getAllUsers = async (req, res, next) => {
     }
 }
 
+const updateUser = async (req, res, next) => {
+    try {
+        if (req.user.nik !== req.body.nik) {
+            throw new ResponseError(400, "unauthorized");
+        };
+        const result = await userService.updateUser(req.body);
+        res.status(200).json({
+            data: result
+        })
+    } catch (e) {
+        next(e);
+    }
+}
+
+const changeUserRole = async (req, res, next) => {
+    try {
+        const result = await userService.changeUserRole(req.body);
+        res.status(200).json({
+            data: result
+        })
+    } catch (e) {
+        next(e);
+    }
+}
+
 export default {
     register,
     login,
     get,
     logout,
-    getAllUsers
+    getAllUsers,
+    updateUser,
+    changeUserRole
 }

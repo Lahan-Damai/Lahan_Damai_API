@@ -125,10 +125,57 @@ const getAllUsers = async () => {
     return prismaClient.user.findMany();
 }
 
+
+const updateUser = async (request) => {
+    const user = validate(getUserValidation, request);
+    return prismaClient.user.update({
+        where: {
+            email: user.email
+        },  
+        data: {
+            ...user
+        }
+    });
+}
+
+const changeUserRole = async (request) => {
+    const user = await prismaClient.user.findUnique({
+        where: {
+            email: request.email
+        },
+    });
+
+    if (!user) {
+        throw new ResponseError(404, "user tidak ditemukan");
+    }
+
+    if (user.role === "admin") {
+        user.role = "user";
+    }
+    else if (user.role === "user") {
+        user.role = "admin";
+    }
+
+    return prismaClient.user.update({
+        where: {
+            email: user.email
+        },  
+        data: {
+            ...user
+        },
+        select: {
+            email: true,
+            role: true
+        }
+    });
+}
+
 export default {
     register,
     login,
     logout,
     get,
-    getAllUsers
+    getAllUsers,
+    updateUser,
+    changeUserRole
 }

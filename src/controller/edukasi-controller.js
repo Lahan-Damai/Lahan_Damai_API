@@ -57,11 +57,35 @@ const deletePostEdukasi = async (req, res, next) => {
     }
 }
 
+const deleteArtikelPhotos = async (req, res, next) => {
+    try {
+        const result = await edukasiService.deleteArtikelPhotos(req.params.id);
+        res.status(200).json({
+            data: result
+        });
+    } catch (e) {
+        next(e);
+    }
+}
+
+const addArtikelPhotos = async (req, res, next) => {
+    try {
+        const result = await edukasiService.addPhotosToArtikel(req.params.id, req);
+        res.status(200).json({
+            data: result
+        });
+    } catch (e) {
+        next(e);
+    }
+}
+
 
 export default {
     getPostEdukasi,
     createPostEdukasi,
     updatePostEdukasi,
     deletePostEdukasi,
-    getPostEdukasiAll
+    getPostEdukasiAll,
+    deleteArtikelPhotos,
+    addArtikelPhotos
 }

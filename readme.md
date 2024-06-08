@@ -197,7 +197,7 @@
     "deskripsi": "string",
     "proses_laporan": "string",
     "tanggal_lapor": "string",
-    "laporan_photos": ["url1", "url2", ...]
+    "fotos": ["url1", "url2", ...]
   }
 }
 ```
@@ -345,7 +345,7 @@
       "user_nik": "string",
       "deskripsi": "string",
       "proses_laporan": "string",
-      "tanggal_lapor": "string"
+      "fotos": ["url1", "url2", ...]
     },
     ...
   ]
@@ -382,7 +382,8 @@
     "isi": "string",
     "publisher": "string",
     "tanggal_upload": "string",
-    "sumber": "string"
+    "sumber": "string",
+    "fotos": ["url1", "url2", ...]
   }
 }
 ```
@@ -410,7 +411,8 @@
       "isi": "string",
       "publisher": "string",
       "tanggal_upload": "string",
-      "sumber": "string"
+      "sumber": "string",
+      "fotos": ["url1", "url2", ...]
     },
     ...
   ]
@@ -436,6 +438,7 @@
   "isi": "string",
   "publisher": "string",
   "tanggal_upload": "string",
+  "foto": [<file1>, <file2>, ...],
   "sumber": "string"
 }
 ```
@@ -525,6 +528,36 @@
 
 ---
 
+### 6. Delete Post Photos
+**Endpoint** `/api/edukasi/photos/delete/:id`   
+**Method** `DELETE`   
+Response:
+```json
+{
+  "data": "success"
+}
+
+```
+- 200 OK: { "data": "success" }
+- 404 Not Found: No photos found for the post
+- 500 Internal Server Error: Server error
+
+
+### 7. Add Photos to a Post
+**Endpoint**: `/api/edukasi/photos/add/:id`   
+**Method**: `PUT`   
+**Request**: Multipart form data with files field containing image files  
+**Response**:
+```json
+{
+  "data": "success"
+}
+
+```
+- 200 OK: Photos added successfully
+- 400 Bad Request: No files provided
+- 404 Not Found: Post not found
+- 500 Internal Server Error: Server error
 
 </details>
 

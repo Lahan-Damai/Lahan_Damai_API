@@ -1,4 +1,4 @@
-    import { validate } from "../validation/validation.js"
+import { validate } from "../validation/validation.js"
 import { prismaClient } from "../application/database.js"
 import { createLaporanValidation, createFotoLaporanValidation, updateLaporanValidation } from "../validation/laporan-validation.js";
 import { bucket } from "../application/storage.js";
@@ -47,26 +47,41 @@ const getLaporan = async (no_sertifikat) => {
 const addPhotosToLaporan = async (no_sertifikat, req) => {
     let fotoUrls = [];
 
-    if (req.files) {
-        for (const file of req.files) {
-            const blob = bucket.file(`${no_sertifikat}-${file.originalname}`);
-            const blobStream = blob.createWriteStream();
-
-            await new Promise((resolve, reject) => {
-                blobStream.on('error', (err) => {
-                    reject(err);
-                });
-
-                blobStream.on('finish', () => {
-                    const fotoUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
-                    fotoUrls.push(fotoUrl);
-                    resolve();
-                });
-
-                blobStream.end(file.buffer);
-            });
-        }
+    if (!req.files) {
+        return "no files provided";
     }
+
+    const countPhotos = await prismaClient.fotoLaporan.count({
+        where: {
+            no_sertifikat: no_sertifikat
+        }
+    });
+    
+    const countFiles = req.files ? req.files.length : 0;
+
+    if (countFiles + countPhotos > 5) {
+        return "failed to add photos, exceeding limit of 5 photos per laporan";
+    }
+
+    for (const file of req.files) {
+        const blob = bucket.file(`${no_sertifikat}-${file.originalname}`);
+        const blobStream = blob.createWriteStream();
+
+        await new Promise((resolve, reject) => {
+            blobStream.on('error', (err) => {
+                reject(err);
+            });
+
+            blobStream.on('finish', () => {
+                const fotoUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
+                fotoUrls.push(fotoUrl);
+                resolve();
+            });
+
+            blobStream.end(file.buffer);
+        });
+    }
+
     
     if (fotoUrls.length > 0) {
         await prismaClient.fotoLaporan.createMany({
@@ -121,35 +136,13 @@ const deleteLaporan = async (no_sertifikat) => {
 }
 
 const updateLaporan = async (request) => {
-    const no_sertifikat = request.body.no_sertifikat;
-    const changes = request.body;
-    const { latitude, longitude, no_sertifikat: existingno_sertifikat, user_nik, deskripsi, proses_laporan, tanggal_lapor } =
-        await prismaClient.laporan.findUnique({
-            where: { no_sertifikat },
-            select: {
-                latitude: true,
-                longitude: true,
-                no_sertifikat: true,
-                user_nik: true,
-                deskripsi: true,
-                proses_laporan: true,
-                tanggal_lapor: true
-            },
-        });
-
-    changes.latitude = changes.latitude ?? latitude;
-    changes.longitude = changes.longitude ?? longitude;
-    changes.no_sertifikat = changes.no_sertifikat ?? existingno_sertifikat;
-    changes.user_nik = changes.user_nik ?? user_nik;
-    changes.deskripsi = changes.deskripsi ?? deskripsi;
-    changes.proses_laporan = changes.proses_laporan ?? proses_laporan;
-    changes.tanggal_lapor = changes.tanggal_lapor ?? tanggal_lapor;
-
-    const updatedLaporan = validate(updateLaporanValidation, changes);
-
-    const result = await prismaClient.laporan.update({
-        where: { no_sertifikat },
-        data: updatedLaporan,
+    const no_sertifikat = request.no_sertifikat;
+    const data = validate(updateLaporanValidation, request);
+    const laporan = await prismaClient.laporan.update({
+        where: {
+            no_sertifikat: no_sertifikat
+        },
+        data: data,
         select: {
             latitude: true,
             longitude: true,
@@ -159,9 +152,9 @@ const updateLaporan = async (request) => {
             proses_laporan: true,
             tanggal_lapor: true
         }
-    });
-
-    return result;
+    })
+    
+    return laporan;
 };
 
 const deleteLaporanPhotos = async (no_sertifikat) => {

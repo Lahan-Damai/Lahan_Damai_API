@@ -97,7 +97,19 @@ model PostEdukasi {
   tanggal_upload DateTime @default(now())
   sumber         String 
 
+  fotos          FotoArtikel[]
+
   @@map("post_edukasi")
+}
+
+model FotoArtikel {
+  url           String
+  id_artikel    Int
+
+  post_edukasi  PostEdukasi @relation(fields: [id_artikel], references: [id], onDelete: Cascade)
+  
+  @@id([url, id_artikel])
+  @@map("foto_artikel")
 }
 
 model UlasanAhli {
