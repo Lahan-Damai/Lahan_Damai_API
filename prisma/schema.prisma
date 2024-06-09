@@ -113,7 +113,6 @@ model FotoArtikel {
 }
 
 model UlasanAhli {
-  id          Int    @id @default(autoincrement())
   ahli_id     Int
   rating      Float
   isi         String @db.VarChar(255)
@@ -121,6 +120,7 @@ model UlasanAhli {
   ahli        Ahli   @relation(fields: [ahli_id], references: [id], onDelete: Cascade)
   user        User   @relation(fields: [user_nik], references: [nik], onDelete: Cascade)
 
+  @@id([ahli_id, user_nik])
   @@map("ulasan_ahli")
 }
 

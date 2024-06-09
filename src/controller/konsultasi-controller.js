@@ -68,6 +68,8 @@ const getAhli = async (req, res, next) => {
 
 const createUlasanAhli = async (req, res, next) => {
     try {
+        req.body.user_nik = req.user.nik;
+        req.body.ahli_id = req.params.id;
         const result = await konsultasiService.createUlasanAhli(req.body);
         res.status(200).json({
             data: result
@@ -99,6 +101,7 @@ const getUlasanAhli = async (req, res, next) => {
     }
 }
 
+
 export default {
     createAhli,
     getAllAhli,
@@ -108,5 +111,6 @@ export default {
     getAhli,
     createUlasanAhli,
     getUlasanAhli,
-    getRatingAhli
+    getRatingAhli,
+
 }

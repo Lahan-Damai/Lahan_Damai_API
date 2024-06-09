@@ -187,12 +187,11 @@ const createUlasanAhli = async (request) => {
     return prismaClient.ulasanAhli.create({
         data: ulasan,
         select: {
-            id: true,
             ahli_id: true,
             rating: true,
             user_nik: true,
             isi: true
-        }
+        }   
     });
 }   
 
@@ -205,8 +204,9 @@ const getRatingAhli = async (id) => {
         where: {
             ahli_id: idAhli
         }
-    })
-    return rating;
+    }); 
+
+    return rating._avg;
 }
 
 const getUlasanAhli = async (id) => {
@@ -216,7 +216,6 @@ const getUlasanAhli = async (id) => {
             ahli_id: idAhli
         },
         select: {
-            id: true,
             ahli_id: true,
             rating: true,
             user_nik: true,

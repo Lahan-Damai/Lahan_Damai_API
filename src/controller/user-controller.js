@@ -80,6 +80,22 @@ const changeUserRole = async (req, res, next) => {
     }
 }
 
+const getOtherUsers = async (req, res, next) => {
+    try {
+        const result = await userService.get(req.body.email);
+        result.alamat = "";
+        result.nik = "";
+        result.tanggal_lahir = "";
+
+        res.status(200).json({
+            data: result
+        });
+    } catch (e) {
+        next(e);
+    }
+}
+
+
 export default {
     register,
     login,
@@ -87,5 +103,6 @@ export default {
     logout,
     getAllUsers,
     updateUser,
-    changeUserRole
+    changeUserRole,
+    getOtherUsers
 }

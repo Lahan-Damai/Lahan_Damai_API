@@ -20,7 +20,6 @@ const updateAhliEdukasiValidation = Joi.object({
 });
 
 const createUlasanAhliValidation = Joi.object({
-    id: Joi.number().integer().positive(),
     ahli_id: Joi.number().integer().positive().required(),
     rating: Joi.number().required(),
     isi: Joi.string().max(255).required(),

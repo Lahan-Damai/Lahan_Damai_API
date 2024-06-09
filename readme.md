@@ -174,6 +174,32 @@
     }
     ```
 
+### 7. get other user by nik
+- **URL**: `/api/users/get/`
+- **Description** : Get the user details by email
+- **Method**: `GET`
+- **Body**:
+  ```json
+  {
+    "email": "string"
+  }
+  ```
+- **Success Response**:
+  - **Code**: `200 OK`
+  - **Content**:
+    ```json
+    {
+      "data": {
+          "email": "string",
+          "nama": "string",
+          "alamat": "",
+          "nik": "",
+          "tanggal_lahir": "",
+          "foto": "https://storage.googleapis.com/lahan-damai/example-example.jpg"
+      }
+    }
+    ```
+
 </details>
 
 <details> 
@@ -982,9 +1008,7 @@ Response:
         ```json
         {
             "data": {
-                "_avg": {
-                    "rating": 4.5
-                }
+                "rating": 4.5
             }
         }
         ```
@@ -999,7 +1023,6 @@ Response:
     ```json
     {
         "rating": 5,
-        "user_nik": "1234567890",
         "isi": "Excellent service!"
     }
     ```
@@ -1009,7 +1032,6 @@ Response:
         ```json
         {
             "data": {
-                "id": 1,
                 "ahli_id": 1,
                 "rating": 5,
                 "user_nik": "1234567890",

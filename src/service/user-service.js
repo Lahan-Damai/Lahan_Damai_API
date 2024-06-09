@@ -85,6 +85,7 @@ const get = async (request) => {
             alamat: true,
             nik: true,
             tanggal_lahir: true,
+            foto: true
         }
     })
 
