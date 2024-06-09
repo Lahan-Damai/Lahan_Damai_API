@@ -125,14 +125,15 @@ model UlasanAhli {
 }
 
 model Ahli {
-  id          Int @id @default(autoincrement())
-  nama        String @db.VarChar(100)
-  bidang      String @db.VarChar(50)
-  nomor_wa    String @db.VarChar(20)
-  deskripsi   String @db.VarChar(255)
-  lama_kerja  Float
+  id                 Int @id @default(autoincrement())
+  nama               String @db.VarChar(100)
+  bidang             String @db.VarChar(50)
+  nomor_wa           String @db.VarChar(20)
+  deskripsi          String @db.VarChar(255)
+  lama_kerja         Float
+  foto               String?
 
-  ulasan      UlasanAhli[]
+  ulasan             UlasanAhli[]
   user_favorite_ahli UserFavoriteAhli[]
   
   @@map("ahli")

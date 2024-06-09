@@ -437,7 +437,7 @@
 
 
 <details> 
-<summary><h1>edukasi</h1></summary>
+<summary><h1> Edukasi</h1></summary>
 
 ### 1. Get Post Edukasi
 **Endpoint:** `/api/edukasi/:id/get`  
@@ -867,4 +867,239 @@ Response:
 - `403 Forbidden`: Tidak memiliki izin untuk memperbarui balasan.
 - `404 Not Found`: Balasan tidak ditemukan.
 - `500 Internal Server Error`: Kesalahan server.
+</details>
+
+
+<details>
+<summary><h1> Konsultasi <h1></summary>
+
+### Get All Experts
+- **Endpoint**: `/api/konsultasi/ahli/get`
+- **Method**: `GET`
+- **Description**: Retrieve all experts.
+- **Response**:
+    - **Status**: `200 OK`
+    - **Body**:
+        ```json
+        {
+            "data": [
+                {
+                    "id": 1,
+                    "nama": "John Doe",
+                    "bidang": "Psychology",
+                    "nomor_wa": "1234567890",
+                    "deskripsi": "Expert in psychology",
+                    "lama_kerja": "5",
+                    "foto": "https://storage.googleapis.com/bucket/1-photo.jpg"
+                },
+                ...
+            ]
+        }
+        ```
+
+### Get Experts by Field
+- **Endpoint**: `/api/konsultasi/ahli/get/bidang/:bidang`
+- **Method**: `GET`
+- **Description**: Retrieve experts by field.
+- **Parameters**:
+    - `bidang` (string) - The field of expertise.
+- **Response**:
+    - **Status**: `200 OK`
+    - **Body**:
+        ```json
+        {
+            "data": [
+                {
+                    "id": 1,
+                    "nama": "John Doe",
+                    "bidang": "Psychology",
+                    "nomor_wa": "1234567890",
+                    "deskripsi": "Expert in psychology",
+                    "lama_kerja": "5",
+                    "foto": "https://storage.googleapis.com/bucket/1-photo.jpg"
+                },
+                ...
+            ]
+        }
+        ```
+
+### Get Expert by ID
+- **Endpoint**: `/api/konsultasi/ahli/get/:id`
+- **Method**: `GET`
+- **Description**: Retrieve an expert by ID.
+- **Parameters**:
+    - `id` (integer) - The ID of the expert.
+- **Response**:
+    - **Status**: `200 OK`
+    - **Body**:
+        ```json
+        {
+            "data": {
+                "id": 1,
+                "nama": "John Doe",
+                "bidang": "Psychology",
+                "nomor_wa": "1234567890",
+                "deskripsi": "Expert in psychology",
+                "lama_kerja": "5",
+                "foto": "https://storage.googleapis.com/bucket/1-photo.jpg"
+            }
+        }
+        ```
+
+### Get Reviews of an Expert
+- **Endpoint**: `/api/konsultasi/ahli/get/:id/ulasan`
+- **Method**: `GET`
+- **Description**: Retrieve reviews of an expert by ID.
+- **Parameters**:
+    - `id` (integer) - The ID of the expert.
+- **Response**:
+    - **Status**: `200 OK`
+    - **Body**:
+        ```json
+        {
+            "data": [
+                {
+                    "id": 1,
+                    "ahli_id": 1,
+                    "rating": 4,
+                    "user_nik": "9876543210",
+                    "isi": "Great consultation!"
+                },
+                ...
+            ]
+        }
+        ```
+
+### Get Rating of an Expert
+- **Endpoint**: `/api/konsultasi/ahli/get/:id/rating`
+- **Method**: `GET`
+- **Description**: Retrieve the average rating of an expert by ID.
+- **Parameters**:
+    - `id` (integer) - The ID of the expert.
+- **Response**:
+    - **Status**: `200 OK`
+    - **Body**:
+        ```json
+        {
+            "data": {
+                "_avg": {
+                    "rating": 4.5
+                }
+            }
+        }
+        ```
+
+### Create Review for an Expert
+- **Endpoint**: `/api/konsultasi/ahli/:id/ulasan`
+- **Method**: `POST`
+- **Description**: Create a review for an expert.
+- **Parameters**:
+    - `id` (integer) - The ID of the expert.
+- **Request Body**:
+    ```json
+    {
+        "rating": 5,
+        "user_nik": "1234567890",
+        "isi": "Excellent service!"
+    }
+    ```
+- **Response**:
+    - **Status**: `200 OK`
+    - **Body**:
+        ```json
+        {
+            "data": {
+                "id": 1,
+                "ahli_id": 1,
+                "rating": 5,
+                "user_nik": "1234567890",
+                "isi": "Excellent service!"
+            }
+        }
+        ```
+
+---
+
+## Admin API Endpoints
+
+### Create Expert
+- **Endpoint**: `/api/konsultasi/ahli/create`
+- **Method**: `POST`
+- **Description**: Create a new expert.
+- **Middleware**: `multerMiddleware` (for handling file uploads)
+- **Request Body**:
+    ```json
+    {
+        "nama": "John Doe",
+        "bidang": "Psychology",
+        "nomor_wa": "1234567890",
+        "deskripsi": "Expert in psychology",
+        "lama_kerja": "5"
+    }
+    ```
+- **Response**:
+    - **Status**: `200 OK`
+    - **Body**:
+        ```json
+        {
+            "data": {
+                "id": 1,
+                "nama": "John Doe",
+                "bidang": "Psychology",
+                "nomor_wa": "1234567890",
+                "deskripsi": "Expert in psychology",
+                "lama_kerja": "5",
+                "foto": "https://storage.googleapis.com/bucket/1-photo.jpg"
+            }
+        }
+        ```
+
+### Update Expert
+- **Endpoint**: `/api/konsultasi/ahli/update/:id`
+- **Method**: `PUT`
+- **Description**: Update an expert's details.
+- **Middleware**: `multerMiddleware` (for handling file uploads)
+- **Parameters**:
+    - `id` (integer) - The ID of the expert.
+- **Request Body**:
+    ```json
+    {
+        "nama": "John Doe",
+        "bidang": "Psychology",
+        "nomor_wa": "1234567890",
+        "deskripsi": "Expert in psychology",
+        "lama_kerja": "5"
+    }
+    ```
+- **Response**:
+    - **Status**: `200 OK`
+    - **Body**:
+        ```json
+        {
+            "data": {
+                "id": 1,
+                "nama": "John Doe",
+                "bidang": "Psychology",
+                "nomor_wa": "1234567890",
+                "deskripsi": "Expert in psychology",
+                "lama_kerja": "5",
+                "foto": "https://storage.googleapis.com/bucket/1-photo.jpg"
+            }
+        }
+        ```
+
+### Delete Expert
+- **Endpoint**: `/api/konsultasi/ahli/delete/:id`
+- **Method**: `DELETE`
+- **Description**: Delete an expert by ID.
+- **Parameters**:
+    - `id` (integer) - The ID of the expert.
+- **Response**:
+    - **Status**: `200 OK`
+    - **Body**:
+        ```json
+        {
+            "data": "success"
+        }
+        ```
 </details>

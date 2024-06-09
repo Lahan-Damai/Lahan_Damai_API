@@ -14,8 +14,8 @@ adminRouter.delete('/api/edukasi/delete/:id', edukasiController.deletePostEdukas
 adminRouter.delete('/api/edukasi/photos/delete/:id', edukasiController.deleteArtikelPhotos);
 adminRouter.put('/api/edukasi/photos/add/:id', multerMiddleware, edukasiController.addArtikelPhotos);
 
-adminRouter.post('/api/konsultasi/ahli/create', konsultasiController.createAhli);
-adminRouter.put('/api/konsultasi/ahli/update/:id', konsultasiController.updateAhli);
+adminRouter.post('/api/konsultasi/ahli/create', multerMiddleware, konsultasiController.createAhli);
+adminRouter.put('/api/konsultasi/ahli/update/:id', multerMiddleware, konsultasiController.updateAhli);
 adminRouter.delete('/api/konsultasi/ahli/delete/:id', konsultasiController.removeAhli);
 
 adminRouter.get('/api/users/get/all', userController.getAllUsers);

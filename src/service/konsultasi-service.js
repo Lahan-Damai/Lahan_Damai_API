@@ -1,29 +1,78 @@
 import { createAhliEdukasiValidation, updateAhliEdukasiValidation, createUlasanAhliValidation } from "../validation/konsultasi-validation.js";
 import { prismaClient } from "../application/database.js"
 import { validate } from "../validation/validation.js"
+import { bucket } from "../application/storage.js";
 
 const createAhli = async (request) => {
-    const ahli = validate(createAhliEdukasiValidation, request);
+    const ahli = validate(createAhliEdukasiValidation, request.body);
 
-    return prismaClient.ahli.create({
+    const idAhli = await prismaClient.ahli.create({
         data: ahli,
         select: {
-            id: true
+            id: true,
+        }
+    });
+
+    let fotoUrl = [];
+
+    if (request.files) {
+        if (request.files.length > 1) {
+            return "only one file allowed";
+        }
+        if (request.files.length === 1) {
+            const blob = bucket.file(`${idAhli.id}-${request.files[0].originalname}`);
+            const blobStream = blob.createWriteStream();
+
+            await new Promise((resolve, reject) => {
+                blobStream.on('error', (err) => {
+                    reject(err);
+                });
+
+                blobStream.on('finish', () => {
+                    const url = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
+                    fotoUrl.push(url);
+                    resolve();
+                });
+                blobStream.end(request.files[0].buffer);
+            })
+        }
+    }
+
+    ahli.foto = fotoUrl[0] ? fotoUrl[0] : "";
+
+    return prismaClient.ahli.update({
+        where: {
+            id: idAhli.id
+        },
+        data: {
+            foto: ahli.foto
+        },
+        select: {
+            id: true,
+            nama: true,
+            bidang: true,
+            nomor_wa: true,
+            deskripsi: true,
+            lama_kerja: true,
+            foto: true
         }
     });
 }
 
 const getAllAhli = async () => {
-    const post = await prismaClient.ahli.findMany({
+    const ahlis = await prismaClient.ahli.findMany({
         select: {
             id: true,
             nama: true,
             bidang: true,
-            no_wa: true
+            nomor_wa: true,
+            deskripsi: true,
+            lama_kerja: true,
+            foto : true
         }
-    })
+    }) 
 
-    return post;
+    return ahlis;
 }
 
 const getAllAhliByBidang = async (bidang) => {
@@ -35,7 +84,10 @@ const getAllAhliByBidang = async (bidang) => {
             id: true,
             nama: true,
             bidang: true,
-            no_wa: true
+            nomor_wa: true,
+            deskripsi: true,
+            lama_kerja: true,
+            foto : true
         }
     })
 
@@ -45,6 +97,7 @@ const getAllAhliByBidang = async (bidang) => {
 
 const getAhli = async (id) => {
     const idAhli = parseInt(id);
+    console.log("id");
     const ahli = await prismaClient.ahli.findUnique({
         where: {
             id: idAhli
@@ -53,50 +106,62 @@ const getAhli = async (id) => {
             id: true,
             nama: true,
             bidang: true,
-            no_wa: true
+            nomor_wa: true,
+            deskripsi: true,
+            lama_kerja: true,
+            foto: true
         }
     })
     return ahli;
 }
 
 const updateAhli = async (request) => {
-    const changes = request.body 
-    const idAhli = parseInt(request.params.id)    
-    const ahli = await prismaClient.ahli.findUnique({
+    let fotosUrl = [];
+    if (request.files) {
+        if (request.files.length > 1) {
+            return "Please upload only 1 file";
+        }
+        if (request.files.length === 1) {
+            const blob = bucket.file(`${request.params.id}-${request.files[0].originalname}`);
+            const blobStream = blob.createWriteStream();
+
+            await new Promise((resolve, reject) => {
+                blobStream.on('error', (err) => {
+                    reject(err);
+                });
+
+                blobStream.on('finish', () => {
+                    const url = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
+                    fotosUrl.push(url);
+                    resolve();
+                });
+                blobStream.end(request.files[0].buffer);
+
+            })
+        }
+    }
+    const idAhli = parseInt(request.params.id);
+    const data = validate(updateAhliEdukasiValidation, request.body);
+
+    data.foto = fotosUrl[0];
+    console.log(fotosUrl[0]);
+
+    const ahli = await prismaClient.ahli.update({
         where: {
             id: idAhli
         },
+        data: data,
         select: {
             id: true,
             nama: true,
             bidang: true,
-            no_wa: true     
+            nomor_wa: true,
+            deskripsi: true,
+            lama_kerja: true,
+            foto: true
         }
     })
-    if (!changes.nama) {
-        changes.nama = ahli.nama
-    }
-    if (!changes.bidang) {
-        changes.bidang = ahli.bidang
-    }
-    if (!changes.no_wa) {
-        changes.no_wa = ahli.no_wa
-    }
-
-    const updatedAhli = validate(updateAhliEdukasiValidation, changes);
-
-    await prismaClient.ahli.update({
-        where: {
-            id: idAhli
-        },
-        data: {
-            nama: updatedAhli.nama,
-            bidang: updatedAhli.bidang,
-            no_wa: updatedAhli.no_wa,
-        }
-    })
-
-    return "success";
+    return ahli;
 }
 
 

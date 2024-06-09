@@ -24,7 +24,7 @@ const getAllAhliByBidang = async (req, res, next) => {
 
 const createAhli = async (req, res, next) => {
     try {
-        const result = await konsultasiService.createAhli(req.body);
+        const result = await konsultasiService.createAhli(req);
         res.status(200).json({
             data: result
         });

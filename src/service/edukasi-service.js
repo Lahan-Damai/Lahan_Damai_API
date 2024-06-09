@@ -157,6 +157,29 @@ const update = async (request, id) => {
     return post;
 }
 
+const updates = async (request, id) => {
+    const idPost = parseInt(id);
+
+    const data = validate(updatePostEdukasiValidation, request.body);
+    const post = await prismaClient.postEdukasi.update({
+        where: {
+            id: idPost
+        },
+        data: data,
+        select: {
+            id: true,
+            judul: true,
+            deskripsi: true,
+            isi: true,
+            publisher: true,     
+            tanggal_upload: true,
+            sumber: true,
+        }
+    })
+
+    return post;
+}
+
 
 const deleteArtikelPhotos = async (id_artikel) => {
     const id = parseInt(id_artikel);
