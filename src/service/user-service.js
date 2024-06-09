@@ -1,9 +1,10 @@
 import { prismaClient } from "../application/database.js"
 import { ResponseError } from "../error/response-error.js"
-import { loginUserValidation, registerUserValidation, getUserValidation } from "../validation/user-validation.js"
+import { loginUserValidation, registerUserValidation, getUserValidation, updateUserValidation } from "../validation/user-validation.js"
 import { validate } from "../validation/validation.js"
 import bcrypt from "bcrypt";
 import { v4 as uuid } from "uuid";
+import { bucket } from "../application/storage.js";
 
 const register = async (request) => {
     const user = validate(registerUserValidation, request);
@@ -73,7 +74,6 @@ const login = async (request) => {
 }
 
 const get = async (request) => {
-    // console.log(request)
     const email = validate(getUserValidation, request);
     const user = await prismaClient.user.findUnique({
         where: {
@@ -127,13 +127,66 @@ const getAllUsers = async () => {
 
 
 const updateUser = async (request) => {
-    const user = validate(getUserValidation, request);
+    let fotoUrls = [];
+
+    if (request.files) {
+        if (request.files.length > 1) {
+            return "only one file allowed";
+        }
+        if (request.files.length === 1) {
+            const blob = bucket.file(`${request.user.nik}-${request.files[0].originalname}`);
+            const blobStream = blob.createWriteStream();
+
+            if (request.user.foto && request.user.foto.length > 30) {
+                const url = request.user.foto;
+                const filename = url.split('/').pop();
+                const blob = bucket.file(filename);
+                await blob.delete();
+            }
+
+            await new Promise((resolve, reject) => {
+                blobStream.on('error', (err) => {
+                    reject(err);
+                });
+
+                blobStream.on('finish', () => {
+                    const fotoUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
+                    fotoUrls.push(fotoUrl);
+                    resolve();
+                });
+                blobStream.end(request.files[0].buffer);
+
+            }) 
+        }
+    }
+
+    const user = validate(updateUserValidation, request.body);
+
+    user.foto = fotoUrls[0] ? fotoUrls[0] : request.body.foto;
+
+    
+    if ((user.foto || user.foto === "") && request.user.foto && request.user.foto.length > 30) {
+        const url = request.user.foto;
+        const filename = url.split('/').pop();
+        const blob = bucket.file(filename);
+        await blob.delete();
+    }
+
     return prismaClient.user.update({
         where: {
-            email: user.email
+            email: request.user.email
         },  
         data: {
             ...user
+        },
+        select: {
+            email: true,
+            role: true,
+            nama: true,
+            alamat: true,
+            nik: true,
+            tanggal_lahir: true,
+            foto: true
         }
     });
 }

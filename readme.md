@@ -7,7 +7,7 @@
 <details>
   <summary><h1>User</h1></summary>
 
-#### **1. Register User**
+### **1. Register User**
 - **URL**: `/api/users/register`
 - **Method**: `POST`
 - **Body**:
@@ -36,7 +36,7 @@
   - **Code**: `400 Bad Request`
   - **Content**: `email atau NIK sudah ada`
 
-#### **2. Login User**
+### **2. Login User**
 - **URL**: `/api/users/login`
 - **Method**: `POST`
 - **Body**:
@@ -63,7 +63,7 @@
   - **Code**: `401 Unauthorized`
   - **Content**: `email or password wrong`
 
-#### **3. Get Current User**
+### **3. Get Current User**
 - **URL**: `/api/users/current`
 - **Method**: `GET`
 - **Headers**:
@@ -95,7 +95,85 @@
 - **Success Response**:
   - **Code**: `200 OK`
   - **Content**:
-    
+
+### 5. Update User
+- **URL**: `/api/users/update`
+- **Method**: `PUT`
+- **Description** updates the user's details including their profile picture. The endpoint allows updating one profile picture per request.
+- **Headers**:
+  - **Content-Type**: multipart/form-data
+- **Success Response**:
+  - **Code**: `200 OK`   
+
+#### Body
+- **Multipart/Form-Data**: 
+  - `files`: (optional) Profile picture file to upload.
+  - Other user details as JSON fields.
+
+- **Request**
+  ```json
+  {
+    "email": "string",
+    "nama": "string",
+    "alamat": "string",
+    "nik": "string",
+    "tanggal_lahir": "string",
+    "foto": [<file>]
+  }
+  ```
+
+- **Response**
+  - Success (200)
+  ```json
+  {
+    "data": {
+      "email": "string",
+      "role": "string",
+      "nama": "string",
+      "alamat": "string",
+      "nik": "string",
+      "tanggal_lahir": "string",
+      "foto": "string"
+    }
+  }
+  ```
+
+- **Errors**
+  - **400 Bad Request**
+    - If more than one file is uploaded:
+      ```json
+      {
+        "error": "only one file allowed"
+      }
+      ```
+  - **401 Unauthorized**
+    - If the user is not authenticated.
+  - **500 Internal Server Error**
+    - If there is a server-side error during the update process.
+
+
+
+
+### 6. Update User Role 
+- **URL**: `/api/users/update/role`
+- **Description** : switch user role, if user then become admin and if admin then become user
+- **Method**: `PUT`
+- **Body**:
+  ```json
+  {}
+  ```
+- **Success Response**:
+  - **Code**: `200 OK`
+  - **Content**:
+    ```json
+    {
+      "data": {
+        "email": "string",
+        "role": "string"
+      }
+    }
+    ```
+
 </details>
 
 <details> 

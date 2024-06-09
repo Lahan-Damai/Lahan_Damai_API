@@ -12,7 +12,7 @@ userRouter.use(authMiddleware);
 
 userRouter.get('/api/users/current', userController.get);
 userRouter.delete('/api/users/logout', userController.logout);
-userRouter.put('/api/users/update', userController.updateUser);
+userRouter.put('/api/users/update', multerMiddleware, userController.updateUser);
 
 userRouter.post('/api/laporan/create', multerMiddleware, laporanController.createLaporanSengketa);
 userRouter.get('/api/map/get', laporanController.getKoordinatSengketa);

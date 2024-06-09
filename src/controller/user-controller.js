@@ -60,10 +60,7 @@ const getAllUsers = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
     try {
-        if (req.user.nik !== req.body.nik) {
-            throw new ResponseError(400, "unauthorized");
-        };
-        const result = await userService.updateUser(req.body);
+        const result = await userService.updateUser(req);
         res.status(200).json({
             data: result
         })
