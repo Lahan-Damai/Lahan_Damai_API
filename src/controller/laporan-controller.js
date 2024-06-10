@@ -14,7 +14,7 @@ const getKoordinatSengketa = async (req, res, next) => {
 
 const getLaporanSengketa = async (req, res, next) => {
     try {
-        const result = await laporanService.getLaporan(req.body.no_sertifikat);
+        const result = await laporanService.getLaporan(req.params.no_sertifikat);
         res.status(200).json({
             data: result
         });
@@ -36,7 +36,7 @@ const createLaporanSengketa = async (req, res, next) => {
 
 const deleteLaporanSengketa = async (req, res, next) => {
     try {
-        const result = await laporanService.deleteLaporan(req.body.no_sertifikat);
+        const result = await laporanService.deleteLaporan(req.params.no_sertifikat);
         res.status(200).json({
             data: result
         });
@@ -47,7 +47,7 @@ const deleteLaporanSengketa = async (req, res, next) => {
 
 const updateLaporanSengketa = async (req, res, next) => {
     try {
-        const result = await laporanService.updateLaporan(req.body);
+        const result = await laporanService.updateLaporan(req.body, req.params.no_sertifikat);
         res.status(200).json({
             data: result
         });
@@ -58,7 +58,7 @@ const updateLaporanSengketa = async (req, res, next) => {
 
 const deleteLaporanPhotos = async (req, res, next) => {
     try {
-        const result = await laporanService.deleteLaporanPhotos(req.body.no_sertifikat);
+        const result = await laporanService.deleteLaporanPhotos(req.params.no_sertifikat);
         res.status(200).json({
             data: result
         });
@@ -69,7 +69,7 @@ const deleteLaporanPhotos = async (req, res, next) => {
 
 const addLaporanPhotos = async (req, res, next) => {
     try {
-        const result = await laporanService.addPhotosToLaporan(req.body.no_sertifikat, req);
+        const result = await laporanService.addPhotosToLaporan(req.params.no_sertifikat, req);
         res.status(200).json({
             data: result
         });
@@ -89,6 +89,17 @@ const getAllLaporanSengketa = async (req, res, next) => {
     }
 }
 
+const getLaporanSengketaByUser = async (req, res, next) => {
+    try {
+        const result = await laporanService.getLaporanByUser(req.user.nik);
+        res.status(200).json({
+            data: result
+        });
+    } catch (e) {
+        next(e);
+    }
+}
+
 export default {
     getKoordinatSengketa,
     getLaporanSengketa,
@@ -97,5 +108,6 @@ export default {
     updateLaporanSengketa,
     deleteLaporanPhotos,
     addLaporanPhotos,
-    getAllLaporanSengketa
+    getAllLaporanSengketa,
+    getLaporanSengketaByUser
 }

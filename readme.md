@@ -276,18 +276,11 @@
 ---
 
 ### 3. Get Laporan
-- **url:** `/api/laporan/get`  
+- **url:** `/api/laporan/:no_sertifikat/get`  
 - **Method:** `GET`  
 - **Description:** Mendapatkan laporan berdasarkan nomor sertifikat.  
 - **Headers:**  
   - `Authorization: Bearer <token>`
-
-**Request Body:**
-```json
-{
-  "no_sertifikat": "string"
-}
-```
 
 **Responses:**
 - `200 OK`: Berhasil mendapatkan laporan.
@@ -459,6 +452,28 @@
 
 ---
 
+### 9. Get Laporan Sengketa Milik User
+**Endpoint:** `/api/laporan/get/user/`  
+**Method:** `GET`  
+**Description:** Mendapatkan semua laporan sengketa yang terkait dengan pengguna.
+**Headers:**  
+- `Authorization: Bearer <token>`
+
+**Responses:**
+```json
+{
+    "data": {
+        "latitude": "string",
+        "longitude": "string",
+        "no_sertifikat": "string",
+        "user_nik": "string",
+        "deskripsi": "string",
+        "proses_laporan": "string",
+        "tanggal_lapor": "string",
+        "fotos": ["url1", "url2", ...]
+    }
+}
+```
 </details>
 
 

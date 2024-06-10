@@ -17,12 +17,13 @@ userRouter.put('/api/users/update', multerMiddleware, userController.updateUser)
 
 userRouter.post('/api/laporan/create', multerMiddleware, laporanController.createLaporanSengketa);
 userRouter.get('/api/map/get', laporanController.getKoordinatSengketa);
-userRouter.get('/api/laporan/get', laporanController.getLaporanSengketa);
+userRouter.get('/api/laporan/:no_sertifikat/get/', laporanController.getLaporanSengketa);
 userRouter.delete('/api/laporan/delete/', laporanController.deleteLaporanSengketa);
 userRouter.put('/api/laporan/update/', laporanController.updateLaporanSengketa);
 userRouter.delete('/api/laporan/photos/delete', laporanController.deleteLaporanPhotos);
 userRouter.put('/api/laporan/photos/add', multerMiddleware, laporanController.addLaporanPhotos);
 userRouter.get('/api/laporan/get/all', laporanController.getAllLaporanSengketa);
+userRouter.get('/api/laporan/get/user', laporanController.getLaporanSengketaByUser);
 
 userRouter.get('/api/edukasi/:id/get', edukasiController.getPostEdukasi);
 userRouter.get('/api/edukasi/get', edukasiController.getPostEdukasiAll);

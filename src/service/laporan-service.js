@@ -3,7 +3,7 @@ import { prismaClient } from "../application/database.js"
 import { createLaporanValidation, createFotoLaporanValidation, updateLaporanValidation } from "../validation/laporan-validation.js";
 import { bucket } from "../application/storage.js";
 
-const getMapLaporan = async (request) => {
+const getMapLaporan = async () => {
     const koordinatLaporan = await prismaClient.laporan.findMany({
         select: {
             no_sertifikat: true,
@@ -95,7 +95,7 @@ const addPhotosToLaporan = async (no_sertifikat, req) => {
 }
 
 const createLaporan = async (request) => {
-    const no_sertifikat = request.body.no_sertifikat;
+    const no_sertifikat = request.params.no_sertifikat;
 
     const laporanData = {
         no_sertifikat: no_sertifikat,
@@ -135,8 +135,7 @@ const deleteLaporan = async (no_sertifikat) => {
     return "success";
 }
 
-const updateLaporan = async (request) => {
-    const no_sertifikat = request.no_sertifikat;
+const updateLaporan = async (request, no_sertifikat) => {
     const data = validate(updateLaporanValidation, request);
     const laporan = await prismaClient.laporan.update({
         where: {
@@ -210,6 +209,40 @@ const getAllLaporan = async () => {
 };
 
 
+const getLaporanByUser = async (nik) => {
+    const laporans = await prismaClient.laporan.findMany({
+        where: {
+            user_nik: nik
+        },
+        orderBy: {
+            tanggal_lapor: 'desc'
+        },
+        select: {
+            latitude: true,
+            longitude: true,
+            no_sertifikat: true,
+            user_nik: true,
+            deskripsi: true,
+            proses_laporan: true,
+            tanggal_lapor: true,
+            fotos: {
+                select: {
+                    url: true
+                }
+            }
+        }
+    });
+
+    const transformedLaporans = laporans.map(laporan => ({
+        ...laporan,
+        fotos: laporan.fotos.map(photo => photo.url)
+    }));
+
+    return transformedLaporans;
+
+}
+
+
 
 export default {
     getMapLaporan,
@@ -219,5 +252,6 @@ export default {
     deleteLaporan,
     updateLaporan,
     deleteLaporanPhotos,
-    getAllLaporan
+    getAllLaporan,
+    getLaporanByUser
 }
