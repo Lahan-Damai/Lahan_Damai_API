@@ -29,6 +29,8 @@ userRouter.get('/api/laporan/get/user', laporanController.getLaporanSengketaByUs
 
 userRouter.get('/api/edukasi/:id/get', edukasiController.getPostEdukasi);
 userRouter.get('/api/edukasi/get', edukasiController.getPostEdukasiAll);
+userRouter.post('/api/edukasi/create', multerMiddleware, edukasiController.createPostEdukasi);
+userRouter.get('/api/edukasi/get/recommended', edukasiController.getRecommendedArtikel);
 
 userRouter.get('/api/konsultasi/ahli/get', konsultasiController.getAllAhli);
 userRouter.get('/api/konsultasi/ahli/get/bidang/:bidang/', konsultasiController.getAllAhliByBidang);

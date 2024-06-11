@@ -79,6 +79,16 @@ const addArtikelPhotos = async (req, res, next) => {
     }
 }
 
+const getRecommendedArtikel = async (req, res, next) => {
+    try {
+        const result = await edukasiService.getRecommended();
+        res.status(200).json({
+            data: result
+        });
+    } catch (e) {
+        next(e);
+    }
+}   
 
 export default {
     getPostEdukasi,
@@ -87,5 +97,6 @@ export default {
     deletePostEdukasi,
     getPostEdukasiAll,
     deleteArtikelPhotos,
-    addArtikelPhotos
+    addArtikelPhotos,
+    getRecommendedArtikel
 }

@@ -15,7 +15,8 @@ const create = async (request) => {
             deskripsi: true,
             isi: true,
             publisher: true,     
-            tanggal_upload: true
+            tanggal_upload: true,
+            isRecommended: true,
         }
     });
 
@@ -91,6 +92,7 @@ const get = async (id) => {
             publisher: true,     
             tanggal_upload: true,
             sumber: true,
+            isRecommended: true,
             fotos: {
                 select: {
                     url: true
@@ -120,6 +122,7 @@ const getAll = async () => {
             publisher: true,     
             tanggal_upload: true,
             sumber: true,
+            isRecommended: true,
             fotos: {
                 select: {
                     url: true
@@ -151,35 +154,12 @@ const update = async (request, id) => {
             publisher: true,     
             tanggal_upload: true,
             sumber: true,
+            isRecommended: true,
         }
     })
 
     return post;
 }
-
-const updates = async (request, id) => {
-    const idPost = parseInt(id);
-
-    const data = validate(updatePostEdukasiValidation, request.body);
-    const post = await prismaClient.postEdukasi.update({
-        where: {
-            id: idPost
-        },
-        data: data,
-        select: {
-            id: true,
-            judul: true,
-            deskripsi: true,
-            isi: true,
-            publisher: true,     
-            tanggal_upload: true,
-            sumber: true,
-        }
-    })
-
-    return post;
-}
-
 
 const deleteArtikelPhotos = async (id_artikel) => {
     const id = parseInt(id_artikel);
@@ -205,6 +185,34 @@ const deleteArtikelPhotos = async (id_artikel) => {
     return "success";
 }
 
+const getRecommended = async () => {
+    const posts = await prismaClient.postEdukasi.findMany({
+        where: {
+            isRecommended: true
+        },
+        select: {
+            id: true,
+            judul: true,
+            deskripsi: true,
+            isi: true,
+            publisher: true,     
+            tanggal_upload: true,
+            sumber: true,
+            fotos: {
+                select: {
+                    url: true
+                }
+            }
+        }
+    });
+
+    const transformedPosts = posts.map(post => ({
+        ...post,
+        fotos: post.fotos.map(foto => foto.url)
+    }))
+    return transformedPosts;
+}
+
 const remove = async (id) => {
     const idPost = parseInt(id);
     await prismaClient.postEdukasi.delete({
@@ -227,5 +235,6 @@ export default {
     remove,
     getAll,
     addPhotosToArtikel,
-    deleteArtikelPhotos
+    deleteArtikelPhotos,
+    getRecommended
 }

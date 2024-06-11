@@ -70,7 +70,6 @@ const getThreadReplies = async (id) => {
 }
 
 const getAllThreadForum = async () => {
-    // Fetch all threads with user details
     const posts = await prismaClient.thread.findMany({
         select: {
             id: true,

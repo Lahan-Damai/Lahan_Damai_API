@@ -8,6 +8,7 @@ const createPostEdukasiValidation = Joi.object({
     publisher: Joi.string().max(50).required(),
     tanggal_upload: Joi.date().iso(),
     sumber: Joi.string(),
+    isRecomended: Joi.boolean(),
 });
 
 const updatePostEdukasiValidation = Joi.object({
@@ -16,6 +17,7 @@ const updatePostEdukasiValidation = Joi.object({
     isi: Joi.string(),
     publisher: Joi.string().max(50),
     sumber: Joi.string(),
+    isRecomended: Joi.boolean(),
 });
 
 export {

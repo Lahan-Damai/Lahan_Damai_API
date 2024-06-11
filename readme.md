@@ -725,6 +725,35 @@ Response:
 - 404 Not Found: Post not found
 - 500 Internal Server Error: Server error
 
+
+### 8. Get Recommended Artikel Edukasi
+**Endpoint:** `/api/edukasi/recommended/get`  
+**Method:** `GET`  
+**Description:** 
+**Headers:**  
+- `Authorization: Bearer <token>`
+
+**Responses:**
+```json
+{
+    "data": [
+        {
+            "id": 1,
+            "judul": "string",
+            "deskripsi": "string",
+            "isi": "string",
+            "publisher": "string",
+            "tanggal_upload": "2023-11-30T00:00:00.000Z",
+            "sumber": "string",
+            "fotos": [...]
+        },
+        ...
+    ]
+}
+```
+
+---
+
 </details>
 
 <details> 
