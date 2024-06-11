@@ -95,7 +95,7 @@ const addPhotosToLaporan = async (no_sertifikat, req) => {
 }
 
 const createLaporan = async (request) => {
-    const no_sertifikat = request.params.no_sertifikat;
+    const no_sertifikat = request.body.no_sertifikat;
 
     const laporanData = {
         no_sertifikat: no_sertifikat,

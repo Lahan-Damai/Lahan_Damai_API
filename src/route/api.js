@@ -1,5 +1,6 @@
 import express from "express";
 import userController from "../controller/user-controller.js";
+import homeController from "../controller/home-controller.js";
 import {authMiddleware} from "../middleware/auth-middleware.js";
 import { multerMiddleware } from "../middleware/multer-middleware.js";
 import laporanController from "../controller/laporan-controller.js";
@@ -9,6 +10,8 @@ import forumController from "../controller/forum-controller.js";
 
 const userRouter = new express.Router();
 userRouter.use(authMiddleware);
+
+userRouter.get("/api/home/get", homeController.getHomeContent);
 
 userRouter.get('/api/users/current', userController.get);
 userRouter.get('/api/users/get/', userController.getOtherUsers);

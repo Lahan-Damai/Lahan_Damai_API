@@ -144,7 +144,8 @@ const updateAhli = async (request) => {
     const data = validate(updateAhliEdukasiValidation, request.body);
 
     data.foto = fotosUrl[0];
-    console.log(fotosUrl[0]);
+    
+    console.log(data)
 
     const ahli = await prismaClient.ahli.update({
         where: {

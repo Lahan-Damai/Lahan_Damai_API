@@ -3,6 +3,49 @@
 ### URL = https://lahandamaiapi-production.up.railway.app/
 
 ### **API Endpoints**
+<details> 
+<summary><h1>Home</h1></summary>
+
+### 1. Get Home Content 
+- **Deskripsi** : Mendapatkan konten halaman utama. Konten tersebut terdiri dari jumlah laporan per bulan untuk tahun berjalan dan daftar postingan edukasi terbaru.    
+- **URL**: `/api/home/get`   
+- **Method**: `GET`   
+
+#### Response
+```json
+{
+    "data": {
+        "jumlah_laporan": [
+            {
+                "bulan": "01",
+                "jumlah": 10
+            },
+            {
+                "bulan": "02",
+                "jumlah": 8
+            },
+            ...
+        ],
+        "edukasi": [
+            {
+                "id": 1,
+                "judul": "Judul Edukasi 1",
+                "deskripsi": "Deskripsi singkat edukasi 1",
+                "isi": "Isi lengkap edukasi 1",
+                "publisher": "Penerbit 1",
+                "tanggal_upload": "2024-06-10T00:00:00.000Z",
+                "sumber": "Sumber 1",
+                "fotos": [
+                    "https://example.com/foto1.jpg",
+                    ...
+                ]
+            },
+            ...
+        ]
+    }
+}
+```
+</details>
 
 <details>
   <summary><h1>User</h1></summary>
