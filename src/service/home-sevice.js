@@ -23,12 +23,17 @@ const getHomeContent = async () => {
         }
     }
 
-    const jumlah_laporan = Object.keys(laporanByMonth).map(yearMonth => {
-        return {
-            bulan: yearMonth,
-            jumlah: laporanByMonth[yearMonth]
-        };
-    });
+    const jumlah_laporan = {};
+    for (const month in laporanByMonth) {
+        const monthNumber = parseInt(month);
+        jumlah_laporan[monthNumber] = laporanByMonth[month];
+    }
+
+    for (let monthNumber = 1; monthNumber <= 12; monthNumber++) {
+        if (!jumlah_laporan[monthNumber]) {
+            jumlah_laporan[monthNumber] = 0;
+        }
+    }
 
     const edukasiTemp = await prismaClient.postEdukasi.findMany({
         select: {
