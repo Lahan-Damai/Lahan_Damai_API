@@ -89,13 +89,14 @@ model Reply {
 
 
 model PostEdukasi {
-  id             Int @id @default(autoincrement())
-  judul          String  @db.VarChar(150)
-  deskripsi      String  @db.VarChar(255)
-  isi            String
-  publisher      String  @db.VarChar(50)
-  tanggal_upload DateTime @default(now())
-  sumber         String 
+  id              Int @id @default(autoincrement())
+  judul           String  @db.VarChar(150)
+  deskripsi       String  @db.VarChar(255)
+  isi             String
+  publisher       String  @db.VarChar(50)
+  tanggal_upload  DateTime @default(now())
+  sumber          String 
+  isRecommended   Boolean   @default(false)
 
   fotos          FotoArtikel[]
 

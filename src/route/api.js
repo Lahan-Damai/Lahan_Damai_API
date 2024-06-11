@@ -25,7 +25,6 @@ userRouter.delete('/api/laporan/delete/', laporanController.deleteLaporanSengket
 userRouter.put('/api/laporan/update/', laporanController.updateLaporanSengketa);
 userRouter.delete('/api/laporan/photos/delete', laporanController.deleteLaporanPhotos);
 userRouter.put('/api/laporan/photos/add', multerMiddleware, laporanController.addLaporanPhotos);
-userRouter.get('/api/laporan/get/all', laporanController.getAllLaporanSengketa);
 userRouter.get('/api/laporan/get/user', laporanController.getLaporanSengketaByUser);
 
 userRouter.get('/api/edukasi/:id/get', edukasiController.getPostEdukasi);
@@ -44,9 +43,11 @@ userRouter.get('/api/forum/:id/get', forumController.getThreadForum);
 userRouter.get('/api/forum/:id/replies/get', forumController.getThreadReplies);
 userRouter.get('/api/forum/get', forumController.getAllThreadForum);
 userRouter.delete('/api/forum/:id/delete', forumController.deleteThreadForum);
-userRouter.put('/api/forum/:id/update', forumController.updateThreadForum);
+userRouter.put('/api/forum/:id/update', forumController.updateThreadForum); 
 userRouter.delete('/api/forum/reply/:id/delete', forumController.deleteReplyForum);
 userRouter.put('/api/forum/reply/:id/update', forumController.updateReplyForum);
+userRouter.get('/api/forum/:id/detail/get/', forumController.getThreadAndReplies);
+
 
 export {
     userRouter

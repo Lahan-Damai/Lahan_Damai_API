@@ -101,6 +101,17 @@ const updateReplyForum = async (req, res, next) => {
 }
 
 
+const getThreadAndReplies = async (req, res, next) => {
+    try {
+        const result = await forumService.getThreadAndReplies(req.params.id);
+        res.status(200).json({
+            data: result
+        });
+    } catch (e) {
+        next(e);
+    }
+}
+
 export default {
     createThreadForum,
     createReplyForum,
@@ -110,5 +121,6 @@ export default {
     deleteThreadForum,
     deleteReplyForum,   
     updateThreadForum,
-    updateReplyForum
+    updateReplyForum,
+    getThreadAndReplies
 }

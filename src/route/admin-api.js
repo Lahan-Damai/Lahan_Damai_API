@@ -3,6 +3,7 @@ import {authAdminMiddleware} from "../middleware/admin-auth-middleware.js";
 import edukasiController from "../controller/edukasi-controller.js";
 import konsultasiController from "../controller/konsultasi-controller.js";
 import userController from "../controller/user-controller.js";
+import laporanController from "../controller/laporan-controller.js";
 import { multerMiddleware } from "../middleware/multer-middleware.js";
 
 const adminRouter = new express.Router();
@@ -20,6 +21,8 @@ adminRouter.delete('/api/konsultasi/ahli/delete/:id', konsultasiController.remov
 
 adminRouter.get('/api/users/get/all', userController.getAllUsers);
 adminRouter.put('/api/users/update/role', userController.changeUserRole);
+
+adminRouter.get('/api/laporan/get/all', laporanController.getAllLaporanSengketa);
 
 export {
     adminRouter

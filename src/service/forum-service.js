@@ -14,6 +14,7 @@ const createThreadForum = async (request, user) => {
             judul: true,
             isi: true,
             user_nik: true,
+            tanggal_upload: true,
         }
     });
 }
@@ -28,6 +29,7 @@ const createReplyForum = async (request, user) => {
             id: true,
             isi: true,
             user_nik: true,
+            tanggal_upload: true,
         }
     });
 }
@@ -43,6 +45,7 @@ const getThreadForum = async (id) => {
             judul: true,
             isi: true,
             user_nik: true,
+            tanggal_upload: true,
         }
     });
 
@@ -59,6 +62,7 @@ const getThreadReplies = async (id) => {
             id: true,
             isi: true,
             user_nik: true,
+            tanggal_upload: true,
         }
     });
 
@@ -66,17 +70,109 @@ const getThreadReplies = async (id) => {
 }
 
 const getAllThreadForum = async () => {
+    // Fetch all threads with user details
     const posts = await prismaClient.thread.findMany({
         select: {
             id: true,
             judul: true,
             isi: true,
-            user_nik: true,
+            tanggal_upload: true,
+            user: {
+                select: {
+                    nama: true,
+                    foto: true,
+                }
+            }
         }
     });
 
-    return posts;
+    const formattedPosts = await Promise.all(posts.map(async post => {
+        const totalThreadReplies = await prismaClient.reply.count({
+            where: {
+                thread_id: post.id
+            }
+        });
+
+        return {
+            id: post.id,
+            judul: post.judul,
+            isi: post.isi,
+            tanggal_upload: post.tanggal_upload,
+            total_reply: totalThreadReplies,
+            user: {
+                nama: post.user.nama,
+                foto: post.user.foto,
+            }
+        };
+    }));
+
+    return formattedPosts;
 }
+
+
+const getThreadAndReplies = async (id) => {
+    const idPost = parseInt(id);
+    const post = await prismaClient.thread.findUnique({
+        where: {
+            id: idPost
+        },
+        select: {
+            id: true,
+            judul: true,
+            isi: true,
+            tanggal_upload: true,
+            user: {
+                select: {
+                    nama: true,
+                    foto: true,
+                }
+            },
+            replies: {
+                select: {
+                    id: true,
+                    isi: true,
+                    tanggal_upload: true,
+                    user: {
+                        select: {
+                            nama: true,
+                            foto: true,
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    const totalThreadReplies = await prismaClient.reply.count({
+        where: {
+            thread_id: idPost
+        }
+    });
+
+    const formattedPost = {
+        id: post.id,
+        judul: post.judul,
+        isi: post.isi,
+        tanggal_upload: post.tanggal_upload,
+        total_reply: totalThreadReplies,
+        user: {
+            nama: post.user.nama,
+            foto: post.user.foto,
+        },
+        replies: post.replies.map(reply => ({
+            id: reply.id,
+            isi: reply.isi,
+            tanggal_upload: reply.tanggal_upload,
+            user: {
+                nama: reply.user.nama,
+                foto: reply.user.foto,
+            }
+        }))
+    };
+
+    return formattedPost;
+}
+
 
 const deleteThreadForum = async (id, user) => {
     const idThread = parseInt(id);
@@ -190,5 +286,6 @@ export default {
     deleteThreadForum,
     deleteReplyForum,
     updateThreadForum,
-    updateReplyForum
+    updateReplyForum,
+    getThreadAndReplies,
 }

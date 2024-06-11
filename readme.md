@@ -15,17 +15,21 @@
 ```json
 {
     "data": {
-        "jumlah_laporan": [
-            {
-                "bulan": "01",
-                "jumlah": 10
-            },
-            {
-                "bulan": "02",
-                "jumlah": 8
-            },
-            ...
-        ],
+        "jumlah_laporan": {
+            "1": 1,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0,
+            "6": 7,
+            "7": 0,
+            "8": 0,
+            "9": 0,
+            "10": 0,
+            "11": 0,
+            "12": 0
+        },
+            
         "edukasi": [
             {
                 "id": 1,
@@ -749,7 +753,8 @@ Response:
     "id": "integer",
     "judul": "string",
     "isi": "string",
-    "user_nik": "string"
+    "user_nik": "string",
+    "tanggal_upload": "string"
   }
 }
 ```
@@ -778,7 +783,8 @@ Response:
   "data": {
     "id": "integer",
     "isi": "string",
-    "user_nik": "string"
+    "user_nik": "string",
+    "tanggal_upload": "string"
   }
 }
 ```
@@ -800,12 +806,53 @@ Response:
     "id": "integer",
     "judul": "string",
     "isi": "string",
-    "user_nik": "string"
+    "user_nik": "string",
+    "tanggal_upload": "string"
   }
 }
 ```
 - `404 Not Found`: Thread tidak ditemukan.
 - `500 Internal Server Error`: Kesalahan server.
+
+### 3.1 Mendapatkan Thread Forum beserta Reply
+**Endpoint:** `/api/forum/:id/detail/get`  
+**Method:** `GET`  
+**Deskripsi:** Mendapatkan seluruh detail dari suatu thread  
+**Parameters:**
+- `id` (path parameter): ID dari thread yang ingin diambil.
+
+**Responses:**
+- `200 OK`: Berhasil mendapatkan thread.
+```json
+{
+    "data": {
+        "id": "integer",
+        "judul": "string",
+        "isi": "string",
+        "tanggal_upload": "string",
+        "total_reply": "integer",
+        "user": {
+            "nama": "string",
+            "foto": "string"
+        },
+        "replies": [
+            {
+                "id": "integer",
+                "isi": "string",
+                "tanggal_upload": "string",
+                "user": {
+                    "nama": "string",
+                    "foto": "string"
+                }
+            },
+            ...
+        ]
+    }
+}
+```
+- `404 Not Found`: Thread tidak ditemukan.
+- `500 Internal Server Error`: Kesalahan server.
+
 
 ### 4. Mendapatkan Balasan Thread Forum
 **Endpoint:** `/api/forum/:id/replies/get`  
@@ -822,7 +869,8 @@ Response:
     {
       "id": "integer",
       "isi": "string",
-      "user_nik": "string"
+      "user_nik": "string",
+      "tanggal_upload": "string"
     },
     ...
   ]
@@ -840,15 +888,20 @@ Response:
 - `200 OK`: Berhasil mendapatkan semua thread.
 ```json
 {
-  "data": [
-    {
-      "id": "integer",
-      "judul": "string",
-      "isi": "string",
-      "user_nik": "string"
-    },
-    ...
-  ]
+    "data": [
+        {
+            "id": "int",
+            "judul": "string",
+            "isi": "string",
+            "tanggal_upload": "2024-06-06T14:37:38.597Z",
+            "total_reply": "int",
+            "user": {
+                "nama": "string",
+                "foto": "https://storage.googleapis.com/..."
+            }
+        },
+        ...
+    ]
 }
 ```
 - `500 Internal Server Error`: Kesalahan server.
