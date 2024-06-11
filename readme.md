@@ -909,7 +909,7 @@ Response:
 - `500 Internal Server Error`: Kesalahan server.
 
 ### 5. Mendapatkan Semua Thread Forum
-**Endpoint:** `/api/forum/get`  
+**Endpoint:** `/api/forum/get/all`  
 **Method:** `GET`  
 **Deskripsi:** Mendapatkan semua thread forum.
 

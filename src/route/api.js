@@ -43,7 +43,7 @@ userRouter.post('/api/forum/create', forumController.createThreadForum);
 userRouter.post('/api/forum/reply/add', forumController.createReplyForum);
 userRouter.get('/api/forum/:id/get', forumController.getThreadForum);
 userRouter.get('/api/forum/:id/replies/get', forumController.getThreadReplies);
-userRouter.get('/api/forum/get', forumController.getAllThreadForum);
+userRouter.get('/api/forum/get/all', forumController.getAllThreadForum);
 userRouter.delete('/api/forum/:id/delete', forumController.deleteThreadForum);
 userRouter.put('/api/forum/:id/update', forumController.updateThreadForum); 
 userRouter.delete('/api/forum/reply/:id/delete', forumController.deleteReplyForum);
