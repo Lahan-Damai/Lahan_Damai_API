@@ -26,12 +26,12 @@ const getHomeContent = async () => {
     const jumlah_laporan = {};
     for (const month in laporanByMonth) {
         const monthNumber = parseInt(month);
-        jumlah_laporan[monthNumber] = laporanByMonth[month];
+        jumlah_laporan[monthNumber-1] = laporanByMonth[month];
     }
 
     for (let monthNumber = 1; monthNumber <= 12; monthNumber++) {
-        if (!jumlah_laporan[monthNumber]) {
-            jumlah_laporan[monthNumber] = 0;
+        if (!jumlah_laporan[monthNumber-1]) {
+            jumlah_laporan[monthNumber-1] = 0;
         }
     }
 
@@ -44,6 +44,7 @@ const getHomeContent = async () => {
             publisher: true,     
             tanggal_upload: true,
             sumber: true,
+            isRecommended: true,    
             fotos: {
                 select: {
                     url: true

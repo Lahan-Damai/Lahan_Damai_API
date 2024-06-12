@@ -16,29 +16,30 @@
 {
     "data": {
         "jumlah_laporan": {
-            "1": 1,
+            "0": 1,
+            "1": 0,
             "2": 0,
             "3": 0,
             "4": 0,
-            "5": 0,
-            "6": 7,
+            "5": 10,
+            "6": 0,
             "7": 0,
             "8": 0,
             "9": 0,
             "10": 0,
             "11": 0,
-            "12": 0
         },
             
         "edukasi": [
             {
                 "id": 1,
-                "judul": "Judul Edukasi 1",
-                "deskripsi": "Deskripsi singkat edukasi 1",
-                "isi": "Isi lengkap edukasi 1",
-                "publisher": "Penerbit 1",
+                "judul": "string",
+                "deskripsi": "string",
+                "isi": "string",
+                "publisher": "string",
                 "tanggal_upload": "2024-06-10T00:00:00.000Z",
-                "sumber": "Sumber 1",
+                "sumber": "string",
+                "isRecommended": "boolean",
                 "fotos": [
                     "https://example.com/foto1.jpg",
                     ...
