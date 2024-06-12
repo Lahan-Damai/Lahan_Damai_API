@@ -1,7 +1,7 @@
 import { prismaClient } from "../application/database.js"
 
 
-const getHomeContent = async () => {
+const getHomeContent = async (user) => {
     const laporan = await prismaClient.laporan.findMany({
         select: {
             tanggal_lapor: true,
@@ -62,7 +62,9 @@ const getHomeContent = async () => {
         fotos: edukasi.fotos.map(foto => foto.url)
     }));
 
-    return { jumlah_laporan, edukasi };
+    const photo_profile = user.foto;
+
+    return { photo_profile, jumlah_laporan, edukasi };
 }
 
 
