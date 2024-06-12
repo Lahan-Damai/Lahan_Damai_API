@@ -62,7 +62,7 @@ model FotoLaporan {
 
 
 model Thread {
-  id              Int       @id @default(autoincrement())
+  id              String       @id @default(uuid())
   judul           String    @db.VarChar(150)
   user_nik        String    @db.VarChar(16)
   isi             String    
@@ -75,10 +75,10 @@ model Thread {
 }
 
 model Reply {
-  id               Int       @id @default(autoincrement())
+  id               String    @id @default(uuid())
   isi              String    @db.VarChar(255)
   user_nik         String    @db.VarChar(16)
-  thread_id        Int
+  thread_id        String
   tanggal_upload   DateTime  @default(now())
 
   user            User     @relation(fields: [user_nik], references: [nik], onDelete: Cascade)
@@ -89,7 +89,7 @@ model Reply {
 
 
 model PostEdukasi {
-  id              Int @id @default(autoincrement())
+  id              String     @id @default(uuid())
   judul           String  @db.VarChar(150)
   deskripsi       String  @db.VarChar(255)
   isi             String
@@ -98,14 +98,14 @@ model PostEdukasi {
   sumber          String 
   isRecommended   Boolean   @default(false)
 
-  fotos          FotoArtikel[]
+  fotos           FotoArtikel[]
 
   @@map("post_edukasi")
 }
 
 model FotoArtikel {
   url           String
-  id_artikel    Int
+  id_artikel    String
 
   post_edukasi  PostEdukasi @relation(fields: [id_artikel], references: [id], onDelete: Cascade)
   
@@ -114,7 +114,7 @@ model FotoArtikel {
 }
 
 model UlasanAhli {
-  ahli_id     Int
+  ahli_id     String
   rating      Float
   isi         String @db.VarChar(255)
   user_nik    String @db.VarChar(100)
@@ -126,7 +126,7 @@ model UlasanAhli {
 }
 
 model Ahli {
-  id                 Int @id @default(autoincrement())
+  id                 String    @id @default(uuid())
   nama               String @db.VarChar(100)
   bidang             String @db.VarChar(50)
   nomor_wa           String @db.VarChar(20)
@@ -142,7 +142,7 @@ model Ahli {
 
 model UserFavoriteAhli {
   email_user    String  @db.VarChar(64)
-  id_ahli       Int
+  id_ahli       String
   
   user          User    @relation(fields: [email_user], references: [email], onDelete: Cascade)
   ahli          Ahli   @relation(fields: [id_ahli], references: [id], onDelete: Cascade)

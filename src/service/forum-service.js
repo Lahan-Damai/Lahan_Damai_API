@@ -35,7 +35,7 @@ const createReplyForum = async (request, user) => {
 }
 
 const getThreadForum = async (id) => {
-    const idPost = parseInt(id);
+    const idPost = id;
     const post = await prismaClient.thread.findUnique({
         where: {
             id: idPost
@@ -53,7 +53,7 @@ const getThreadForum = async (id) => {
 }
 
 const getThreadReplies = async (id) => {
-    const idThread = parseInt(id);
+    const idThread = id;
     const replies = await prismaClient.reply.findMany({
         where: {
             thread_id: idThread
@@ -110,7 +110,7 @@ const getAllThreadForum = async () => {
 
 
 const getThreadAndReplies = async (id) => {
-    const idPost = parseInt(id);
+    const idPost = id;
     const post = await prismaClient.thread.findUnique({
         where: {
             id: idPost
@@ -174,7 +174,7 @@ const getThreadAndReplies = async (id) => {
 
 
 const deleteThreadForum = async (id, user) => {
-    const idThread = parseInt(id);
+    const idThread = id;
 
     const thread_author = await prismaClient.thread.findUnique({
         where: {
@@ -199,7 +199,7 @@ const deleteThreadForum = async (id, user) => {
 }
 
 const deleteReplyForum = async (id, user) => {
-    const idReply = parseInt(id);
+    const idReply = id;
     const reply_author = await prismaClient.reply.findUnique({
         where: {
             id: idReply
@@ -224,7 +224,7 @@ const deleteReplyForum = async (id, user) => {
 
 
 const updateThreadForum = async (id, request, user) => {
-    const idThread = parseInt(id);
+    const idThread = id;
 
     const thread_author = await prismaClient.thread.findUnique({
         where: {
@@ -251,7 +251,7 @@ const updateThreadForum = async (id, request, user) => {
 }
 
 const updateReplyForum = async (id, request, user) => {
-    const idReply = parseInt(id);
+    const idReply = id;
     const reply_author = await prismaClient.reply.findUnique({
         where: {
             id: idReply

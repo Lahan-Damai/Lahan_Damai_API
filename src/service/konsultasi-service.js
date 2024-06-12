@@ -96,7 +96,7 @@ const getAllAhliByBidang = async (bidang) => {
 
 
 const getAhli = async (id) => {
-    const idAhli = parseInt(id);
+    const idAhli = id;
     console.log("id");
     const ahli = await prismaClient.ahli.findUnique({
         where: {
@@ -140,7 +140,7 @@ const updateAhli = async (request) => {
             })
         }
     }
-    const idAhli = parseInt(request.params.id);
+    const idAhli = request.params.id;
     const data = validate(updateAhliEdukasiValidation, request.body);
 
     data.foto = fotosUrl[0];
@@ -167,7 +167,7 @@ const updateAhli = async (request) => {
 
 
 const removeAhli = async (id) => {
-    const idAhli = parseInt(id);
+    const idAhli = id;
     await prismaClient.ahli.delete({
         where: {
             id: idAhli
@@ -197,7 +197,7 @@ const createUlasanAhli = async (request) => {
 }   
 
 const getRatingAhli = async (id) => {
-    const idAhli = parseInt(id);
+    const idAhli = id;
     const rating = await prismaClient.ulasanAhli.aggregate({
         _avg: {
             rating: true
@@ -211,7 +211,7 @@ const getRatingAhli = async (id) => {
 }
 
 const getUlasanAhli = async (id) => {
-    const idAhli = parseInt(id);
+    const idAhli = id;
     const ulasan = await prismaClient.ulasanAhli.findMany({
         where: {
             ahli_id: idAhli

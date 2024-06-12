@@ -25,7 +25,7 @@ const create = async (request) => {
 }
 
 const addPhotosToArtikel = async (id_artikel, req) => {
-    const id = parseInt(id_artikel);
+    const id = id_artikel;
     let fotoUrls = [];
 
     if (!req.files) {
@@ -79,7 +79,7 @@ const addPhotosToArtikel = async (id_artikel, req) => {
 
 
 const get = async (id) => {
-    const idPost = parseInt(id);
+    const idPost = id;
     const post = await prismaClient.postEdukasi.findUnique({
         where: {
             id: idPost
@@ -139,7 +139,7 @@ const getAll = async () => {
 }
 
 const update = async (request, id) => {
-    const idPost = parseInt(id);
+    const idPost = id;
     const data = validate(updatePostEdukasiValidation, request);
     const post = await prismaClient.postEdukasi.update({
         where: {
@@ -162,7 +162,7 @@ const update = async (request, id) => {
 }
 
 const deleteArtikelPhotos = async (id_artikel) => {
-    const id = parseInt(id_artikel);
+    const id = id_artikel;
     const artikelPhotos = await prismaClient.fotoArtikel.findMany({
         where: {
             id_artikel: id
@@ -214,7 +214,7 @@ const getRecommended = async () => {
 }
 
 const remove = async (id) => {
-    const idPost = parseInt(id);
+    const idPost = id;
     await prismaClient.postEdukasi.delete({
         where: {
             id: idPost

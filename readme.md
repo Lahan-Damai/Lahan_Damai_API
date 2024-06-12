@@ -32,7 +32,7 @@
             
         "edukasi": [
             {
-                "id": 1,
+                "id": "uuid",
                 "judul": "string",
                 "deskripsi": "string",
                 "isi": "string",
@@ -543,7 +543,7 @@
 ```json
 {
   "data": {
-    "id": "integer",
+    "id": "string",
     "judul": "string",
     "deskripsi": "string",
     "isi": "string",
@@ -572,7 +572,7 @@
 {
   "data": [
     {
-      "id": "integer",
+      "id": "string",
       "judul": "string",
       "deskripsi": "string",
       "isi": "string",
@@ -780,7 +780,7 @@ Response:
 ```json
 {
   "data": {
-    "id": "integer",
+    "id": "string",
     "judul": "string",
     "isi": "string",
     "user_nik": "string",
@@ -801,7 +801,7 @@ Response:
 **Request Body:**
 ```json
 {
-  "thread_id": "integer",
+  "thread_id": "string",
   "isi": "string"
 }
 ```
@@ -811,7 +811,7 @@ Response:
 ```json
 {
   "data": {
-    "id": "integer",
+    "id": "string",
     "isi": "string",
     "user_nik": "string",
     "tanggal_upload": "string"
@@ -833,7 +833,7 @@ Response:
 ```json
 {
   "data": {
-    "id": "integer",
+    "id": "string",
     "judul": "string",
     "isi": "string",
     "user_nik": "string",
@@ -856,7 +856,7 @@ Response:
 ```json
 {
     "data": {
-        "id": "integer",
+        "id": "string",
         "judul": "string",
         "isi": "string",
         "tanggal_upload": "string",
@@ -867,7 +867,7 @@ Response:
         },
         "replies": [
             {
-                "id": "integer",
+                "id": "string",
                 "isi": "string",
                 "tanggal_upload": "string",
                 "user": {
@@ -897,7 +897,7 @@ Response:
 {
   "data": [
     {
-      "id": "integer",
+      "id": "string",
       "isi": "string",
       "user_nik": "string",
       "tanggal_upload": "string"
@@ -920,7 +920,7 @@ Response:
 {
     "data": [
         {
-            "id": "int",
+            "id": "string",
             "judul": "string",
             "isi": "string",
             "tanggal_upload": "2024-06-06T14:37:38.597Z",
@@ -1051,7 +1051,7 @@ Response:
         {
             "data": [
                 {
-                    "id": 1,
+                    "id": "uuid",
                     "nama": "John Doe",
                     "bidang": "Psychology",
                     "nomor_wa": "1234567890",
@@ -1077,7 +1077,7 @@ Response:
         {
             "data": [
                 {
-                    "id": 1,
+                    "id": "uuid",
                     "nama": "John Doe",
                     "bidang": "Psychology",
                     "nomor_wa": "1234567890",
@@ -1095,14 +1095,14 @@ Response:
 - **Method**: `GET`
 - **Description**: Retrieve an expert by ID.
 - **Parameters**:
-    - `id` (integer) - The ID of the expert.
+    - `id` The ID of the expert.
 - **Response**:
     - **Status**: `200 OK`
     - **Body**:
         ```json
         {
             "data": {
-                "id": 1,
+                "id": "uuid",
                 "nama": "John Doe",
                 "bidang": "Psychology",
                 "nomor_wa": "1234567890",
@@ -1118,7 +1118,7 @@ Response:
 - **Method**: `GET`
 - **Description**: Retrieve reviews of an expert by ID.
 - **Parameters**:
-    - `id` (integer) - The ID of the expert.
+    - `id` The ID of the expert.
 - **Response**:
     - **Status**: `200 OK`
     - **Body**:
@@ -1126,7 +1126,7 @@ Response:
         {
             "data": [
                 {
-                    "id": 1,
+                    "id": "uuid",
                     "ahli_id": 1,
                     "rating": 4,
                     "user_nik": "9876543210",
@@ -1142,7 +1142,7 @@ Response:
 - **Method**: `GET`
 - **Description**: Retrieve the average rating of an expert by ID.
 - **Parameters**:
-    - `id` (integer) - The ID of the expert.
+    - `id` The ID of the expert.
 - **Response**:
     - **Status**: `200 OK`
     - **Body**:
@@ -1159,7 +1159,7 @@ Response:
 - **Method**: `POST`
 - **Description**: Create a review for an expert.
 - **Parameters**:
-    - `id` (integer) - The ID of the expert.
+    - `id` The ID of the expert.
 - **Request Body**:
     ```json
     {
@@ -1197,7 +1197,8 @@ Response:
         "bidang": "Psychology",
         "nomor_wa": "1234567890",
         "deskripsi": "Expert in psychology",
-        "lama_kerja": "5"
+        "lama_kerja": "5",
+        "foto": "<file>"
     }
     ```
 - **Response**:
@@ -1206,7 +1207,7 @@ Response:
         ```json
         {
             "data": {
-                "id": 1,
+                "id": "uuid",
                 "nama": "John Doe",
                 "bidang": "Psychology",
                 "nomor_wa": "1234567890",
@@ -1223,7 +1224,7 @@ Response:
 - **Description**: Update an expert's details.
 - **Middleware**: `multerMiddleware` (for handling file uploads)
 - **Parameters**:
-    - `id` (integer) - The ID of the expert.
+    - `id` The ID of the expert.
 - **Request Body**:
     ```json
     {
@@ -1240,7 +1241,7 @@ Response:
         ```json
         {
             "data": {
-                "id": 1,
+                "id": "uuid",
                 "nama": "John Doe",
                 "bidang": "Psychology",
                 "nomor_wa": "1234567890",
@@ -1256,7 +1257,7 @@ Response:
 - **Method**: `DELETE`
 - **Description**: Delete an expert by ID.
 - **Parameters**:
-    - `id` (integer) - The ID of the expert.
+    - `id` The ID of the expert.
 - **Response**:
     - **Status**: `200 OK`
     - **Body**:

@@ -1,7 +1,7 @@
 import Joi from 'joi';
 
 const createPostEdukasiValidation = Joi.object({
-    id: Joi.number().integer().positive(),
+    id: Joi.string().max(36),
     judul: Joi.string().max(150).required(),
     deskripsi: Joi.string().max(255).required(),
     isi: Joi.string().required(),

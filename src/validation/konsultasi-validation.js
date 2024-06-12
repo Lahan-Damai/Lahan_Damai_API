@@ -1,7 +1,7 @@
 import Joi from 'joi';
 
 const createAhliEdukasiValidation = Joi.object({
-    id: Joi.number().integer().positive(),
+    id: Joi.string().max(36),
     nama: Joi.string().max(100).required(),
     bidang: Joi.string().max(50).required(),
     nomor_wa: Joi.string().max(20).required(),

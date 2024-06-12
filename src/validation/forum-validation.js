@@ -7,7 +7,7 @@ const createPostForumValidation = Joi.object({
 });
 
 const createReplyForumValidation = Joi.object({
-    thread_id: Joi.number().required(),
+    thread_id: Joi.string().max(36).required(),
     isi: Joi.string().required(),
     user_nik: Joi.string().max(16).required(),
 });
