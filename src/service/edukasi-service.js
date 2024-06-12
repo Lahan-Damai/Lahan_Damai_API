@@ -16,7 +16,7 @@ const create = async (request) => {
             isi: true,
             publisher: true,     
             tanggal_upload: true,
-            isRecommended: true,
+            is_recommended: true,
         }
     });
 
@@ -92,7 +92,7 @@ const get = async (id) => {
             publisher: true,     
             tanggal_upload: true,
             sumber: true,
-            isRecommended: true,
+            is_recommended: true,
             fotos: {
                 select: {
                     url: true
@@ -122,7 +122,7 @@ const getAll = async () => {
             publisher: true,     
             tanggal_upload: true,
             sumber: true,
-            isRecommended: true,
+            is_recommended: true,
             fotos: {
                 select: {
                     url: true
@@ -154,7 +154,7 @@ const update = async (request, id) => {
             publisher: true,     
             tanggal_upload: true,
             sumber: true,
-            isRecommended: true,
+            is_recommended: true,
         }
     })
 
@@ -188,7 +188,7 @@ const deleteArtikelPhotos = async (id_artikel) => {
 const getRecommended = async () => {
     const posts = await prismaClient.postEdukasi.findMany({
         where: {
-            isRecommended: true
+            is_recommended: true
         },
         select: {
             id: true,

@@ -96,7 +96,7 @@ model PostEdukasi {
   publisher       String  @db.VarChar(50)
   tanggal_upload  DateTime @default(now())
   sumber          String 
-  isRecommended   Boolean   @default(false)
+  is_recommended  Boolean   @default(false)
 
   fotos           FotoArtikel[]
 

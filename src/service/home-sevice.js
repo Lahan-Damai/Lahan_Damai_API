@@ -44,7 +44,7 @@ const getHomeContent = async (user) => {
             publisher: true,     
             tanggal_upload: true,
             sumber: true,
-            isRecommended: true,    
+            is_recommended: true,    
             fotos: {
                 select: {
                     url: true
