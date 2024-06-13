@@ -240,6 +240,7 @@ const getUlasanAhli = async (id) => {
         },
         select: {
             ahli_id: true,
+            id: true,
             rating: true,
             user_nik: true,
             isi: true
