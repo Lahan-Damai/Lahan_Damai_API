@@ -1164,6 +1164,41 @@ Response:
         }
         ```
 
+### Get expert detail
+- **Endpoint**: `/api/konsultasi/ahli/get/:id/detail`
+- **Method**: `GET`
+- **Description**: Mendapatkan detail dari sebuah ahli berdasarkan ID.
+- **Parameters**:
+    - `id` The ID of the expert.
+- **Response**:
+    - **Status**: `200 OK`
+    - **Body**:
+        ```json
+        {
+            "data": {
+                "id": "string",
+                "nama": "string",
+                "bidang": "string",
+                "nomor_wa": "string",
+                "deskripsi": "string",
+                "lama_kerja": "integer",
+                "foto": "string",
+                "rating": "integer",
+                "reviews": [
+                    {
+                        "ahli_id": "string",
+                        "rating": "integer",
+                        "user_nik": "string",
+                        "isi": "string"
+                    }
+                    ...
+                ],
+                "total_review": "integer"
+            }
+        }
+        ```
+
+
 ### Create Review for an Expert
 - **Endpoint**: `/api/konsultasi/ahli/:id/ulasan`
 - **Method**: `POST`

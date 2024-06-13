@@ -165,6 +165,28 @@ const updateAhli = async (request) => {
     return ahli;
 }
 
+const getDetailAhli = async (id) => {
+    const idAhli = id;
+    const ahli = await prismaClient.ahli.findUnique({
+        where: {
+            id: idAhli
+        },
+        select: {
+            id: true,
+            nama: true,
+            bidang: true,
+            nomor_wa: true,
+            deskripsi: true,
+            lama_kerja: true,
+            foto: true
+        }
+    });
+    const rating = await getRatingAhli(idAhli);
+    ahli.rating = rating.rating;
+    ahli.reviews = await getUlasanAhli(idAhli);
+    ahli.total_review = ahli.reviews.length;
+    return ahli;
+}
 
 const removeAhli = async (id) => {
     const idAhli = id;
@@ -236,4 +258,5 @@ export default {
     createUlasanAhli,
     getUlasanAhli,
     getRatingAhli,
+    getDetailAhli,
 }

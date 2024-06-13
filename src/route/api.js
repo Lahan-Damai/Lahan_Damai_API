@@ -38,6 +38,7 @@ userRouter.get('/api/konsultasi/ahli/get/:id', konsultasiController.getAhli);
 userRouter.get('/api/konsultasi/ahli/get/:id/ulasan', konsultasiController.getUlasanAhli);
 userRouter.get('/api/konsultasi/ahli/get/:id/rating', konsultasiController.getRatingAhli);
 userRouter.post('/api/konsultasi/ahli/:id/ulasan', konsultasiController.createUlasanAhli);
+userRouter.get('/api/konsultasi/ahli/get/:id/detail', konsultasiController.getDetailAhli);
 
 userRouter.post('/api/forum/create', forumController.createThreadForum);
 userRouter.post('/api/forum/reply/add', forumController.createReplyForum);

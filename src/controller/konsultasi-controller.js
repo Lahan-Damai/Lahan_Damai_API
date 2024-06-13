@@ -102,6 +102,18 @@ const getUlasanAhli = async (req, res, next) => {
 }
 
 
+const getDetailAhli = async (req, res, next) => {
+    try {
+        const result = await konsultasiService.getDetailAhli(req.params.id);
+        res.status(200).json({
+            data: result
+        });
+    } catch (e) {
+        next(e);
+    }
+}
+
+
 export default {
     createAhli,
     getAllAhli,
@@ -112,5 +124,5 @@ export default {
     createUlasanAhli,
     getUlasanAhli,
     getRatingAhli,
-
+    getDetailAhli
 }
