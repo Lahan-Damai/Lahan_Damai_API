@@ -873,6 +873,7 @@ Response:
         "replies": [
             {
                 "id": "string",
+                "thread_id": "string",
                 "isi": "string",
                 "tanggal_upload": "string",
                 "user": {

@@ -135,6 +135,7 @@ const getThreadAndReplies = async (id) => {
             replies: {
                 select: {
                     id: true,
+                    thread_id: true,
                     isi: true,
                     tanggal_upload: true,
                     user: {
@@ -170,6 +171,7 @@ const getThreadAndReplies = async (id) => {
         },
         replies: post.replies.map(reply => ({
             id: reply.id,
+            thread_id: reply.thread_id,
             isi: reply.isi,
             tanggal_upload: reply.tanggal_upload,
             user: {
