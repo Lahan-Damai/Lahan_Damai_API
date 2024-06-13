@@ -97,7 +97,6 @@ const getAllAhliByBidang = async (bidang) => {
 
 const getAhli = async (id) => {
     const idAhli = id;
-    console.log("id");
     const ahli = await prismaClient.ahli.findUnique({
         where: {
             id: idAhli
@@ -144,8 +143,6 @@ const updateAhli = async (request) => {
     const data = validate(updateAhliEdukasiValidation, request.body);
 
     data.foto = fotosUrl[0];
-    
-    console.log(data)
 
     const ahli = await prismaClient.ahli.update({
         where: {
@@ -233,6 +230,7 @@ const getRatingAhli = async (id) => {
 }
 
 const getUlasanAhli = async (id) => {
+    console.log("getUlasanAhli");
     const idAhli = id;
     const ulasan = await prismaClient.ulasanAhli.findMany({
         where: {
@@ -240,13 +238,43 @@ const getUlasanAhli = async (id) => {
         },
         select: {
             ahli_id: true,
-            id: true,
             rating: true,
             user_nik: true,
             isi: true
         }
     })
     return ulasan;
+}
+
+
+const deleteUlasanAhli = async (id, user) => {
+    const idAhli = id;
+    const ulasan = await prismaClient.ulasanAhli.findUnique({
+        where: {
+            ahli_id_user_nik: {
+                ahli_id: idAhli,
+                user_nik: user.nik
+            }
+        },
+        select: {
+            user_nik: true,
+        }
+    })
+
+    if (ulasan.user_nik !== user.nik && user.role !== "admin") {
+        throw new Error('Unauthorized');
+    }
+
+    await prismaClient.ulasanAhli.delete({
+        where: {
+            ahli_id_user_nik: {
+                ahli_id: idAhli,
+                user_nik: user.nik
+            }
+        }
+    })
+
+    return "success";
 }
 
 export default {
@@ -260,4 +288,5 @@ export default {
     getUlasanAhli,
     getRatingAhli,
     getDetailAhli,
+    deleteUlasanAhli
 }

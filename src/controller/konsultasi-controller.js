@@ -113,6 +113,17 @@ const getDetailAhli = async (req, res, next) => {
     }
 }
 
+const deleteUlasanAhli = async (req, res, next) => {
+    try {
+        const result = await konsultasiService.deleteUlasanAhli(req.params.id, req.user);
+        res.status(200).json({
+            data: result
+        });
+    } catch (e) {
+        next(e);
+    }
+}
+
 
 export default {
     createAhli,
@@ -124,5 +135,6 @@ export default {
     createUlasanAhli,
     getUlasanAhli,
     getRatingAhli,
-    getDetailAhli
+    getDetailAhli,
+    deleteUlasanAhli
 }

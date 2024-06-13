@@ -1311,4 +1311,20 @@ Response:
             "data": "success"
         }
         ```
+
+### Delete Ulasan Ahli
+- **Endpoint**: `/api/konsultasi/ahli/:id/ulasan`
+- **Method**: `DELETE`
+- **Description**: hapus ulasan ahli berdasarkan id ahli.
+- **Parameters**:
+    - `id` The ID of the expert.
+- **Response**:
+    - **Status**: `200 OK`
+    - **Body**:
+        ```json
+        {
+            "data": "success"
+        }
+        ```
+
 </details>
