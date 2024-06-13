@@ -80,6 +80,8 @@ const getAllThreadForum = async () => {
                 select: {
                     nama: true,
                     foto: true,
+                    email: true,
+                    nik: true,
                 }
             }
         }
@@ -101,6 +103,8 @@ const getAllThreadForum = async () => {
             user: {
                 nama: post.user.nama,
                 foto: post.user.foto,
+                email: post.user.email,
+                nik: post.user.nik
             }
         };
     }));
@@ -124,6 +128,8 @@ const getThreadAndReplies = async (id) => {
                 select: {
                     nama: true,
                     foto: true,
+                    email: true,
+                    nik: true,
                 }
             },
             replies: {
@@ -135,6 +141,8 @@ const getThreadAndReplies = async (id) => {
                         select: {
                             nama: true,
                             foto: true,
+                            email: true,
+                            nik: true,
                         }
                     }
                 }
@@ -157,6 +165,8 @@ const getThreadAndReplies = async (id) => {
         user: {
             nama: post.user.nama,
             foto: post.user.foto,
+            email: post.user.email,
+            nik: post.user.nik
         },
         replies: post.replies.map(reply => ({
             id: reply.id,
@@ -165,6 +175,8 @@ const getThreadAndReplies = async (id) => {
             user: {
                 nama: reply.user.nama,
                 foto: reply.user.foto,
+                email: reply.user.email,
+                nik: reply.user.nik
             }
         }))
     };
@@ -184,8 +196,8 @@ const deleteThreadForum = async (id, user) => {
             user_nik: true
         }
     });
-    
-    if (thread_author.user_nik !== user.nik) {
+ 
+    if (thread_author.user_nik !== user.nik && user.role !== "admin") {
         throw new Error('Unauthorized');
     }
 
@@ -209,7 +221,7 @@ const deleteReplyForum = async (id, user) => {
         }
     });
 
-    if (reply_author.user_nik !== user.nik) {
+    if (reply_author.user_nik !== user.nik && user.role !== "admin") {
         throw new Error('Unauthorized');
     }
 

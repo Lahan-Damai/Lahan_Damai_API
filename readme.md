@@ -103,7 +103,9 @@
       "data": {
         "token": "string",
         "nama": "string",
-        "role": "string"
+        "role": "string",
+        "email": "string",
+        "nik": "string"
       }
     }
     ```
@@ -864,7 +866,9 @@ Response:
         "total_reply": "integer",
         "user": {
             "nama": "string",
-            "foto": "string"
+            "foto": "string",
+            "email": "string",
+            "nik": "string"
         },
         "replies": [
             {
@@ -873,7 +877,9 @@ Response:
                 "tanggal_upload": "string",
                 "user": {
                     "nama": "string",
-                    "foto": "string"
+                    "foto": "string",
+                    "email": "string",
+                    "nik": "string"
                 }
             },
             ...
@@ -928,7 +934,9 @@ Response:
             "total_reply": "int",
             "user": {
                 "nama": "string",
-                "foto": "https://storage.googleapis.com/..."
+                "foto": "https://storage.googleapis.com/...",
+                "email": "string",
+                "nik": "string"
             }
         },
         ...

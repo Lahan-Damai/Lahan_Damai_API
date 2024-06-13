@@ -69,6 +69,8 @@ const login = async (request) => {
             token: true,
             nama: true,
             role: true,
+            email: true,
+            nik: true
         }
     });
 }
