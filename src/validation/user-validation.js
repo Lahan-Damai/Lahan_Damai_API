@@ -8,6 +8,7 @@ const registerUserValidation = Joi.object({
   password: Joi.string().min(6).max(100).required(),
   token: Joi.string().max(100).optional(),
   tanggal_lahir: Joi.date().required(),
+  role: Joi.string().max(10),
 });
 
 

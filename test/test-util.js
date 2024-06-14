@@ -4,20 +4,22 @@ import bcrypt from "bcrypt";
 export const removeTestUser = async () => {
     await prismaClient.user.deleteMany({
         where: {
-            username: "damai01"
+            email: "damai0123@gmail.com"
         }
     })
 }
 
-export const createTestUser = async () => {
+export const createTestUser = async (role = "user") => {
     await prismaClient.user.create({
         data: {
-            nik: "12345678",
-            username: "damai01",
+            nik: "1234567890",
+            email: "damai0123@gmail.com",
             nama: "damai",     
             alamat: "beji, depok",   
             password: await bcrypt.hash("lahanku123", 10),
-            token: "testtoken"
+            tanggal_lahir: new Date(),
+            token: "testtoken",
+            role: role
         }
     })
 }
@@ -25,7 +27,7 @@ export const createTestUser = async () => {
 export const getTestUser = async () => {
     return prismaClient.user.findUnique({
         where: {
-            username: "damai01"
+            email: "damai0123@gmail.com"
         }
     });
 }

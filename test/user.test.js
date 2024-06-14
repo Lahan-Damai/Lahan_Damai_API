@@ -1,48 +1,50 @@
-import { prismaClient } from "../src/application/database.js"
 import supertest from "supertest";
 import {app} from "../src/application/app.js";
 import { createTestUser, removeTestUser, getTestUser } from "./test-util.js";
 
 
-describe('POST /api/users', () => { 
+describe('POST /api/users/register', () => { 
     afterEach(async () => {
         await removeTestUser();
     })
     
     it('bisa register user baru', async () => { 
         const result = await supertest(app)
-        .post('/api/users')
+        .post('/api/users/register')
         .send({
-            nik: "12345678",
-            username: "damai01",
+            nik: "1234567890",
+            email: "damai0123@gmail.com",
             nama: "damai",     
             alamat: "beji, depok",   
-            password: "lahanku123"
+            password: "lahanku123",
+            tanggal_lahir: new Date()
         })
 
         expect(result.status).toBe(200);
         expect(result.body.data.nama).toBe("damai");
-        expect(result.body.data.username).toBe("damai01");
+        expect(result.body.data.email).toBe("damai0123@gmail.com");
         expect(result.body.data.password).toBeUndefined();
     }) 
-    it('username dan NIK unik', async () => {
+    it('email dan NIK unik', async () => {
         const result1 = await supertest(app)
-        .post('/api/users')
+        .post('/api/users/register')
         .send({
-            nik: "12345678",
-            username: "damai01",
+            nik: "1234567890",
+            email: "damai0123@gmail.com",
             nama: "damai",     
             alamat: "beji, depok",   
-            password: "lahanku123"
+            password: "lahanku123",
+            tanggal_lahir: new Date()
         });
         const result2 = await supertest(app)
-        .post('/api/users')
+        .post('/api/users/register')
         .send({
-            nik: "12345678",
-            username: "damai01",
+            nik: "1234567890",
+            email: "damai0123@gmail.com",
             nama: "damai",     
             alamat: "beji, depok",   
-            password: "lahanku123"
+            password: "lahanku123",
+            tanggal_lahir: new Date()
         });
         expect(result1.status).toBe(200);
         expect(result2.status).toBe(400);
@@ -60,7 +62,7 @@ describe('POST /api/users', () => {
         const result = await supertest(app)
         .post('/api/users/login')
         .send({
-            username: "damai01",
+            email: "damai0123@gmail.com",
             password: "lahanku123"
         })
         expect(result.status).toBe(200);
@@ -71,7 +73,7 @@ describe('POST /api/users', () => {
         const result = await supertest(app)
         .post('/api/users/login')
         .send({
-            username: "",
+            email: "",
             password: ""
         })
         expect(result.status).toBe(400);
@@ -81,17 +83,17 @@ describe('POST /api/users', () => {
         const result = await supertest(app)
         .post('/api/users/login')
         .send({
-            username: "damai01",
+            email: "damai0123@gmail.com",
             password: "fakepass"
         })
         expect(result.status).toBe(401);
         expect(result.body.errors).toBeDefined();
     })
-    it("tidak bisa login jika username salah", async () => {
+    it("tidak bisa login jika email salah", async () => {
         const result = await supertest(app)
         .post('/api/users/login')
         .send({
-            username: "fakeuser",
+            email: "fakeuser",
             password: "lahanku123"
         })
         expect(result.status).toBe(401);
@@ -115,7 +117,7 @@ describe('POST /api/users', () => {
             .set('Cookie', 'token=testtoken');
 
         expect(result.status).toBe(200);
-        expect(result.body.data.username).toBe('damai01');
+        expect(result.body.data.email).toBe('damai0123@gmail.com');
         expect(result.body.data.nama).toBe('damai');
     });
 
@@ -145,7 +147,7 @@ describe('DELETE /api/users/logout', function () {
 
         expect(result.status).toBe(200);
         const user = await getTestUser();
-        expect(result.body.data.username).toBe(user.username);
+        expect(result.body.data.email).toBe(user.email);
         expect(user.token).toBeNull();
     });
 
