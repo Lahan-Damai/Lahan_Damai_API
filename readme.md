@@ -1203,6 +1203,7 @@ Response:
 - **Endpoint**: `/api/konsultasi/ahli/:id/ulasan`
 - **Method**: `POST`
 - **Description**: Create a review for an expert.
+- pengguna hanya dapat membuat maksimal 1 ulasan untuk satu ahli 
 - **Parameters**:
     - `id` The ID of the expert.
 - **Request Body**:
@@ -1312,12 +1313,20 @@ Response:
         }
         ```
 
-### Delete Ulasan Ahli
+### Delete Ulasan Ahli 
 - **Endpoint**: `/api/konsultasi/ahli/:id/ulasan`
 - **Method**: `DELETE`
 - **Description**: hapus ulasan ahli berdasarkan id ahli.
 - **Parameters**:
     - `id` The ID of the expert.
+- **Request**: 
+    - jika admin yang melakukan delete tambahkan request body dengan atribut user_nik milik ulasan yang ingin dihapus
+    - **Body**:
+    ```json
+      {
+        "user_nik": "string"
+      }
+    ```
 - **Response**:
     - **Status**: `200 OK`
     - **Body**:
@@ -1326,5 +1335,6 @@ Response:
             "data": "success"
         }
         ```
+- server akan return unauthorized apabila user yang melakukan request delete bukan user pembuat ulasan
 
 </details>

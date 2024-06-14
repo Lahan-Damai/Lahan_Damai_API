@@ -115,7 +115,10 @@ const getDetailAhli = async (req, res, next) => {
 
 const deleteUlasanAhli = async (req, res, next) => {
     try {
-        const result = await konsultasiService.deleteUlasanAhli(req.params.id, req.user);
+        if (!req.body.user_nik) {
+            req.body.user_nik = req.user.nik;
+        }
+        const result = await konsultasiService.deleteUlasanAhli(req.params.id, req.user, req.body);
         res.status(200).json({
             data: result
         });

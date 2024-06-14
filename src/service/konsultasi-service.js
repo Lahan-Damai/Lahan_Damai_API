@@ -230,7 +230,6 @@ const getRatingAhli = async (id) => {
 }
 
 const getUlasanAhli = async (id) => {
-    console.log("getUlasanAhli");
     const idAhli = id;
     const ulasan = await prismaClient.ulasanAhli.findMany({
         where: {
@@ -247,19 +246,22 @@ const getUlasanAhli = async (id) => {
 }
 
 
-const deleteUlasanAhli = async (id, user) => {
+const deleteUlasanAhli = async (id, user, request) => {
     const idAhli = id;
     const ulasan = await prismaClient.ulasanAhli.findUnique({
         where: {
             ahli_id_user_nik: {
                 ahli_id: idAhli,
-                user_nik: user.nik
+                user_nik: request.user_nik
             }
         },
         select: {
             user_nik: true,
         }
     })
+    if (!ulasan) {
+        throw new Error('Ulasan not found');
+    }
 
     if (ulasan.user_nik !== user.nik && user.role !== "admin") {
         throw new Error('Unauthorized');
@@ -269,7 +271,7 @@ const deleteUlasanAhli = async (id, user) => {
         where: {
             ahli_id_user_nik: {
                 ahli_id: idAhli,
-                user_nik: user.nik
+                user_nik: request.user_nik
             }
         }
     })
