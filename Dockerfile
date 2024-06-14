@@ -28,6 +28,12 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 # Copy the rest of the source files into the image.
 COPY . .
 
+ARG DATABASE_URL
+ENV DATABASE_URL ${DATABASE_URL}
+
+ARG DIRECT_URL
+ENV DIRECT_URL ${DIRECT_URL}
+
 # Generate Prisma client
 RUN npx prisma generate
 
