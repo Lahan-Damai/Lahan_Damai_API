@@ -258,7 +258,23 @@ const getUlasanAhli = async (id) => {
             isi: true
         }
     })
-    return ulasan;
+
+    const ulasanWithUserDetail = await Promise.all(ulasan.map(async (ulasan) => {
+        const user = await prismaClient.user.findUnique({
+            where: {
+                nik: ulasan.user_nik
+            },
+            select: {
+                nama: true,
+                foto: true
+            }
+        })
+        ulasan.nama = user.nama;
+        ulasan.foto = user.foto;
+        return ulasan;
+    }));
+
+    return ulasanWithUserDetail;
 }
 
 

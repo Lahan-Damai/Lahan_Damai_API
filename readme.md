@@ -1193,7 +1193,9 @@ Response:
                         "ahli_id": "string",
                         "rating": "integer",
                         "user_nik": "string",
-                        "isi": "string"
+                        "isi": "string",
+                        "nama": "string",
+                        "foto": "string"
                     }
                     ...
                 ],
