@@ -1066,8 +1066,10 @@ Response:
                     "bidang": "Psychology",
                     "nomor_wa": "1234567890",
                     "deskripsi": "Expert in psychology",
-                    "lama_kerja": "5",
-                    "foto": "https://storage.googleapis.com/bucket/1-photo.jpg"
+                    "lama_kerja": 5,
+                    "foto": "https://storage.googleapis.com/bucket/1-photo.jpg",
+                    "rating": 4,
+                    "total_review": 5,
                 },
                 ...
             ]
@@ -1093,7 +1095,9 @@ Response:
                     "nomor_wa": "1234567890",
                     "deskripsi": "Expert in psychology",
                     "lama_kerja": "5",
-                    "foto": "https://storage.googleapis.com/bucket/1-photo.jpg"
+                    "foto": "https://storage.googleapis.com/bucket/1-photo.jpg",
+                    "rating": 4,
+                    "total_review": 5,
                 },
                 ...
             ]
@@ -1227,9 +1231,63 @@ Response:
         }
         ```
 
----
+### Add Expert to Favorite List
+- **Endpoint**: `/api/konsultasi/ahli/:id/favorite`
+- **Method**: `POST`
+- **Description**: Add an expert to user's favorite list
+- **Parameters**:
+    - `id` The ID of the expert.
 
-## Admin API Endpoints
+- **Response**:
+    - **Status**: `200 OK`
+    - **Body**:
+        ```json
+        {
+            "data": "success"
+        }
+        ```
+
+### delete Expert from Favorite List
+- **Endpoint**: `/api/konsultasi/ahli/:id/favorite`
+- **Method**: `DELETE`
+- **Description**: Delete an expert from user's favorite list
+- **Parameters**:
+    - `id` The ID of the expert.
+
+- **Response**:
+    - **Status**: `200 OK`
+    - **Body**:
+        ```json
+        {
+            "data": "success"
+        }
+        ```
+
+### get User Expert Favorite List
+- **Endpoint**: `/api/konsultasi/ahli/favorite/get`
+- **Method**: `GET`
+- **Description**: Retrieve the list of experts that the user has added to their favorites list.
+
+- **Response**:
+    - **Status**: `200 OK`
+    - **Body**:
+        ```json
+        {
+            "data": [
+                {
+                    "id": "string",
+                    "nama": "string",
+                    "bidang": "string",
+                    "nomor_wa": "string",
+                    "deskripsi": "string",
+                    "lama_kerja": 5,
+                    "foto": "url string",
+                    "rating": 4
+                }
+            ]
+        }
+        ```
+---
 
 ### Create Expert
 - **Endpoint**: `/api/konsultasi/ahli/create`

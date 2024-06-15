@@ -40,6 +40,9 @@ userRouter.get('/api/konsultasi/ahli/get/:id/rating', konsultasiController.getRa
 userRouter.post('/api/konsultasi/ahli/:id/ulasan', konsultasiController.createUlasanAhli);
 userRouter.get('/api/konsultasi/ahli/get/:id/detail', konsultasiController.getDetailAhli);
 userRouter.delete('/api/konsultasi/ahli/:id/ulasan', konsultasiController.deleteUlasanAhli);
+userRouter.post('/api/konsultasi/ahli/:id/favorite', konsultasiController.addFavorite);
+userRouter.delete('/api/konsultasi/ahli/:id/favorite', konsultasiController.removeFavorite);
+userRouter.get('/api/konsultasi/ahli/favorite/get', konsultasiController.getUserFavorite);
 
 userRouter.post('/api/forum/create', forumController.createThreadForum);
 userRouter.post('/api/forum/reply/add', forumController.createReplyForum);
