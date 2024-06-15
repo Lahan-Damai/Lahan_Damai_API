@@ -226,15 +226,11 @@
     ```
 
 ### 7. get other user by nik
-- **URL**: `/api/users/get/`
-- **Description** : Get the user details by email
+- **URL**: `/api/users/:nik/get/`
+- **Description** : Get the user details by nik
 - **Method**: `GET`
-- **Body**:
-  ```json
-  {
-    "email": "string"
-  }
-  ```
+- **Reqeuest Parameter**: (nik) NIK user
+- hanya dapat dipanggil oleh user role admin
 - **Success Response**:
   - **Code**: `200 OK`
   - **Content**:
@@ -243,9 +239,9 @@
       "data": {
           "email": "string",
           "nama": "string",
-          "alamat": "",
-          "nik": "",
-          "tanggal_lahir": "",
+          "alamat": "string",
+          "nik": "string",
+          "tanggal_lahir": "string",
           "foto": "https://storage.googleapis.com/lahan-damai/example-example.jpg"
       }
     }

@@ -14,7 +14,6 @@ userRouter.use(authMiddleware);
 userRouter.get("/api/home/get", homeController.getHomeContent);
 
 userRouter.get('/api/users/current', userController.get);
-userRouter.get('/api/users/get/', userController.getOtherUsers);
 userRouter.delete('/api/users/logout', userController.logout);
 userRouter.put('/api/users/update', multerMiddleware, userController.updateUser);
 
