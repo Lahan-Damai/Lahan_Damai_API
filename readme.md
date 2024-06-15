@@ -226,15 +226,11 @@
     ```
 
 ### 7. get other user by nik
-- **URL**: `/api/users/get/`
-- **Description** : Get the user details by email
+- **URL**: `/api/users/:nik/get/`
+- **Description** : Get the user details by nik
 - **Method**: `GET`
-- **Body**:
-  ```json
-  {
-    "email": "string"
-  }
-  ```
+- **Reqeuest Parameter**: (nik) NIK user
+- hanya dapat dipanggil oleh user role admin
 - **Success Response**:
   - **Code**: `200 OK`
   - **Content**:
@@ -243,9 +239,9 @@
       "data": {
           "email": "string",
           "nama": "string",
-          "alamat": "",
-          "nik": "",
-          "tanggal_lahir": "",
+          "alamat": "string",
+          "nik": "string",
+          "tanggal_lahir": "string",
           "foto": "https://storage.googleapis.com/lahan-damai/example-example.jpg"
       }
     }
@@ -1066,8 +1062,10 @@ Response:
                     "bidang": "Psychology",
                     "nomor_wa": "1234567890",
                     "deskripsi": "Expert in psychology",
-                    "lama_kerja": "5",
-                    "foto": "https://storage.googleapis.com/bucket/1-photo.jpg"
+                    "lama_kerja": 5,
+                    "foto": "https://storage.googleapis.com/bucket/1-photo.jpg",
+                    "rating": 4,
+                    "total_review": 5,
                 },
                 ...
             ]
@@ -1093,7 +1091,9 @@ Response:
                     "nomor_wa": "1234567890",
                     "deskripsi": "Expert in psychology",
                     "lama_kerja": "5",
-                    "foto": "https://storage.googleapis.com/bucket/1-photo.jpg"
+                    "foto": "https://storage.googleapis.com/bucket/1-photo.jpg",
+                    "rating": 4,
+                    "total_review": 5,
                 },
                 ...
             ]
@@ -1189,7 +1189,9 @@ Response:
                         "ahli_id": "string",
                         "rating": "integer",
                         "user_nik": "string",
-                        "isi": "string"
+                        "isi": "string",
+                        "nama": "string",
+                        "foto": "string"
                     }
                     ...
                 ],
@@ -1203,6 +1205,7 @@ Response:
 - **Endpoint**: `/api/konsultasi/ahli/:id/ulasan`
 - **Method**: `POST`
 - **Description**: Create a review for an expert.
+- pengguna hanya dapat membuat maksimal 1 ulasan untuk satu ahli 
 - **Parameters**:
     - `id` The ID of the expert.
 - **Request Body**:
@@ -1226,9 +1229,63 @@ Response:
         }
         ```
 
----
+### Add Expert to Favorite List
+- **Endpoint**: `/api/konsultasi/ahli/:id/favorite`
+- **Method**: `POST`
+- **Description**: Add an expert to user's favorite list
+- **Parameters**:
+    - `id` The ID of the expert.
 
-## Admin API Endpoints
+- **Response**:
+    - **Status**: `200 OK`
+    - **Body**:
+        ```json
+        {
+            "data": "success"
+        }
+        ```
+
+### delete Expert from Favorite List
+- **Endpoint**: `/api/konsultasi/ahli/:id/favorite`
+- **Method**: `DELETE`
+- **Description**: Delete an expert from user's favorite list
+- **Parameters**:
+    - `id` The ID of the expert.
+
+- **Response**:
+    - **Status**: `200 OK`
+    - **Body**:
+        ```json
+        {
+            "data": "success"
+        }
+        ```
+
+### get User Expert Favorite List
+- **Endpoint**: `/api/konsultasi/ahli/favorite/get`
+- **Method**: `GET`
+- **Description**: Retrieve the list of experts that the user has added to their favorites list.
+
+- **Response**:
+    - **Status**: `200 OK`
+    - **Body**:
+        ```json
+        {
+            "data": [
+                {
+                    "id": "string",
+                    "nama": "string",
+                    "bidang": "string",
+                    "nomor_wa": "string",
+                    "deskripsi": "string",
+                    "lama_kerja": 5,
+                    "foto": "url string",
+                    "rating": 4
+                }
+            ]
+        }
+        ```
+---
 
 ### Create Expert
 - **Endpoint**: `/api/konsultasi/ahli/create`
@@ -1312,12 +1369,20 @@ Response:
         }
         ```
 
-### Delete Ulasan Ahli
+### Delete Ulasan Ahli 
 - **Endpoint**: `/api/konsultasi/ahli/:id/ulasan`
 - **Method**: `DELETE`
 - **Description**: hapus ulasan ahli berdasarkan id ahli.
 - **Parameters**:
     - `id` The ID of the expert.
+- **Request**: 
+    - jika admin yang melakukan delete tambahkan request body dengan atribut user_nik milik ulasan yang ingin dihapus
+    - **Body**:
+    ```json
+      {
+        "user_nik": "string"
+      }
+    ```
 - **Response**:
     - **Status**: `200 OK`
     - **Body**:
@@ -1326,5 +1391,6 @@ Response:
             "data": "success"
         }
         ```
+- server akan return unauthorized apabila user yang melakukan request delete bukan user pembuat ulasan
 
 </details>

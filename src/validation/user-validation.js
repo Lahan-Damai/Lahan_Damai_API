@@ -17,7 +17,7 @@ const loginUserValidation = Joi.object({
     password: Joi.string().min(6).max(100).required(),
 })
 
-const getUserValidation = Joi.string().max(30).required()
+const getUserValidation = Joi.string().max(64).required()
 
 const updateUserValidation = Joi.object({
   nik: Joi.string().pattern(/^\d+$/).max(16),

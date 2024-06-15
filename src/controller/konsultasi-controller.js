@@ -115,7 +115,10 @@ const getDetailAhli = async (req, res, next) => {
 
 const deleteUlasanAhli = async (req, res, next) => {
     try {
-        const result = await konsultasiService.deleteUlasanAhli(req.params.id, req.user);
+        if (!req.body.user_nik) {
+            req.body.user_nik = req.user.nik;
+        }
+        const result = await konsultasiService.deleteUlasanAhli(req.params.id, req.user, req.body);
         res.status(200).json({
             data: result
         });
@@ -124,6 +127,39 @@ const deleteUlasanAhli = async (req, res, next) => {
     }
 }
 
+const addFavorite = async (req, res, next) => {
+    try {
+        const result = await konsultasiService.addFavorite(req.params.id, req.user);
+        res.status(200).json({
+            data: result
+        });
+    } catch (e) {
+        next(e);
+    }
+}
+
+
+const removeFavorite = async (req, res, next) => {
+    try {
+        const result = await konsultasiService.removeFavorite(req.params.id, req.user);
+        res.status(200).json({
+            data: result
+        });
+    } catch (e) {
+        next(e);
+    }
+}
+
+const getUserFavorite = async (req, res, next) => {
+    try {
+        const result = await konsultasiService.getUserFavorite(req.user);
+        res.status(200).json({
+            data: result
+        });
+    } catch (e) {
+        next(e);
+    }
+}
 
 export default {
     createAhli,
@@ -136,5 +172,8 @@ export default {
     getUlasanAhli,
     getRatingAhli,
     getDetailAhli,
-    deleteUlasanAhli
+    deleteUlasanAhli,
+    addFavorite,
+    removeFavorite,
+    getUserFavorite
 }

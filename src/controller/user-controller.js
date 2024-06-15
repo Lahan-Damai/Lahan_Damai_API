@@ -25,8 +25,8 @@ const login = async (req, res, next) => {
 
 const get = async (req, res, next) => {
     try {
-        const email = req.user.email;
-        const result = await userService.get(email);
+        const nik = req.user.nik;
+        const result = await userService.get(nik);
         res.status(200).json({
             data: result
         });
@@ -82,10 +82,7 @@ const changeUserRole = async (req, res, next) => {
 
 const getOtherUsers = async (req, res, next) => {
     try {
-        const result = await userService.get(req.body.email);
-        result.alamat = "";
-        result.nik = "";
-        result.tanggal_lahir = "";
+        const result = await userService.get(req.params.nik);
 
         res.status(200).json({
             data: result

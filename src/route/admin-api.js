@@ -21,6 +21,7 @@ adminRouter.delete('/api/konsultasi/ahli/delete/:id', konsultasiController.remov
 
 adminRouter.get('/api/users/get/all', userController.getAllUsers);
 adminRouter.put('/api/users/update/role', userController.changeUserRole);
+adminRouter.get('/api/users/:nik/get/', userController.getOtherUsers);
 
 adminRouter.get('/api/laporan/get/all', laporanController.getAllLaporanSengketa);
 

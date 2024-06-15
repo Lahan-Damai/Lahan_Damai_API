@@ -68,15 +68,23 @@ const getAllAhli = async () => {
             nomor_wa: true,
             deskripsi: true,
             lama_kerja: true,
-            foto : true
+            foto : true,
         }
-    }) 
+    })
 
-    return ahlis;
+    const ahlisWithRating = await Promise.all(ahlis.map(async (ahli) => {
+        const rating = await getRatingAhli(ahli.id);
+        ahli.rating = rating.rating ? rating.rating : 0;
+        const reviews = await getUlasanAhli(ahli.id);
+        ahli.total_review = reviews.length;
+        return ahli;
+    }));
+
+    return ahlisWithRating;
 }
 
 const getAllAhliByBidang = async (bidang) => {
-    const post = await prismaClient.ahli.findMany({
+    const ahlis = await prismaClient.ahli.findMany({
         where: {
             bidang: bidang
         },
@@ -89,9 +97,17 @@ const getAllAhliByBidang = async (bidang) => {
             lama_kerja: true,
             foto : true
         }
-    })
+    });
 
-    return post;
+    const ahlisWithRating = await Promise.all(ahlis.map(async (ahli) => {
+        const rating = await getRatingAhli(ahli.id);
+        ahli.rating = rating.rating ? rating.rating : 0;
+        const reviews = await getUlasanAhli(ahli.id);
+        ahli.total_review = reviews.length;
+        return ahli;
+    }));
+
+    return ahlisWithRating;
 }
 
 
@@ -179,7 +195,7 @@ const getDetailAhli = async (id) => {
         }
     });
     const rating = await getRatingAhli(idAhli);
-    ahli.rating = rating.rating;
+    ahli.rating = rating.rating ? rating.rating : 0;
     ahli.reviews = await getUlasanAhli(idAhli);
     ahli.total_review = ahli.reviews.length;
     return ahli;
@@ -230,7 +246,6 @@ const getRatingAhli = async (id) => {
 }
 
 const getUlasanAhli = async (id) => {
-    console.log("getUlasanAhli");
     const idAhli = id;
     const ulasan = await prismaClient.ulasanAhli.findMany({
         where: {
@@ -243,23 +258,42 @@ const getUlasanAhli = async (id) => {
             isi: true
         }
     })
-    return ulasan;
+
+    const ulasanWithUserDetail = await Promise.all(ulasan.map(async (ulasan) => {
+        const user = await prismaClient.user.findUnique({
+            where: {
+                nik: ulasan.user_nik
+            },
+            select: {
+                nama: true,
+                foto: true
+            }
+        })
+        ulasan.nama = user.nama;
+        ulasan.foto = user.foto;
+        return ulasan;
+    }));
+
+    return ulasanWithUserDetail;
 }
 
 
-const deleteUlasanAhli = async (id, user) => {
+const deleteUlasanAhli = async (id, user, request) => {
     const idAhli = id;
     const ulasan = await prismaClient.ulasanAhli.findUnique({
         where: {
             ahli_id_user_nik: {
                 ahli_id: idAhli,
-                user_nik: user.nik
+                user_nik: request.user_nik
             }
         },
         select: {
             user_nik: true,
         }
     })
+    if (!ulasan) {
+        throw new Error('Ulasan not found');
+    }
 
     if (ulasan.user_nik !== user.nik && user.role !== "admin") {
         throw new Error('Unauthorized');
@@ -269,12 +303,81 @@ const deleteUlasanAhli = async (id, user) => {
         where: {
             ahli_id_user_nik: {
                 ahli_id: idAhli,
-                user_nik: user.nik
+                user_nik: request.user_nik
             }
         }
     })
 
     return "success";
+}
+
+
+const addFavorite = async (idAhli, user) => {
+    try {
+        await prismaClient.userFavoriteAhli.create({
+            data: {
+                email_user: user.email,
+                id_ahli: idAhli
+            }
+        })
+    } catch (error) {
+        throw new Error("already favorited");
+    }
+    return "success";
+}
+
+const removeFavorite = async (idAhli, user) => {
+    try {
+        await prismaClient.userFavoriteAhli.delete({
+            where: {
+                email_user_id_ahli: {
+                    email_user: user.email,
+                    id_ahli: idAhli
+                }
+            }
+        })
+    } catch (error) {
+        throw new Error("already unfavorited");
+    }
+
+    return "success";
+}
+
+const getUserFavorite = async (user) => {
+    console.log(user)
+    const favorites = await prismaClient.userFavoriteAhli.findMany({
+        where: {
+            email_user: user.email
+        },
+        select: {
+            id_ahli: true
+        }
+    })
+    const data = favorites.map((favorite) => favorite.id_ahli);
+
+    
+    const ahliData = await prismaClient.ahli.findMany({
+        where: {
+            id: {
+                in: data
+            }
+        },
+        select: {
+            id: true,
+            nama: true,
+            bidang: true,
+            nomor_wa: true,
+            deskripsi: true,
+            lama_kerja: true,
+            foto: true
+        }
+    })
+    const ahliDataWithRating = await Promise.all(ahliData.map(async (ahli) => {
+        const rating = await getRatingAhli(ahli.id);
+        ahli.rating = rating.rating ? rating.rating : 0;
+        return ahli;
+    }))
+    return ahliDataWithRating;
 }
 
 export default {
@@ -288,5 +391,8 @@ export default {
     getUlasanAhli,
     getRatingAhli,
     getDetailAhli,
-    deleteUlasanAhli
+    deleteUlasanAhli,
+    addFavorite,
+    removeFavorite,
+    getUserFavorite
 }
