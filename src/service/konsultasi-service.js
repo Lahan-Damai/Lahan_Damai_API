@@ -74,7 +74,7 @@ const getAllAhli = async () => {
 
     const ahlisWithRating = await Promise.all(ahlis.map(async (ahli) => {
         const rating = await getRatingAhli(ahli.id);
-        ahli.rating = rating.rating;
+        ahli.rating = rating.rating ? rating.rating : 0;
         const reviews = await getUlasanAhli(ahli.id);
         ahli.total_review = reviews.length;
         return ahli;
@@ -101,7 +101,7 @@ const getAllAhliByBidang = async (bidang) => {
 
     const ahlisWithRating = await Promise.all(ahlis.map(async (ahli) => {
         const rating = await getRatingAhli(ahli.id);
-        ahli.rating = rating.rating;
+        ahli.rating = rating.rating ? rating.rating : 0;
         const reviews = await getUlasanAhli(ahli.id);
         ahli.total_review = reviews.length;
         return ahli;
@@ -195,7 +195,7 @@ const getDetailAhli = async (id) => {
         }
     });
     const rating = await getRatingAhli(idAhli);
-    ahli.rating = rating.rating;
+    ahli.rating = rating.rating ? rating.rating : 0;
     ahli.reviews = await getUlasanAhli(idAhli);
     ahli.total_review = ahli.reviews.length;
     return ahli;
@@ -374,7 +374,7 @@ const getUserFavorite = async (user) => {
     })
     const ahliDataWithRating = await Promise.all(ahliData.map(async (ahli) => {
         const rating = await getRatingAhli(ahli.id);
-        ahli.rating = rating.rating;
+        ahli.rating = rating.rating ? rating.rating : 0;
         return ahli;
     }))
     return ahliDataWithRating;

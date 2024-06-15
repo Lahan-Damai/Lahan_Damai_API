@@ -127,10 +127,10 @@ model UlasanAhli {
 
 model Ahli {
   id                 String    @id @default(uuid())
-  nama               String @db.VarChar(100)
-  bidang             String @db.VarChar(50)
-  nomor_wa           String @db.VarChar(20)
-  deskripsi          String @db.VarChar(255)
+  nama               String    @db.VarChar(100)
+  bidang             String    @db.VarChar(50)
+  nomor_wa           String    @db.VarChar(20)
+  deskripsi          String    @db.VarChar(255)
   lama_kerja         Float
   foto               String?
 
