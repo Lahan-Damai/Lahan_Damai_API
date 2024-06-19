@@ -129,7 +129,7 @@ const getAllUsers = async () => {
 }
 
 
-const updateUser = async (request) => {
+const updateUser = async (request, thisUser) => {
     let fotoUrls = [];
 
     if (request.files) {
@@ -137,16 +137,21 @@ const updateUser = async (request) => {
             return "only one file allowed";
         }
         if (request.files.length === 1) {
-            const blob = bucket.file(`${request.user.nik}-${request.files[0].originalname}`);
-            const blobStream = blob.createWriteStream();
+            var oldFiletype = "";
+            if (thisUser.foto && thisUser.foto.length > 30) {
+                oldFiletype = thisUser.foto.split('.').pop();
+            }
 
-            if (request.user.foto && request.user.foto.length > 30) {
-                const url = request.user.foto;
-                const filename = url.split('/').pop();
-                const blob = bucket.file(filename);
+            const filetype = request.files[0].originalname.split('.').pop();
+
+            if (oldFiletype !== filetype && oldFiletype !== "") {
+                const blob = bucket.file(`${request.user.nik}-profile.${oldFiletype}`);
                 await blob.delete();
             }
 
+            const blob = bucket.file(`${request.user.nik}-profile.${filetype}`);
+            const blobStream = blob.createWriteStream();
+            
             await new Promise((resolve, reject) => {
                 blobStream.on('error', (err) => {
                     reject(err);
@@ -163,17 +168,9 @@ const updateUser = async (request) => {
         }
     }
 
+    request.body.foto = fotoUrls[0];
+
     const user = validate(updateUserValidation, request.body);
-
-    user.foto = fotoUrls[0] ? fotoUrls[0] : request.body.foto;
-
-    
-    if ((user.foto || user.foto === "") && request.user.foto && request.user.foto.length > 30) {
-        const url = request.user.foto;
-        const filename = url.split('/').pop();
-        const blob = bucket.file(filename);
-        await blob.delete();
-    }
 
     return prismaClient.user.update({
         where: {

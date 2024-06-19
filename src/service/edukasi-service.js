@@ -156,7 +156,7 @@ const update = async (request, id) => {
             sumber: true,
             is_recommended: true,
         }
-    })
+    });
 
     return post;
 }
@@ -215,6 +215,7 @@ const getRecommended = async () => {
 
 const remove = async (id) => {
     const idPost = id;
+    deleteArtikelPhotos(idPost);
     await prismaClient.postEdukasi.delete({
         where: {
             id: idPost

@@ -60,7 +60,7 @@ const getAllUsers = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
     try {
-        const result = await userService.updateUser(req);
+        const result = await userService.updateUser(req, req.user);
         res.status(200).json({
             data: result
         })

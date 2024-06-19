@@ -203,6 +203,28 @@ const getDetailAhli = async (id) => {
 
 const removeAhli = async (id) => {
     const idAhli = id;
+
+    const ahli = await prismaClient.ahli.findUnique({
+        where: {
+            id: idAhli
+        },
+        select: {
+            id: true,
+            nama: true,
+            bidang: true,
+            foto: true
+        }
+    });
+
+    if (!ahli) {
+        throw new ResponseError(404, "Ahli tidak ditemukan");
+    }
+
+    if (ahli.foto) {
+        const filename = ahli.foto.split('/').pop();
+        await bucket.file(filename).delete();
+    }
+
     await prismaClient.ahli.delete({
         where: {
             id: idAhli
