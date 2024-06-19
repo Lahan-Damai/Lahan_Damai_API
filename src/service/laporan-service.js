@@ -127,6 +127,9 @@ const createLaporan = async (request) => {
 }; 
 
 const deleteLaporan = async (no_sertifikat) => {
+    
+    deleteLaporanPhotos(no_sertifikat);
+    
     await prismaClient.laporan.delete({
         where: {
             no_sertifikat: no_sertifikat
