@@ -2,7 +2,7 @@ import { google } from 'googleapis';
 import https  from 'https';
 import { prismaClient } from '../application/database.js';
 
-import key from '../lahan-damai-firebase-adminsdk-hjzwb-77805cb9b1.json' with {type: "json"};
+import key from '../lahan-damai-firebase-adminsdk-hjzwb-77805cb9b1.json' assert {type: "json"};
 
 const PROJECT_ID = 'lahan-damai-23819';
 const HOST = 'fcm.googleapis.com';
