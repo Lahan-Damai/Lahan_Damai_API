@@ -9,12 +9,14 @@ const registerUserValidation = Joi.object({
   token: Joi.string().max(100).optional(),
   tanggal_lahir: Joi.date().required(),
   role: Joi.string().max(10),
+  fcm_token: Joi.string().optional(),
 });
 
 
 const loginUserValidation = Joi.object({
     email: Joi.string().max(64).required(),
     password: Joi.string().min(6).max(100).required(),
+    fcm_token: Joi.string().optional(),
 })
 
 const getUserValidation = Joi.string().max(64).required()

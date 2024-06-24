@@ -2,6 +2,7 @@ import { validate } from "../validation/validation.js"
 import { prismaClient } from "../application/database.js"
 import { createLaporanValidation, createFotoLaporanValidation, updateLaporanValidation } from "../validation/laporan-validation.js";
 import { bucket } from "../application/storage.js";
+import { updateProsesLaporanNotification } from "./notification-service.js";
 
 const getMapLaporan = async () => {
     const koordinatLaporan = await prismaClient.laporan.findMany({
@@ -155,6 +156,11 @@ const updateLaporan = async (request, no_sertifikat) => {
             tanggal_lapor: true
         }
     })
+
+    if (data.proses_laporan) {
+        updateProsesLaporanNotification(laporan.user_nik, no_sertifikat, data.proses_laporan);
+    }
+
     
     return laporan;
 };

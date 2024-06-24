@@ -6,6 +6,8 @@ import bcrypt from "bcrypt";
 import { v4 as uuid } from "uuid";
 import { bucket } from "../application/storage.js";
 
+import { testNotification } from "./notification-service.js";
+
 const register = async (request) => {
     const user = validate(registerUserValidation, request);
 
@@ -57,16 +59,20 @@ const login = async (request) => {
     }
 
     const token = uuid().toString();
+    const fcm_token = loginRequest.fcm_token ?? null;
+    // await testNotification(fcm_token);
     
     return prismaClient.user.update({
         data: {
-            token: token
+            token: token,
+            fcm_token: fcm_token
         },
         where: {
             email: user.email
         },
         select: {
             token: true,
+            fcm_token: true,
             nama: true,
             role: true,
             email: true,

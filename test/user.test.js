@@ -12,7 +12,7 @@ describe('POST /api/users/register', () => {
         const result = await supertest(app)
         .post('/api/users/register')
         .send({
-            nik: "1234567890",
+            nik: "74855621128",
             email: "damai0123@gmail.com",
             nama: "damai",     
             alamat: "beji, depok",   
@@ -29,7 +29,7 @@ describe('POST /api/users/register', () => {
         const result1 = await supertest(app)
         .post('/api/users/register')
         .send({
-            nik: "1234567890",
+            nik: "74855621128",
             email: "damai0123@gmail.com",
             nama: "damai",     
             alamat: "beji, depok",   
@@ -39,7 +39,7 @@ describe('POST /api/users/register', () => {
         const result2 = await supertest(app)
         .post('/api/users/register')
         .send({
-            nik: "1234567890",
+            nik: "74855621128",
             email: "damai0123@gmail.com",
             nama: "damai",     
             alamat: "beji, depok",   

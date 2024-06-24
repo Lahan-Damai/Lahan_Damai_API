@@ -1,7 +1,7 @@
 import { prismaClient } from "../application/database.js"
 import { validate } from "../validation/validation.js"
 import { createPostForumValidation, createReplyForumValidation } from "../validation/forum-validation.js";
-
+import { sendReplyNotification } from "./notification-service.js";
 
 const createThreadForum = async (request, user) => {
     request.user_nik = user.nik;
@@ -23,7 +23,7 @@ const createReplyForum = async (request, user) => {
     request.user_nik = user.nik;
     const replyForum = validate(createReplyForumValidation, request);
 
-    return prismaClient.reply.create({
+    const result = await prismaClient.reply.create({
         data: replyForum,
         select: {
             id: true,
@@ -32,6 +32,10 @@ const createReplyForum = async (request, user) => {
             tanggal_upload: true,
         }
     });
+
+    await sendReplyNotification(request.thread_id, user.nama, request.isi);
+
+    return result;
 }
 
 const getThreadForum = async (id) => {

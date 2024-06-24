@@ -12,7 +12,7 @@ export const removeTestUser = async () => {
 export const createTestUser = async (role = "user") => {
     await prismaClient.user.create({
         data: {
-            nik: "1234567890",
+            nik: "74855621128",
             email: "damai0123@gmail.com",
             nama: "damai",     
             alamat: "beji, depok",   
@@ -20,6 +20,69 @@ export const createTestUser = async (role = "user") => {
             tanggal_lahir: new Date(),
             token: "testtoken",
             role: role
+        }
+    })
+}
+
+export const removeLaporan = async () => {
+    await prismaClient.laporan.deleteMany({
+        where: {
+            user_nik: "74855621128"
+        }
+    })
+}
+
+export const createLaporan = async () => {
+    await prismaClient.laporan.create({
+        data: {
+            no_sertifikat: "test-no_sertifikat",
+            user_nik: "74855621128",
+            deskripsi: "test deskripsi",
+            latitude: 69.6969,
+            longitude: 42.0,
+            proses_laporan: "diproses",
+            tanggal_lapor: "2020-01-01T00:00:00.000Z",
+        }
+    })
+};
+
+export const createTestAhli = async () => {
+    await prismaClient.ahli.create({
+        data: {
+            id: "1",
+            nama: "testahli",
+            bidang: "testbidang",
+            nomor_wa: "082112655847",
+            deskripsi: "test deskripsi",
+            lama_kerja: 5,
+            foto: "url string"
+        }
+    })
+}
+
+export const removeTestAhli = async () => {
+    await prismaClient.ahli.delete({
+        where: {
+            id: "1"
+        }
+    })
+}
+
+export const createUlasanAhli = async () => {
+    await prismaClient.ulasanAhli.create({
+        data: {
+            ahli_id: "1",
+            user_nik: "74855621128",
+            isi: "test deskripsi",
+            rating: 5
+        }
+    })
+}
+
+export const removeUlasanAhli = async () => {
+    await prismaClient.ulasanAhli.deleteMany({
+        where: {
+            ahli_id: "1"
         }
     })
 }
