@@ -242,6 +242,7 @@
           "alamat": "string",
           "nik": "string",
           "tanggal_lahir": "string",
+          "role": "string"
           "foto": "https://storage.googleapis.com/lahan-damai/example-example.jpg"
       }
     }
