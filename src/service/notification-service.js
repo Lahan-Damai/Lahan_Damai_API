@@ -99,7 +99,9 @@ const updateProsesLaporanNotification = async (user_nik, no_sertifikat, proses_l
         } else if (proses_laporan === 'Diproses') {
             buildOverrideMessage(token.fcm_token, 'Laporan anda dengan no sertifikat ' + no_sertifikat + ' sedang diproses', 'Laporan anda sedang diproses');
         } else if (proses_laporan === 'Selesai') {
-            buildOverrideMessage(token.fcm_token, 'Laporan anda dengan no sertifikat ' + no_sertifikat + ' telah selesai', 'Laporan anda selesai');
+            buildOverrideMessage(token.fcm_token, 'Laporan anda dengan no sertifikat ' + no_sertifikat + ' telah selesai', 'Laporan anda telah selesai');
+        } else {
+          buildOverrideMessage(token.fcm_token, 'Laporan anda dengan no sertifikat ' + no_sertifikat + ' ' + proses_laporan, `Laporan anda ${proses_laporan}`);
         }
     }
 }

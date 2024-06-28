@@ -4,16 +4,32 @@ import { createLaporanValidation, createFotoLaporanValidation, updateLaporanVali
 import { bucket } from "../application/storage.js";
 import { updateProsesLaporanNotification } from "./notification-service.js";
 
-const getMapLaporan = async () => {
-    const koordinatLaporan = await prismaClient.laporan.findMany({
-        select: {
-            no_sertifikat: true,
-            latitude: true,
-            longitude: true,
-        }
-    })
+const getMapLaporan = async (user) => {
 
-    return koordinatLaporan;
+    if (user.role === "admin") {
+        const koordinatLaporan = await prismaClient.laporan.findMany({
+            select: {
+                no_sertifikat: true,
+                latitude: true,
+                longitude: true,
+            }
+        })
+    
+        return koordinatLaporan;
+    } else {
+        const koordinatLaporan = await prismaClient.laporan.findMany({
+            where: {
+                user_nik: user.nik
+            },
+            select: {
+                no_sertifikat: true,
+                latitude: true,
+                longitude: true,
+            }
+        })
+    
+        return koordinatLaporan;
+    }
 }
 
 const getLaporan = async (no_sertifikat) => {

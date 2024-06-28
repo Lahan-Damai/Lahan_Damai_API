@@ -301,7 +301,7 @@
 ### 2. Get Koordinat Laporan
 - **url:** `/api/map/get`  
 - **Method:** `GET`  
-- **Description:** Mendapatkan koordinat semua laporan.  
+- **Description:** Mendapatkan koordinat semua laporan milik pengguna. jika admin, maka akan mengembalikan semua koordinat yang ada di database.  
 - **Headers:**  
   - `Authorization: Bearer <token>`
 
