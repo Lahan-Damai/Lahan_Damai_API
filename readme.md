@@ -1,6 +1,6 @@
 <h1 style="text-align: center;">SENGKETA-LAHAN API</h1>
 
-### URL = https://lahandamaiapi-production.up.railway.app/
+### URL = https://api.lahandamai.xyz/
 
 ### **API Endpoints**
 <details> 
@@ -150,7 +150,7 @@
 ### 5. Update User
 - **URL**: `/api/users/update`
 - **Method**: `PUT`
-- **Description** updates the user's details including their profile picture. The endpoint allows updating one profile picture per request.
+- **Description**: memperbarui detail pengguna termasuk foto profil dengan pembaruan satu gambar profil per permintaan.
 - **Headers**:
   - **Content-Type**: multipart/form-data
 - **Success Response**:
@@ -158,8 +158,8 @@
 
 #### Body
 - **Multipart/Form-Data**: 
-  - `files`: (optional) Profile picture file to upload.
-  - Other user details as JSON fields.
+  - `files`: (opsional) File gambar profil untuk diunggah.
+  - Detail pengguna lainnya sebagai field JSON.
 
 - **Request**
   ```json
@@ -207,7 +207,7 @@
 
 ### 6. Update User Role 
 - **URL**: `/api/users/update/role`
-- **Description** : switch user role, if user then become admin and if admin then become user
+- **Description** : mengganti peran pengguna, jika pengguna umum maka menjadi admin dan jika admin maka menjadi pengguna umum
 - **Method**: `PUT`
 - **Body**:
   ```json
@@ -227,7 +227,7 @@
 
 ### 7. get other user by nik
 - **URL**: `/api/users/:nik/get/`
-- **Description** : Get the user details by nik
+- **Description** : Dapatkan detail pengguna berdasarkan nik
 - **Method**: `GET`
 - **Reqeuest Parameter**: (nik) NIK user
 - hanya dapat dipanggil oleh user role admin
@@ -242,7 +242,7 @@
           "alamat": "string",
           "nik": "string",
           "tanggal_lahir": "string",
-          "role": "string"
+          "role": "string",
           "foto": "https://storage.googleapis.com/lahan-damai/example-example.jpg"
       }
     }
@@ -275,7 +275,7 @@
 ```
 
     **Note:**
-    - `tanggal_lapor` defaultnya adalah tanggal sekarang. Jika tidak diberikan maka akan diisi dengan tanggal saat ini.
+    - `tanggal_lapor` Jika tidak diberikan maka akan diisi dengan tanggal saat ini.
 
 
 **Responses:**
@@ -554,8 +554,6 @@
   }
 }
 ```
-- `404 Not Found`: Post edukasi tidak ditemukan.
-- `500 Internal Server Error`: Kesalahan server.
 
 ---
 
@@ -585,7 +583,6 @@
   ]
 }
 ```
-- `500 Internal Server Error`: Kesalahan server.
 
 ---
 
@@ -624,8 +621,6 @@
   }
 }
 ```
-- `400 Bad Request`: Permintaan tidak valid.
-- `500 Internal Server Error`: Kesalahan server.
 
 ---
 
@@ -667,9 +662,6 @@
   }
 }
 ```
-- `404 Not Found`: Post edukasi tidak ditemukan.
-- `400 Bad Request`: Permintaan tidak valid.
-- `500 Internal Server Error`: Kesalahan server.
 
 ---
 
@@ -690,8 +682,6 @@
   "data": "success"
 }
 ```
-- `404 Not Found`: Post edukasi tidak ditemukan.
-- `500 Internal Server Error`: Kesalahan server.
 
 ---
 
@@ -721,10 +711,6 @@ Response:
 }
 
 ```
-- 200 OK: Photos added successfully
-- 400 Bad Request: No files provided
-- 404 Not Found: Post not found
-- 500 Internal Server Error: Server error
 
 
 ### 8. Get Recommended Artikel Edukasi
@@ -788,8 +774,6 @@ Response:
   }
 }
 ```
-- `400 Bad Request`: Permintaan tidak valid.
-- `500 Internal Server Error`: Kesalahan server.
 
 ### 2. Membuat Balasan Thread Forum
 **Endpoint:** `/api/forum/reply/add`  
@@ -818,8 +802,6 @@ Response:
   }
 }
 ```
-- `400 Bad Request`: Permintaan tidak valid.
-- `500 Internal Server Error`: Kesalahan server.
 
 ### 3. Mendapatkan Thread Forum
 **Endpoint:** `/api/forum/:id/get`  
@@ -827,6 +809,9 @@ Response:
 **Deskripsi:** Mendapatkan detail dari sebuah thread forum berdasarkan ID.  
 **Parameters:**
 - `id` (path parameter): ID dari thread yang ingin diambil.
+**Headers:**
+- `Authorization: Bearer <token>`
+
 
 **Responses:**
 - `200 OK`: Berhasil mendapatkan thread.
@@ -841,15 +826,15 @@ Response:
   }
 }
 ```
-- `404 Not Found`: Thread tidak ditemukan.
-- `500 Internal Server Error`: Kesalahan server.
-
 ### 3.1 Mendapatkan Thread Forum beserta Reply
 **Endpoint:** `/api/forum/:id/detail/get`  
 **Method:** `GET`  
 **Deskripsi:** Mendapatkan seluruh detail dari suatu thread  
 **Parameters:**
 - `id` (path parameter): ID dari thread yang ingin diambil.
+**Headers:**
+- `Authorization: Bearer <token>`
+
 
 **Responses:**
 - `200 OK`: Berhasil mendapatkan thread.
@@ -885,16 +870,14 @@ Response:
     }
 }
 ```
-- `404 Not Found`: Thread tidak ditemukan.
-- `500 Internal Server Error`: Kesalahan server.
-
-
 ### 4. Mendapatkan Balasan Thread Forum
 **Endpoint:** `/api/forum/:id/replies/get`  
 **Method:** `GET`  
 **Deskripsi:** Mendapatkan semua balasan dari sebuah thread forum berdasarkan ID thread.  
 **Parameters:**
 - `id` (path parameter): ID dari thread yang balasannya ingin diambil.
+**Headers:**
+- `Authorization: Bearer <token>`
 
 **Responses:**
 - `200 OK`: Berhasil mendapatkan balasan.
@@ -911,13 +894,13 @@ Response:
   ]
 }
 ```
-- `404 Not Found`: Thread tidak ditemukan.
-- `500 Internal Server Error`: Kesalahan server.
 
 ### 5. Mendapatkan Semua Thread Forum
 **Endpoint:** `/api/forum/get/all`  
 **Method:** `GET`  
 **Deskripsi:** Mendapatkan semua thread forum.
+**Headers:**
+- `Authorization: Bearer <token>`
 
 **Responses:**
 - `200 OK`: Berhasil mendapatkan semua thread.
@@ -941,7 +924,6 @@ Response:
     ]
 }
 ```
-- `500 Internal Server Error`: Kesalahan server.
 
 ### 6. Menghapus Thread Forum
 **Endpoint:** `/api/forum/:id/delete`  
@@ -960,9 +942,6 @@ Response:
   "data": "success"
 }
 ```
-- `403 Forbidden`: Tidak memiliki izin untuk menghapus thread.
-- `404 Not Found`: Thread tidak ditemukan.
-- `500 Internal Server Error`: Kesalahan server.
 
 ### 7. Menghapus Balasan Thread Forum
 **Endpoint:** `/api/forum/reply/:id/delete`  
@@ -981,9 +960,6 @@ Response:
   "data": "success"
 }
 ```
-- `403 Forbidden`: Tidak memiliki izin untuk menghapus balasan.
-- `404 Not Found`: Balasan tidak ditemukan.
-- `500 Internal Server Error`: Kesalahan server.
 
 ### 8. Memperbarui Thread Forum
 **Endpoint:** `/api/forum/:id/update`  
@@ -1010,9 +986,6 @@ Response:
   "data": "success"
 }
 ```
-- `403 Forbidden`: Tidak memiliki izin untuk memperbarui thread.
-- `404 Not Found`: Thread tidak ditemukan.
-- `500 Internal Server Error`: Kesalahan server.
 
 ### 9. Memperbarui Balasan Thread Forum
 **Endpoint:** `/api/forum/reply/:id/update`  
@@ -1038,9 +1011,6 @@ Response:
   "data": "success"
 }
 ```
-- `403 Forbidden`: Tidak memiliki izin untuk memperbarui balasan.
-- `404 Not Found`: Balasan tidak ditemukan.
-- `500 Internal Server Error`: Kesalahan server.
 </details>
 
 
@@ -1050,7 +1020,9 @@ Response:
 ### Get All Experts
 - **Endpoint**: `/api/konsultasi/ahli/get`
 - **Method**: `GET`
-- **Description**: Retrieve all experts.
+- **Description**: Ambil semua ahli.
+- **Headers:** `Authorization: Bearer <token>`
+
 - **Response**:
     - **Status**: `200 OK`
     - **Body**:
@@ -1076,9 +1048,10 @@ Response:
 ### Get Experts by Field
 - **Endpoint**: `/api/konsultasi/ahli/get/bidang/:bidang`
 - **Method**: `GET`
-- **Description**: Retrieve experts by field.
+- **Description**: Dapatkan ahli berdasarkan bidangnya.
 - **Parameters**:
-    - `bidang` (string) - The field of expertise.
+    - `bidang` (string) - bidang keahliannya.
+- **Headers:** `Authorization: Bearer <token>`
 - **Response**:
     - **Status**: `200 OK`
     - **Body**:
@@ -1104,9 +1077,10 @@ Response:
 ### Get Expert by ID
 - **Endpoint**: `/api/konsultasi/ahli/get/:id`
 - **Method**: `GET`
-- **Description**: Retrieve an expert by ID.
+- **Description**: Mengambil ahli berdasarkan ID.
 - **Parameters**:
     - `id` The ID of the expert.
+- **Headers:** `Authorization: Bearer <token>`
 - **Response**:
     - **Status**: `200 OK`
     - **Body**:
@@ -1127,7 +1101,8 @@ Response:
 ### Get Reviews of an Expert
 - **Endpoint**: `/api/konsultasi/ahli/get/:id/ulasan`
 - **Method**: `GET`
-- **Description**: Retrieve reviews of an expert by ID.
+- **Description**: Ambil ulasan seorang ahli berdasarkan ID.
+- **Headers:** `Authorization: Bearer <token>`
 - **Parameters**:
     - `id` The ID of the expert.
 - **Response**:
@@ -1151,7 +1126,8 @@ Response:
 ### Get Rating of an Expert
 - **Endpoint**: `/api/konsultasi/ahli/get/:id/rating`
 - **Method**: `GET`
-- **Description**: Retrieve the average rating of an expert by ID.
+- **Description**: Ambil rating rata-rata seorang ahli berdasarkan ID.
+- **Headers:** `Authorization: Bearer <token>`
 - **Parameters**:
     - `id` The ID of the expert.
 - **Response**:
@@ -1169,8 +1145,9 @@ Response:
 - **Endpoint**: `/api/konsultasi/ahli/get/:id/detail`
 - **Method**: `GET`
 - **Description**: Mendapatkan detail dari sebuah ahli berdasarkan ID.
+- **Headers:** `Authorization: Bearer <token>`
 - **Parameters**:
-    - `id` The ID of the expert.
+    - `id` id ahli.
 - **Response**:
     - **Status**: `200 OK`
     - **Body**:
@@ -1205,8 +1182,9 @@ Response:
 ### Create Review for an Expert
 - **Endpoint**: `/api/konsultasi/ahli/:id/ulasan`
 - **Method**: `POST`
-- **Description**: Create a review for an expert.
+- **Description**: Buat ulasan untuk seorang ahli.
 - pengguna hanya dapat membuat maksimal 1 ulasan untuk satu ahli 
+- **Headers:** `Authorization: Bearer <token>`
 - **Parameters**:
     - `id` The ID of the expert.
 - **Request Body**:
@@ -1233,7 +1211,8 @@ Response:
 ### Add Expert to Favorite List
 - **Endpoint**: `/api/konsultasi/ahli/:id/favorite`
 - **Method**: `POST`
-- **Description**: Add an expert to user's favorite list
+- **Description**: Menambahkan pakar ke daftar favorit pengguna
+- **Headers:** `Authorization: Bearer <token>`
 - **Parameters**:
     - `id` The ID of the expert.
 
@@ -1249,7 +1228,8 @@ Response:
 ### delete Expert from Favorite List
 - **Endpoint**: `/api/konsultasi/ahli/:id/favorite`
 - **Method**: `DELETE`
-- **Description**: Delete an expert from user's favorite list
+- **Description**: Menghapus pakar dari daftar favorit pengguna
+- **Headers:** `Authorization: Bearer <token>`
 - **Parameters**:
     - `id` The ID of the expert.
 
@@ -1265,8 +1245,8 @@ Response:
 ### get User Expert Favorite List
 - **Endpoint**: `/api/konsultasi/ahli/favorite/get`
 - **Method**: `GET`
-- **Description**: Retrieve the list of experts that the user has added to their favorites list.
-
+- **Description**: Mengambil daftar pakar yang telah ditambahkan pengguna ke daftar favorit mereka.
+- **Headers:** `Authorization: Bearer <token>`
 - **Response**:
     - **Status**: `200 OK`
     - **Body**:
@@ -1291,8 +1271,8 @@ Response:
 ### Create Expert
 - **Endpoint**: `/api/konsultasi/ahli/create`
 - **Method**: `POST`
-- **Description**: Create a new expert.
-- **Middleware**: `multerMiddleware` (for handling file uploads)
+- **Description**: Membuat pakar baru.
+- **Headers:** `Authorization: Bearer <token>`
 - **Request Body**:
     ```json
     {
@@ -1324,8 +1304,8 @@ Response:
 ### Update Expert
 - **Endpoint**: `/api/konsultasi/ahli/update/:id`
 - **Method**: `PUT`
-- **Description**: Update an expert's details.
-- **Middleware**: `multerMiddleware` (for handling file uploads)
+- **Description**: Memperbarui detail pakar.
+- **Headers:** `Authorization: Bearer <token>`
 - **Parameters**:
     - `id` The ID of the expert.
 - **Request Body**:
@@ -1358,7 +1338,8 @@ Response:
 ### Delete Expert
 - **Endpoint**: `/api/konsultasi/ahli/delete/:id`
 - **Method**: `DELETE`
-- **Description**: Delete an expert by ID.
+- **Description**: Menghapus pakar berdasarkan ID.
+- **Headers:** `Authorization: Bearer <token>`
 - **Parameters**:
     - `id` The ID of the expert.
 - **Response**:
@@ -1374,6 +1355,7 @@ Response:
 - **Endpoint**: `/api/konsultasi/ahli/:id/ulasan`
 - **Method**: `DELETE`
 - **Description**: hapus ulasan ahli berdasarkan id ahli.
+- **Headers:** `Authorization: Bearer <token>`
 - **Parameters**:
     - `id` The ID of the expert.
 - **Request**: 
@@ -1392,6 +1374,6 @@ Response:
             "data": "success"
         }
         ```
-- server akan return unauthorized apabila user yang melakukan request delete bukan user pembuat ulasan
+- server akan mengembalikan respon unauthorized apabila user yang melakukan request delete bukan user pembuat ulasan
 
 </details>
