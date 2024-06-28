@@ -3,7 +3,7 @@ import laporanService from "../service/laporan-service.js";
 
 const getKoordinatSengketa = async (req, res, next) => {
     try {
-        const result = await laporanService.getMapLaporan(req.user);
+        const result = await laporanService.getMapLaporan();
         res.status(200).json({
             data: result
         });
