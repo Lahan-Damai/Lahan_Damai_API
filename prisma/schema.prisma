@@ -38,7 +38,7 @@ model User {
 }
 
 model Laporan {
-  no_sertifikat  String  @id @db.VarChar(150)
+  no_sertifikat  String  @db.VarChar(150)
   user_nik       String  @db.VarChar(16)
   deskripsi      String
   proses_laporan String  @db.VarChar(10)
@@ -49,27 +49,29 @@ model Laporan {
   user           User    @relation(fields: [user_nik], references: [nik], onDelete: Cascade)
   fotos          FotoLaporan[]
 
+  @@id([no_sertifikat, user_nik])
   @@map("laporans")
 }
 
 model FotoLaporan {
   url           String
   no_sertifikat String
-  laporan       Laporan @relation(fields: [no_sertifikat], references: [no_sertifikat], onDelete: Cascade)
+  user_nik      String
+
+  laporan       Laporan @relation(fields: [no_sertifikat, user_nik], references: [no_sertifikat, user_nik], onDelete: Cascade)
   
-  @@id([url, no_sertifikat])
+  @@id([url, no_sertifikat, user_nik])
   @@map("foto_laporan")
 }
 
-
 model Thread {
-  id              String       @id @default(uuid())
+  id              String    @id @default(uuid())
   judul           String    @db.VarChar(150)
   user_nik        String    @db.VarChar(16)
   isi             String    
   tanggal_upload  DateTime  @default(now())
   
-  replies         Reply[]
+  replies         Reply[] 
   user            User      @relation(fields: [user_nik], references: [nik], onDelete: Cascade)
 
   @@map("threads")
@@ -80,22 +82,25 @@ model Reply {
   isi              String    @db.VarChar(255)
   user_nik         String    @db.VarChar(16)
   thread_id        String
+  parent_id        String?    
   tanggal_upload   DateTime  @default(now())
 
-  user            User     @relation(fields: [user_nik], references: [nik], onDelete: Cascade)
-  thread          Thread   @relation(fields: [thread_id], references: [id], onDelete: Cascade)
+  user             User      @relation(fields: [user_nik], references: [nik], onDelete: Cascade)
+  thread           Thread    @relation(fields: [thread_id], references: [id], onDelete: Cascade)
+  reply            Reply?    @relation("ReplyToReply", fields: [parent_id], references: [id], onDelete: Cascade)
+  replies          Reply[]   @relation("ReplyToReply")
 
   @@map("replies")
 }
 
 
 model PostEdukasi {
-  id              String     @id @default(uuid())
-  judul           String  @db.VarChar(150)
-  deskripsi       String  @db.VarChar(255)
+  id              String    @id @default(uuid())
+  judul           String    @db.VarChar(150)
+  deskripsi       String    @db.VarChar(255)
   isi             String
-  publisher       String  @db.VarChar(50)
-  tanggal_upload  DateTime @default(now())
+  publisher       String    @db.VarChar(50)
+  tanggal_upload  DateTime  @default(now())
   sumber          String 
   is_recommended  Boolean   @default(false)
 

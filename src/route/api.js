@@ -7,6 +7,7 @@ import laporanController from "../controller/laporan-controller.js";
 import edukasiController from "../controller/edukasi-controller.js";
 import konsultasiController from "../controller/konsultasi-controller.js";
 import forumController from "../controller/forum-controller.js";
+import chatbotController from "../controller/chatbot-controller.js";
 
 const userRouter = new express.Router();
 userRouter.use(authMiddleware);
@@ -53,6 +54,8 @@ userRouter.put('/api/forum/:id/update', forumController.updateThreadForum);
 userRouter.delete('/api/forum/reply/:id/delete', forumController.deleteReplyForum);
 userRouter.put('/api/forum/reply/:id/update', forumController.updateReplyForum);
 userRouter.get('/api/forum/:id/detail/get/', forumController.getThreadAndReplies);
+
+userRouter.post('/api/chatbot/generate', chatbotController.generateAnswer);
 
 
 export {

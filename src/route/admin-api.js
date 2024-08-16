@@ -5,6 +5,7 @@ import konsultasiController from "../controller/konsultasi-controller.js";
 import userController from "../controller/user-controller.js";
 import laporanController from "../controller/laporan-controller.js";
 import { multerMiddleware } from "../middleware/multer-middleware.js";
+import chatbotController from "../controller/chatbot-controller.js";
 
 const adminRouter = new express.Router();
 adminRouter.use(authAdminMiddleware);
@@ -24,6 +25,10 @@ adminRouter.put('/api/users/update/role', userController.changeUserRole);
 adminRouter.get('/api/users/:nik/get/', userController.getOtherUsers);
 
 adminRouter.get('/api/laporan/get/all', laporanController.getAllLaporanSengketa);
+
+adminRouter.delete('/api/chatbot/delete-collection', chatbotController.deleteCollection);
+adminRouter.post('/api/chatbot/create-collection', chatbotController.createCollection);
+adminRouter.post('/api/chatbot/insert-document', chatbotController.insertFileToChromaDb);
 
 export {
     adminRouter

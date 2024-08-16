@@ -4,7 +4,7 @@ import { createLaporanValidation, createFotoLaporanValidation, updateLaporanVali
 import { bucket } from "../application/storage.js";
 import { updateProsesLaporanNotification } from "./notification-service.js";
 
-const getMapLaporan = async () => {
+const getMapLaporan = async () => { 
     const koordinatLaporan = await prismaClient.laporan.findMany({
         select: {
             no_sertifikat: true,
@@ -17,10 +17,19 @@ const getMapLaporan = async () => {
     return koordinatLaporan;
 }
 
-const getLaporan = async (no_sertifikat) => {
-    const laporan = await prismaClient.laporan.findUnique({
+const getLaporan = async (no_sertifikat, user_nik) => {
+    let countLapor = await prismaClient.laporan.count({
         where: {
             no_sertifikat: no_sertifikat
+        }
+    });
+
+    const laporan = await prismaClient.laporan.findUnique({
+        where: {
+            no_sertifikat_user_nik: {
+                no_sertifikat: no_sertifikat,
+                user_nik: user_nik
+            }
         },
         select: {
             latitude: true,
@@ -38,15 +47,21 @@ const getLaporan = async (no_sertifikat) => {
         }
     });
 
+    if (!laporan) {
+        return "laporan not found";
+    }
+
     const transformedLaporans = {
         ...laporan,
-        fotos: laporan.fotos.map(foto => foto.url)
+        fotos: laporan.fotos.map(foto => foto.url),
+        count_lapor: countLapor
     }  
+
 
     return transformedLaporans;
 }
 
-const addPhotosToLaporan = async (no_sertifikat, req) => {
+const addPhotosToLaporan = async (no_sertifikat, req, user_nik) => {
     let fotoUrls = [];
 
     if (!req.files) {
@@ -55,7 +70,10 @@ const addPhotosToLaporan = async (no_sertifikat, req) => {
 
     const countPhotos = await prismaClient.fotoLaporan.count({
         where: {
-            no_sertifikat: no_sertifikat
+            no_sertifikat_user_nik: {
+                no_sertifikat: no_sertifikat,
+                user_nik: user_nik
+            }
         }
     });
     
@@ -128,23 +146,29 @@ const createLaporan = async (request) => {
     return result;
 }; 
 
-const deleteLaporan = async (no_sertifikat) => {
+const deleteLaporan = async (no_sertifikat, user_nik) => {
     
     deleteLaporanPhotos(no_sertifikat);
     
     await prismaClient.laporan.delete({
         where: {
-            no_sertifikat: no_sertifikat
+            no_sertifikat_user_nik: {
+                no_sertifikat: no_sertifikat,
+                user_nik: user_nik
+            }
         }
     });
     return "success";
 }
 
-const updateLaporan = async (request, no_sertifikat) => {
+const updateLaporan = async (request, no_sertifikat, user_nik) => {
     const data = validate(updateLaporanValidation, request);
     const laporan = await prismaClient.laporan.update({
         where: {
-            no_sertifikat: no_sertifikat
+            no_sertifikat_user_nik: {
+                no_sertifikat: no_sertifikat,
+                user_nik: user_nik
+            }
         },
         data: data,
         select: {
@@ -166,10 +190,13 @@ const updateLaporan = async (request, no_sertifikat) => {
     return laporan;
 };
 
-const deleteLaporanPhotos = async (no_sertifikat) => {
+const deleteLaporanPhotos = async (no_sertifikat, user_nik) => {
     const laporanPhotos = await prismaClient.fotoLaporan.findMany({
         where: {
-            no_sertifikat: no_sertifikat
+            no_sertifikat_user_nik: {
+                no_sertifikat: no_sertifikat,
+                user_nik: user_nik
+            }
         }
     });
 
@@ -247,6 +274,7 @@ const getLaporanByUser = async (nik) => {
         ...laporan,
         fotos: laporan.fotos.map(photo => photo.url)
     }));
+
 
     return transformedLaporans;
 

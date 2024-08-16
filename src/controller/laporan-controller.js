@@ -14,7 +14,8 @@ const getKoordinatSengketa = async (req, res, next) => {
 
 const getLaporanSengketa = async (req, res, next) => {
     try {
-        const result = await laporanService.getLaporan(req.params.no_sertifikat);
+        const user_nik = req.body.user_nik ? req.body.user_nik : req.user.nik;
+        const result = await laporanService.getLaporan(req.params.no_sertifikat, user_nik);
         res.status(200).json({
             data: result
         });
@@ -36,7 +37,8 @@ const createLaporanSengketa = async (req, res, next) => {
 
 const deleteLaporanSengketa = async (req, res, next) => {
     try {
-        const result = await laporanService.deleteLaporan(req.body.no_sertifikat);
+        const user_nik = req.body.user_nik ? req.body.user_nik : req.user.nik;
+        const result = await laporanService.deleteLaporan(req.body.no_sertifikat, user_nik);
         res.status(200).json({
             data: result
         });
@@ -47,7 +49,8 @@ const deleteLaporanSengketa = async (req, res, next) => {
 
 const updateLaporanSengketa = async (req, res, next) => {
     try {
-        const result = await laporanService.updateLaporan(req.body, req.body.no_sertifikat);
+        const user_nik = req.body.user_nik ? req.body.user_nik : req.user.nik;
+        const result = await laporanService.updateLaporan(req.body, req.body.no_sertifikat, user_nik);
         res.status(200).json({
             data: result
         });
@@ -58,7 +61,8 @@ const updateLaporanSengketa = async (req, res, next) => {
 
 const deleteLaporanPhotos = async (req, res, next) => {
     try {
-        const result = await laporanService.deleteLaporanPhotos(req.body.no_sertifikat);
+        const user_nik = req.body.user_nik ? req.body.user_nik : req.user.nik;
+        const result = await laporanService.deleteLaporanPhotos(req.body.no_sertifikat, user_nik);
         res.status(200).json({
             data: result
         });
@@ -69,7 +73,8 @@ const deleteLaporanPhotos = async (req, res, next) => {
 
 const addLaporanPhotos = async (req, res, next) => {
     try {
-        const result = await laporanService.addPhotosToLaporan(req.body.no_sertifikat, req);
+        const user_nik = req.body.user_nik ? req.body.user_nik : req.user.nik;
+        const result = await laporanService.addPhotosToLaporan(req.body.no_sertifikat, req, user_nik);
         res.status(200).json({
             data: result
         });
