@@ -9,19 +9,11 @@ const API_KEY = "AIzaSyDZoWiABYgRKzeWRp-z89XDtG8fS_eJ2QU";
 const embedder = new GoogleGenerativeAiEmbeddingFunction({googleApiKey: API_KEY});
 
 async function clearCollection() {
-    try {
-        client.deleteCollection({name:"pdf_embeddings"});
-    } catch (error) {
-        console.error(error);
-    }
+    client.deleteCollection({name:"pdf_embeddings"});   
 }
 
 async function createCollection() {
-    try {
-        await client.createCollection({name: "pdf_embeddings", embeddingFunction: new GoogleGenerativeAiEmbeddingFunction({googleApiKey: "AIzaSyDZoWiABYgRKzeWRp-z89XDtG8fS_eJ2QU"})})
-    } catch (error) {
-        console.error(error);
-    }
+    await client.createCollection({name: "pdf_embeddings", embeddingFunction: new GoogleGenerativeAiEmbeddingFunction({googleApiKey: "AIzaSyDZoWiABYgRKzeWRp-z89XDtG8fS_eJ2QU"})})
 }
 
 /**

@@ -6,7 +6,7 @@ import bcrypt from "bcrypt";
 import { v4 as uuid } from "uuid";
 import { bucket } from "../application/storage.js";
 
-import { testNotification } from "./notification-service.js";
+// import { testNotification } from "./notification-service.js";
 
 const register = async (request) => {
     const user = validate(registerUserValidation, request);

@@ -94,3 +94,26 @@ export const getTestUser = async () => {
         }
     });
 }
+
+export const createThreadForum = async () => {
+    await prismaClient.thread.create({
+        data: {
+            id: "1",
+            judul: "test judul",
+            isi: "test isi",
+            user_nik: "74855621128"
+        }
+    })
+}
+
+
+export const createReplyForum = async () => {
+    await prismaClient.reply.create({
+        data: {
+            id: "1",
+            isi: "test isi",
+            user_nik: "74855621128",
+            thread_id: "1"
+        }
+    })
+}

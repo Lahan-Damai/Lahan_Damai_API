@@ -329,7 +329,12 @@
 - **Description:** Mendapatkan laporan berdasarkan nomor sertifikat.  
 - **Headers:**  
   - `Authorization: Bearer <token>`
-
+**Request Body:**
+```json
+{
+	"user_nik": "string" // opsional
+}
+```
 **Responses:**
 - `200 OK`: Berhasil mendapatkan laporan.
 ```json
@@ -361,7 +366,8 @@
 **Request Body:**
 ```json
 {
-  "no_sertifikat": "string"
+  "no_sertifikat": "string",
+  "user_nik": "string"
 }
 ```
 
@@ -389,6 +395,7 @@
 ```json
 {
   "no_sertifikat": "string",
+  "user_nik": "string",
   "deskripsi": "string",
   "latitude": "float",
   "longitude": "float",
@@ -428,7 +435,8 @@
 **Request Body:**
 ```json
 {
-  "no_sertifikat": "string"
+  "no_sertifikat": "string",
+  "user_nik": "string"
 }
 ```
 
@@ -456,6 +464,7 @@
 ```json
 {
   "no_sertifikat": "string",
+  "user_nik": "string",
   "files": [<file1>, <file2>, ...]
 }
 ```
@@ -506,6 +515,13 @@
 **Description:** Mendapatkan semua laporan sengketa yang terkait dengan pengguna.
 **Headers:**  
 - `Authorization: Bearer <token>`
+
+**Request:**
+```json
+{
+  "user_nik": "string" // opsional
+}
+```
 
 **Responses:**
 ```json
@@ -863,9 +879,16 @@ Response:
                     "foto": "string",
                     "email": "string",
                     "nik": "string"
-                }
+                },
+                "replies": [
+                    {...},
+                    {...},
+                    {...},
+                ]
             },
-            ...
+            {...},
+            {...},
+            
         ]
     }
 }

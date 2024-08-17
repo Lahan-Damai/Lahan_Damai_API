@@ -148,7 +148,7 @@ const createLaporan = async (request) => {
 
 const deleteLaporan = async (no_sertifikat, user_nik) => {
     
-    deleteLaporanPhotos(no_sertifikat);
+    deleteLaporanPhotos(no_sertifikat, user_nik);
     
     await prismaClient.laporan.delete({
         where: {
@@ -193,10 +193,8 @@ const updateLaporan = async (request, no_sertifikat, user_nik) => {
 const deleteLaporanPhotos = async (no_sertifikat, user_nik) => {
     const laporanPhotos = await prismaClient.fotoLaporan.findMany({
         where: {
-            no_sertifikat_user_nik: {
-                no_sertifikat: no_sertifikat,
-                user_nik: user_nik
-            }
+            no_sertifikat: no_sertifikat,
+            user_nik: user_nik
         }
     });
 

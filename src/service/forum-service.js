@@ -116,7 +116,6 @@ const getAllThreadForum = async () => {
     return formattedPosts;
 }
 
-
 const getThreadAndReplies = async (id) => {
     const idPost = id;
     const post = await prismaClient.thread.findUnique({
@@ -140,6 +139,7 @@ const getThreadAndReplies = async (id) => {
                 select: {
                     id: true,
                     thread_id: true,
+                    parent_id: true,
                     isi: true,
                     tanggal_upload: true,
                     user: {
@@ -155,6 +155,14 @@ const getThreadAndReplies = async (id) => {
         }
     });
 
+    if (!post) {
+        return "Thread is NOT found";
+    }
+
+    for (const reply of post.replies) {
+        reply.replies = await traverse(reply);
+    }
+
     const totalThreadReplies = await prismaClient.reply.count({
         where: {
             thread_id: idPost
@@ -162,34 +170,44 @@ const getThreadAndReplies = async (id) => {
     });
 
     const formattedPost = {
-        id: post.id,
-        judul: post.judul,
-        isi: post.isi,
-        tanggal_upload: post.tanggal_upload,
         total_reply: totalThreadReplies,
-        user: {
-            nama: post.user.nama,
-            foto: post.user.foto,
-            email: post.user.email,
-            nik: post.user.nik
-        },
-        replies: post.replies.map(reply => ({
-            id: reply.id,
-            thread_id: reply.thread_id,
-            isi: reply.isi,
-            tanggal_upload: reply.tanggal_upload,
-            user: {
-                nama: reply.user.nama,
-                foto: reply.user.foto,
-                email: reply.user.email,
-                nik: reply.user.nik
-            }
-        }))
-    };
+        ...post,
+    }
 
     return formattedPost;
 }
 
+const traverse = async (reply) => {
+    const replies = await prismaClient.reply.findMany({
+        where: {
+            parent_id: reply.id
+        },
+        select: {
+            id: true,
+            thread_id: true,
+            isi: true,
+            tanggal_upload: true,
+            parent_id: true,
+            user: {
+                select: {
+                    nama: true,
+                    foto: true,
+                    email: true,
+                    nik: true,
+                }
+            },
+
+        }
+    });
+    if (replies.length === 0) {
+        return;
+    }
+    for (const replyChild of replies) { 
+        replyChild.replies = await traverse(replyChild);
+    }
+
+    return replies;
+}
 
 const deleteThreadForum = async (id, user) => {
     const idThread = id;

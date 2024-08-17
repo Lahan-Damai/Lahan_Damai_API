@@ -44,16 +44,16 @@ userRouter.post('/api/konsultasi/ahli/:id/favorite', konsultasiController.addFav
 userRouter.delete('/api/konsultasi/ahli/:id/favorite', konsultasiController.removeFavorite);
 userRouter.get('/api/konsultasi/ahli/favorite/get', konsultasiController.getUserFavorite);
 
-userRouter.post('/api/forum/create', forumController.createThreadForum);
-userRouter.post('/api/forum/reply/add', forumController.createReplyForum);
-userRouter.get('/api/forum/:id/get', forumController.getThreadForum);
-userRouter.get('/api/forum/:id/replies/get', forumController.getThreadReplies);
 userRouter.get('/api/forum/get/all', forumController.getAllThreadForum);
+userRouter.post('/api/forum/create', forumController.createThreadForum);
 userRouter.delete('/api/forum/:id/delete', forumController.deleteThreadForum);
 userRouter.put('/api/forum/:id/update', forumController.updateThreadForum); 
-userRouter.delete('/api/forum/reply/:id/delete', forumController.deleteReplyForum);
-userRouter.put('/api/forum/reply/:id/update', forumController.updateReplyForum);
 userRouter.get('/api/forum/:id/detail/get/', forumController.getThreadAndReplies);
+userRouter.post('/api/forum/reply/add', forumController.createReplyForum);
+userRouter.delete('/api/forum/reply/:id/delete', forumController.deleteReplyForum);
+userRouter.get('/api/forum/:id/get', forumController.getThreadForum);
+userRouter.get('/api/forum/:id/replies/get', forumController.getThreadReplies);
+userRouter.put('/api/forum/reply/:id/update', forumController.updateReplyForum);
 
 userRouter.post('/api/chatbot/generate', chatbotController.generateAnswer);
 

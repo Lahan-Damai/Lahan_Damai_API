@@ -14,7 +14,7 @@ const generateAnswer = async (req, res, next) => {
 
 
 // admin api
-const deleteCollection = async () => {
+const deleteCollection = async (req, res, next) => {
     try {
         await vdb.clearCollection();
         res.status(200).json({
@@ -25,7 +25,7 @@ const deleteCollection = async () => {
     }
 }
 
-const createCollection = async () => {
+const createCollection = async (req, res, next) => {
     try {
         await vdb.createCollection();
         res.status(200).json({
@@ -37,9 +37,9 @@ const createCollection = async () => {
 }
 
 
-const insertFileToChromaDb = async (fileName, UUName) => {
+const insertFileToChromaDb = async (req, res, next) => {
     try {
-        await vdb.insertFileToChromaDb(fileName, UUName);
+        await vdb.insertFileToChromaDb(req.body.file_name, req.body.uu_name);
         res.status(200).json({
             data: "success"
         });
