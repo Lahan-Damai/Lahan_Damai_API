@@ -20,6 +20,7 @@ userRouter.put('/api/users/update', multerMiddleware, userController.updateUser)
 
 userRouter.post('/api/laporan/create', multerMiddleware, laporanController.createLaporanSengketa);
 userRouter.get('/api/map/get', laporanController.getKoordinatSengketa);
+userRouter.get('/api/laporan/:user_nik/:no_sertifikat/get/', laporanController.getLaporanSengketa);
 userRouter.get('/api/laporan/:no_sertifikat/get/', laporanController.getLaporanSengketa);
 userRouter.delete('/api/laporan/delete/', laporanController.deleteLaporanSengketa);
 userRouter.put('/api/laporan/update/', laporanController.updateLaporanSengketa);
