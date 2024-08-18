@@ -2,7 +2,9 @@ import { ChromaClient, GoogleGenerativeAiEmbeddingFunction } from 'chromadb';
 import { Storage } from '@google-cloud/storage';
 import pdf from 'pdf-parse';
 
-const client = new ChromaClient();
+const client = new ChromaClient({
+    path: 'http://34.126.138.137:8000',
+});
 const storage = new Storage();
 const bucketName = 'lahan-damai'; 
 const API_KEY = "AIzaSyDZoWiABYgRKzeWRp-z89XDtG8fS_eJ2QU";

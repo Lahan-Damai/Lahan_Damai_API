@@ -1400,3 +1400,49 @@ Response:
 - server akan mengembalikan respon unauthorized apabila user yang melakukan request delete bukan user pembuat ulasan
 
 </details>
+
+
+<details> 
+<summary><h1>ChatBot</h1></summary>
+
+### 1. Generate Answer
+- **Endpoint**: `/api/chatbot/generate`
+- **Method**: `POST`
+
+**Request Body:**
+```json
+{
+	"query": "string"
+}
+```
+
+**Response:**
+```json
+{
+	"data": "string"
+}
+```
+
+### 2. Insert Document As Context for Chatbot
+- **Endpoint**: `/api/chatbot/insert-document`
+- **Method**: `POST`
+
+**Request Body:**
+- contoh:
+```json
+{
+    "file_name": "UUTanah/UU_05_1960.pdf",
+    "uu_name": "Undang-Undang Nomor 5 Tahun 1960"
+}
+```
+- file_name: nama file di bucket google cloud, format: direktori/nama_file.pdf
+- uu_name: nama undang-undang; nama uu dan file harus sesuai 
+
+**Response:**
+```json
+{
+	"data": "success"
+}
+```
+
+</details>
