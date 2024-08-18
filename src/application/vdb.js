@@ -3,7 +3,7 @@ import { Storage } from '@google-cloud/storage';
 import pdf from 'pdf-parse';
 
 const client = new ChromaClient({
-    path: 'http://localhost:8000',
+    path: 'http://34.126.138.137:8000',
 });
 const storage = new Storage();
 const bucketName = 'lahan-damai'; 
