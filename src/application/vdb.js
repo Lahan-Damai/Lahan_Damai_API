@@ -3,7 +3,7 @@ import { Storage } from '@google-cloud/storage';
 import pdf from 'pdf-parse';
 
 const client = new ChromaClient({
-    path: 'http://34.126.138.137:8000',
+    path: 'http://localhost:8000',
 });
 const storage = new Storage();
 const bucketName = 'lahan-damai'; 
@@ -67,7 +67,6 @@ async function query(queryText) {
 async function queryChromaDB(queryText) {
     const API_KEY = "AIzaSyDZoWiABYgRKzeWRp-z89XDtG8fS_eJ2QU";
     const RELEVANT_THRESHOLD = 0.3;
-    const client = new ChromaClient();
     const collection = await client.getCollection({ 
         name: 'pdf_embeddings',
         embeddingFunction: embedder
