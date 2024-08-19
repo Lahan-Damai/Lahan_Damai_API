@@ -136,6 +136,9 @@ const getThreadAndReplies = async (id) => {
                 }
             },
             replies: {
+                where: {
+                    parent_id: null
+                },
                 select: {
                     id: true,
                     thread_id: true,
