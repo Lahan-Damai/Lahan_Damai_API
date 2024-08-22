@@ -4,6 +4,12 @@ import { createLaporanValidation, createFotoLaporanValidation, updateLaporanVali
 import { bucket } from "../application/storage.js";
 import { updateProsesLaporanNotification } from "./notification-service.js";
 
+// for parsing BigInt prismaClient @getalllaporansortbyvotecount
+BigInt.prototype.toJSON = function () {
+    const int = Number.parseInt(this.toString());
+    return int ?? this.toString();
+};
+
 const getMapLaporan = async () => { 
     const koordinatLaporan = await prismaClient.laporan.findMany({
         select: {
@@ -42,6 +48,18 @@ const getLaporan = async (no_sertifikat, user_nik) => {
             fotos: {
                 select: {
                     url: true
+                }
+            },
+            komentar_sengketa: {
+                select: {
+                    comment: true,
+                    id: true,
+                    user: {
+                        select: {
+                            nama: true,
+                            foto: true
+                        }
+                    }
                 }
             }
         }
@@ -279,6 +297,81 @@ const getLaporanByUser = async (nik) => {
 }
 
 
+const voteLaporan = async (user_voter_nik, no_sertifikat, user_nik) => {
+    await prismaClient.voteSengketa.create({
+        data: {
+            user_voter_nik: user_voter_nik,
+            no_sertifikat: no_sertifikat,
+            user_nik: user_nik
+        }
+    })
+    return "success";
+}
+
+const unvoteLaporan = async (user_voter_nik, no_sertifikat, user_nik) => {
+    await prismaClient.voteSengketa.deleteMany({
+        where: {
+            user_voter_nik: user_voter_nik,
+            no_sertifikat: no_sertifikat,
+            user_nik: user_nik
+        }
+    })
+    return "success";
+}
+
+
+
+const getAllLaporanSortByVoteCount = async () => { 
+    const laporans = await prismaClient.$queryRaw`
+        SELECT l.no_sertifikat, l.latitude, l.longitude, l.proses_laporan, l.tanggal_lapor, l.deskripsi, l.user_nik, (SELECT f.url FROM foto_laporan f WHERE f.no_sertifikat = l.no_sertifikat LIMIT 1) AS fotos, COUNT(v.no_sertifikat) as vote_count 
+        FROM laporans l 
+        LEFT JOIN vote_sengketa v ON l.no_sertifikat = v.no_sertifikat 
+        LEFT JOIN foto_laporan f ON l.no_sertifikat = f.no_sertifikat
+        GROUP BY l.no_sertifikat, l.latitude, l.longitude, l.proses_laporan, l.tanggal_lapor, l.deskripsi, l.user_nik, fotos
+        ORDER BY vote_count DESC;`;
+    return laporans;
+}
+
+const addCommentLaporan = async (user_commenter_nik, user_nik, no_sertifikat, comment) => {
+    const data = await prismaClient.komentarSengketa.create({
+        data: {
+            user_commenter_nik: user_commenter_nik,
+            user_nik: user_nik,
+            no_sertifikat: no_sertifikat,
+            comment: comment
+        }
+    })
+    return data;
+}
+
+const deleteCommentLaporan = async (id_comment) => {
+    await prismaClient.komentarSengketa.deleteMany({
+        where: {
+            id: id_comment
+        }
+    })
+    return "success";
+}
+
+const getCommentLaporan = async (no_sertifikat, user_nik) => {
+    const data = await prismaClient.komentarSengketa.findMany({
+        where: {
+            no_sertifikat: no_sertifikat,
+            user_nik: user_nik
+        },
+        select: {
+            comment: true,
+            id: true,
+            user : {
+                select: {
+                    nama: true,
+                    foto: true
+                }
+            }
+        }
+    })
+    return data;
+}
 
 export default {
     getMapLaporan,
@@ -289,5 +382,11 @@ export default {
     updateLaporan,
     deleteLaporanPhotos,
     getAllLaporan,
-    getLaporanByUser
+    getLaporanByUser,
+    voteLaporan,
+    unvoteLaporan,
+    getAllLaporanSortByVoteCount,
+    addCommentLaporan,
+    deleteCommentLaporan,
+    getCommentLaporan
 }

@@ -32,7 +32,8 @@ model User {
   replies             Reply[]
   user_favorite_ahli  UserFavoriteAhli[]
   ulasan_ahli         UlasanAhli[]
-
+  vote_sengketa       VoteSengketa[]
+  komentar_sengketa   KomentarSengketa[]
 
   @@map("users")
 }
@@ -47,7 +48,10 @@ model Laporan {
   tanggal_lapor  DateTime @default(now())
 
   user           User    @relation(fields: [user_nik], references: [nik], onDelete: Cascade)
-  fotos          FotoLaporan[]
+  
+  fotos             FotoLaporan[]
+  vote_sengketa     VoteSengketa[]
+  komentar_sengketa KomentarSengketa[]
 
   @@id([no_sertifikat, user_nik])
   @@map("laporans")
@@ -155,4 +159,29 @@ model UserFavoriteAhli {
 
   @@id([email_user, id_ahli])
   @@map("user_favorite_ahli")
+}
+
+model VoteSengketa {
+  no_sertifikat  String
+  user_nik       String
+  user_voter_nik String
+
+  user          User    @relation(fields: [user_voter_nik], references: [nik], onDelete: Cascade)
+  laporan       Laporan @relation(fields: [no_sertifikat, user_nik], references: [no_sertifikat, user_nik], onDelete: Cascade)
+  
+  @@id([no_sertifikat, user_nik, user_voter_nik])
+  @@map("vote_sengketa")
+}
+
+model KomentarSengketa {
+  no_sertifikat      String
+  user_nik           String
+  user_commenter_nik String
+  id                 String @id @default(uuid())
+  comment            String
+
+  user          User    @relation(fields: [user_commenter_nik], references: [nik], onDelete: Cascade)
+  laporan       Laporan @relation(fields: [no_sertifikat, user_nik], references: [no_sertifikat, user_nik], onDelete: Cascade) 
+
+  @@map("komentar_sengketa")  
 }

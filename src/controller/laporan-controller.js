@@ -105,6 +105,73 @@ const getLaporanSengketaByUser = async (req, res, next) => {
     }
 }
 
+const voteLaporanSengketa = async (req, res, next) => {
+    try {
+        const result = await laporanService.voteLaporan(req.user.nik, req.body.no_sertifikat, req.body.user_nik);
+        res.status(200).json({
+            data: result
+        });
+    } catch (e) {
+        next(e);
+    }
+}
+
+const unvoteLaporanSengketa = async (req, res, next) => {
+    try {
+        const result = await laporanService.unvoteLaporan(req.user.nik, req.body.no_sertifikat, req.body.user_nik);
+        res.status(200).json({
+            data: result
+        });
+    } catch (e) {
+        next(e);
+    }
+}
+
+
+const getAllLaporanSortByVoteCount = async (req, res, next) => {
+    try {
+        const result = await laporanService.getAllLaporanSortByVoteCount();
+        res.status(200).json({
+            data: result
+        });
+    } catch (e) {
+        next(e);
+    }
+}
+
+const addCommentLaporanSengketa = async (req, res, next) => {
+    try {
+        const result = await laporanService.addCommentLaporan(req.user.nik, req.body.user_nik, req.body.no_sertifikat, req.body.comment);
+        res.status(200).json({
+            data: result
+        });
+    } catch (e) {
+        next(e);
+    }
+}
+
+const deleteCommentLaporanSengketa = async (req, res, next) => {
+    try {
+        const result = await laporanService.deleteCommentLaporan(req.body.id_comment);
+        res.status(200).json({
+            data: result
+        });
+    } catch (e) {
+        next(e);
+    }
+}
+
+const getCommentLaporanSengketa = async (req, res, next) => {
+    try {
+        const result = await laporanService.getCommentLaporan(req.params.no_sertifikat, req.params.user_nik);
+        res.status(200).json({
+            data: result
+        });
+    } catch (e) {
+        next(e);
+    }
+}
+
 export default {
     getKoordinatSengketa,
     getLaporanSengketa,
@@ -114,5 +181,11 @@ export default {
     deleteLaporanPhotos,
     addLaporanPhotos,
     getAllLaporanSengketa,
-    getLaporanSengketaByUser
+    getLaporanSengketaByUser,
+    voteLaporanSengketa,
+    unvoteLaporanSengketa,
+    getAllLaporanSortByVoteCount,
+    addCommentLaporanSengketa,
+    deleteCommentLaporanSengketa,
+    getCommentLaporanSengketa
 }

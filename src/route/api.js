@@ -18,15 +18,21 @@ userRouter.get('/api/users/current', userController.get);
 userRouter.delete('/api/users/logout', userController.logout);
 userRouter.put('/api/users/update', multerMiddleware, userController.updateUser);
 
-userRouter.post('/api/laporan/create', multerMiddleware, laporanController.createLaporanSengketa);
 userRouter.get('/api/map/get', laporanController.getKoordinatSengketa);
 userRouter.get('/api/laporan/:user_nik/:no_sertifikat/get/', laporanController.getLaporanSengketa);
 userRouter.get('/api/laporan/:no_sertifikat/get/', laporanController.getLaporanSengketa);
-userRouter.delete('/api/laporan/delete/', laporanController.deleteLaporanSengketa);
-userRouter.put('/api/laporan/update/', laporanController.updateLaporanSengketa);
-userRouter.delete('/api/laporan/photos/delete', laporanController.deleteLaporanPhotos);
-userRouter.put('/api/laporan/photos/add', multerMiddleware, laporanController.addLaporanPhotos);
+userRouter.get('/api/laporan/get/by/vote', laporanController.getAllLaporanSortByVoteCount);
 userRouter.get('/api/laporan/get/user', laporanController.getLaporanSengketaByUser);
+userRouter.get('/api/laporan/:user_nik/:no_sertifikat/comment/getall', laporanController.getCommentLaporanSengketa);
+userRouter.delete('/api/laporan/delete/', laporanController.deleteLaporanSengketa);
+userRouter.delete('/api/laporan/photos/delete', laporanController.deleteLaporanPhotos);
+userRouter.delete('/api/laporan/unvote', laporanController.unvoteLaporanSengketa);
+userRouter.delete('/api/laporan/comment/delete', laporanController.deleteCommentLaporanSengketa);
+userRouter.put('/api/laporan/update/', laporanController.updateLaporanSengketa);
+userRouter.put('/api/laporan/photos/add', multerMiddleware, laporanController.addLaporanPhotos);
+userRouter.post('/api/laporan/create', multerMiddleware, laporanController.createLaporanSengketa);
+userRouter.post('/api/laporan/vote', laporanController.voteLaporanSengketa);
+userRouter.post('/api/laporan/comment/add', laporanController.addCommentLaporanSengketa);
 
 userRouter.get('/api/edukasi/:id/get', edukasiController.getPostEdukasi);
 userRouter.get('/api/edukasi/get', edukasiController.getPostEdukasiAll);

@@ -324,32 +324,39 @@
 ---
 
 ### 3. Get Laporan
-- **url:** `/api/laporan/:no_sertifikat/get`  
+- **url:** `/api/laporan/:user_nik/:no_sertifikat/get`  
 - **Method:** `GET`  
-- **Description:** Mendapatkan laporan berdasarkan nomor sertifikat.  
+- **Description:** Mendapatkan laporan berdasarkan nomor sertifikat dan nik user pelapor.  
 - **Headers:**  
   - `Authorization: Bearer <token>`
-**Request Body:**
-```json
-{
-	"user_nik": "string" // opsional
-}
-```
 **Responses:**
 - `200 OK`: Berhasil mendapatkan laporan.
 ```json
+
 {
-  "data": {
-    "latitude": "float",
-    "longitude": "float",
-    "no_sertifikat": "string",
-    "user_nik": "string",
-    "deskripsi": "string",
-    "proses_laporan": "string",
-    "tanggal_lapor": "string",
-    "fotos": ["url1", "url2", ...]
-  }
+    "data": {
+        "latitude": -6.966150271,
+        "longitude": 107.6612558,
+        "no_sertifikat": "10.15.2...",
+        "user_nik": "123456...",
+        "deskripsi": "Tanah atas nama Coki, meng...",
+        "proses_laporan": "Diproses",
+        "tanggal_lapor": "2024-05-04T...",
+        "fotos": ["https://storage.go ...."],
+        "komentar_sengketa": [
+            {
+                "comment": "isi komen",
+                "id": "704ed6f1-cd...",
+                "user": {
+                    "nama": "Daf...",
+                    "foto": "https://storage.go..."
+                }
+            }
+        ],
+        "count_lapor": 1 // jumlah laporan yang memiliki no sertifikat yang sama
+    }
 }
+
 ```
 - `404 Not Found`: Laporan tidak ditemukan.
 - `500 Internal Server Error`: Kesalahan server.
@@ -538,6 +545,137 @@
     }
 }
 ```
+
+### 10. mendapatkan seluruh Laporan Sengketa berdasarkan jumlah vote
+**Endpoint:** `/api/laporan/get/by/vote`  
+**Method:** `GET`  
+**Headers:**  
+- `Authorization: Bearer <token>`
+
+**Responses:**
+```json
+{
+    "data": {
+        "latitude": "double",
+        "longitude": "double",
+        "no_sertifikat": "string",
+        "user_nik": "string",
+        "deskripsi": "string",
+        "proses_laporan": "string",
+        "tanggal_lapor": "string",
+        "fotos": "url1", // hanya mengembalikan 1 foto pertama
+        "vote_count": "integer"
+    }
+}
+```
+
+### 11. menambahkan vote ke laporan sengketa
+**Endpoint:** `/api/laporan/vote`  
+**Method:** `POST`  
+**Headers:**  
+- `Authorization: Bearer <token>`
+
+**Request:**
+```json
+{
+  "no_sertifikat": "string", 
+  "user_nik": "string" // nik milik pelapor bukan milik voter
+}
+```
+**Responses:**
+```json
+{
+    "data": "success"
+}
+```
+
+### 12. menghapus vote ke laporan sengketa
+**Endpoint:** `/api/laporan/unvote`  
+**Method:** `DELETE`  
+**Headers:**  
+- `Authorization: Bearer <token>`
+
+**Request:**
+```json
+{
+  "no_sertifikat": "string", 
+  "user_nik": "string" // nik milik pelapor bukan milik voter
+}
+```
+**Responses:**
+```json
+{
+    "data": "success"
+}
+```
+
+### 13. menambahkan comment ke laporan sengketa
+**Endpoint:** `/api/laporan/comment/add`  
+**Method:** `POST`  
+**Headers:**  
+- `Authorization: Bearer <token>`
+
+**Request:**
+```json
+{
+  "no_sertifikat": "string", 
+  "user_nik": "string", // nik milik pelapor bukan milik voter
+  "comment": "string" // isi comment
+}
+```
+**Responses:**
+```json
+{
+    "data": {
+        "user_commenter_nik": "user_commenter_nik",
+        "user_nik": "user_nik",
+        "no_sertifikat": "no_sertifikat",
+        "comment": "comment"
+    }
+}
+```
+
+### 14. menghapus comment di laporan sengketa
+**Endpoint:** `/api/laporan/comment/delete`
+**Method:** `DELETE`  
+**Headers:**  
+- `Authorization: Bearer <token>`
+
+**Request:**
+```json
+{
+  "id": "string"
+}
+```
+**Responses:**
+```json
+{
+    "data": "succes"
+}
+```
+
+### 15. mendapatkan komen pada laporan sengketa
+**Endpoint:** `/api/laporan/:user_nik/:no_sertifikat/comment/getall`
+**Method:** `GET`  
+**Headers:**  
+- `Authorization: Bearer <token>`
+**Responses:**
+```json
+{
+    "data": [
+        {
+            "comment": "comment",
+            "id": "704ed6f1-cd...",
+            "user": {
+                "nama": "Daf..",
+                "foto": "https://storage.goo..."
+            }
+        }
+    ]
+}
+```
+
+
 </details>
 
 
