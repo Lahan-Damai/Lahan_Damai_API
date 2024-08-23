@@ -46,6 +46,7 @@ model Laporan {
   latitude       Float
   longitude      Float
   tanggal_lapor  DateTime @default(now())
+  vote           Int   @default(0)
 
   user           User    @relation(fields: [user_nik], references: [nik], onDelete: Cascade)
   
@@ -179,6 +180,7 @@ model KomentarSengketa {
   user_commenter_nik String
   id                 String @id @default(uuid())
   comment            String
+  tanggal_upload     DateTime  @default(now())
 
   user          User    @relation(fields: [user_commenter_nik], references: [nik], onDelete: Cascade)
   laporan       Laporan @relation(fields: [no_sertifikat, user_nik], references: [no_sertifikat, user_nik], onDelete: Cascade) 

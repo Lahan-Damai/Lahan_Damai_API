@@ -23,12 +23,22 @@ const getMapLaporan = async () => {
     return koordinatLaporan;
 }
 
-const getLaporan = async (no_sertifikat, user_nik) => {
+const getLaporan = async (no_sertifikat, user_nik, user_voter_nik) => {
     let countLapor = await prismaClient.laporan.count({
         where: {
             no_sertifikat: no_sertifikat
         }
     });
+
+    const isVoted = await prismaClient.voteSengketa.findUnique({
+        where: {
+            no_sertifikat_user_nik_user_voter_nik: {
+                user_nik: user_nik,
+                no_sertifikat: no_sertifikat,
+                user_voter_nik: user_voter_nik
+            }
+        }
+    }) ? true : false;
 
     const laporan = await prismaClient.laporan.findUnique({
         where: {
@@ -45,6 +55,7 @@ const getLaporan = async (no_sertifikat, user_nik) => {
             deskripsi: true,
             proses_laporan: true,
             tanggal_lapor: true,
+            vote: true,
             fotos: {
                 select: {
                     url: true
@@ -53,10 +64,12 @@ const getLaporan = async (no_sertifikat, user_nik) => {
             komentar_sengketa: {
                 select: {
                     comment: true,
+                    tanggal_upload: true,
                     id: true,
                     user: {
                         select: {
                             nama: true,
+                            nik: true,
                             foto: true
                         }
                     }
@@ -72,7 +85,8 @@ const getLaporan = async (no_sertifikat, user_nik) => {
     const transformedLaporans = {
         ...laporan,
         fotos: laporan.fotos.map(foto => foto.url),
-        count_lapor: countLapor
+        count_lapor: countLapor,
+        is_voted: isVoted
     }  
 
 
@@ -327,13 +341,11 @@ const unvoteLaporan = async (user_voter_nik, no_sertifikat, user_nik) => {
 
 
 const getAllLaporanSortByVoteCount = async () => { 
-    const laporans = await prismaClient.$queryRaw`
-        SELECT l.no_sertifikat, l.latitude, l.longitude, l.proses_laporan, l.tanggal_lapor, l.deskripsi, l.user_nik, (SELECT f.url FROM foto_laporan f WHERE f.no_sertifikat = l.no_sertifikat LIMIT 1) AS fotos, COUNT(v.no_sertifikat) as vote_count 
-        FROM laporans l 
-        LEFT JOIN vote_sengketa v ON l.no_sertifikat = v.no_sertifikat 
-        LEFT JOIN foto_laporan f ON l.no_sertifikat = f.no_sertifikat
-        GROUP BY l.no_sertifikat, l.latitude, l.longitude, l.proses_laporan, l.tanggal_lapor, l.deskripsi, l.user_nik, fotos
-        ORDER BY vote_count DESC;`;
+    const laporans = await prismaClient.laporan.findMany({
+        orderBy: {
+            vote: 'desc'
+        }
+    })
     return laporans;
 }
 

@@ -343,12 +343,15 @@
         "proses_laporan": "Diproses",
         "tanggal_lapor": "2024-05-04T...",
         "fotos": ["https://storage.go ...."],
+        "is_voted": false,
+        "vote": 10, // jumlah vote
         "komentar_sengketa": [
             {
                 "comment": "isi komen",
                 "id": "704ed6f1-cd...",
                 "user": {
                     "nama": "Daf...",
+                    "nik": "1234..",
                     "foto": "https://storage.go..."
                 }
             }
