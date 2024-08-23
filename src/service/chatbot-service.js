@@ -1,5 +1,6 @@
 import vdb from "../application/vdb.js";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { bucket } from "../application/storage.js";
 
 const API_KEY = "AIzaSyDZoWiABYgRKzeWRp-z89XDtG8fS_eJ2QU";
 const genAI = new GoogleGenerativeAI(API_KEY);  
@@ -28,6 +29,20 @@ const generateAnswer = async (query) => {
     });
 
     return result.response.text();
+}
+
+const postFileToGoogleCloudStorage = async (req) => {
+    const file = req.file;
+    const blob = bucket.file(file.originalname);
+    const blobStream = blob.createWriteStream();
+    blobStream.on('error', (err) => {
+        console.log(err);
+    });
+    blobStream.on('finish', async () => {
+        const publicUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
+        console.log(publicUrl);
+    });
+    blobStream.end(file.buffer);
 }
 
 export default {

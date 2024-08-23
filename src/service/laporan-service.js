@@ -92,10 +92,8 @@ const addPhotosToLaporan = async (no_sertifikat, user_nik, req) => {
 
     const countPhotos = await prismaClient.fotoLaporan.count({
         where: {
-            no_sertifikat_user_nik: {
-                no_sertifikat: no_sertifikat,
-                user_nik: user_nik
-            }
+            no_sertifikat: no_sertifikat,
+            user_nik: user_nik
         }
     });
     
@@ -129,7 +127,8 @@ const addPhotosToLaporan = async (no_sertifikat, user_nik, req) => {
         await prismaClient.fotoLaporan.createMany({
             data: fotoUrls.map(fotoUrl => ({
                 url: fotoUrl,
-                no_sertifikat: no_sertifikat
+                no_sertifikat: no_sertifikat,
+                user_nik: user_nik
             }))
         });
     }
@@ -230,7 +229,8 @@ const deleteLaporanPhotos = async (no_sertifikat, user_nik) => {
 
     await prismaClient.fotoLaporan.deleteMany({
         where: {
-            no_sertifikat: no_sertifikat
+            no_sertifikat: no_sertifikat,
+            user_nik: user_nik
         }
     });
 
