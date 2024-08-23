@@ -79,11 +79,15 @@ const getLaporan = async (no_sertifikat, user_nik) => {
     return transformedLaporans;
 }
 
-const addPhotosToLaporan = async (no_sertifikat, req, user_nik) => {
+const addPhotosToLaporan = async (no_sertifikat, user_nik, req) => {
     let fotoUrls = [];
 
     if (!req.files) {
         return "no files provided";
+    }
+
+    if (!no_sertifikat || !user_nik) {
+        return "no no_sertifikat or user_nik provided";
     }
 
     const countPhotos = await prismaClient.fotoLaporan.count({
@@ -134,10 +138,11 @@ const addPhotosToLaporan = async (no_sertifikat, req, user_nik) => {
 
 const createLaporan = async (request) => {
     const no_sertifikat = request.body.no_sertifikat;
+    const user_nik = request.user.nik;
 
     const laporanData = {
         no_sertifikat: no_sertifikat,
-        user_nik: request.user.nik,
+        user_nik: user_nik,
         deskripsi: request.body.deskripsi,
         latitude: parseFloat(request.body.latitude),
         longitude: parseFloat(request.body.longitude),
@@ -159,7 +164,7 @@ const createLaporan = async (request) => {
         }
     });
 
-    addPhotosToLaporan(no_sertifikat, request);
+    addPhotosToLaporan(no_sertifikat, user_nik, request);
 
     return result;
 }; 
