@@ -35,6 +35,17 @@ const createLaporanSengketa = async (req, res, next) => {
     }
 }
 
+const getLaporanByIdSengketa = async (req, res, next) => {
+    try {
+        const result = await laporanService.getLaporanById(req.params.id, req.user.nik);
+        res.status(200).json({
+            data: result
+        });
+    } catch (e) {
+        next(e);
+    }
+}
+
 const deleteLaporanSengketa = async (req, res, next) => {
     try {
         const user_nik = req.body.user_nik ? req.body.user_nik : req.user.nik;
@@ -187,5 +198,6 @@ export default {
     getAllLaporanSortByVoteCount,
     addCommentLaporanSengketa,
     deleteCommentLaporanSengketa,
-    getCommentLaporanSengketa
+    getCommentLaporanSengketa,
+    getLaporanByIdSengketa
 }

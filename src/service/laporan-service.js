@@ -56,6 +56,7 @@ const getLaporan = async (no_sertifikat, user_nik, user_voter_nik) => {
             proses_laporan: true,
             tanggal_lapor: true,
             vote: true,
+            id: true,
             fotos: {
                 select: {
                     url: true
@@ -149,32 +150,47 @@ const addPhotosToLaporan = async (no_sertifikat, user_nik, req) => {
     return "success";
 }
 
+// helper functions to generate random string
+function generateRandomString(length = 6) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        result += characters[randomIndex];
+    }
+    return result;
+}
+
+
 const createLaporan = async (request) => {
     const no_sertifikat = request.body.no_sertifikat;
     const user_nik = request.user.nik;
+    let id = "";
+    let isLaporanExist = false;
+    
+    do {
+        id = generateRandomString();
+        isLaporanExist = await prismaClient.laporan.findFirst({
+            where: {
+                id: id
+            }
+        }) ? true : false;
+    } while (isLaporanExist);
 
     const laporanData = {
         no_sertifikat: no_sertifikat,
         user_nik: user_nik,
+        id: id,
         deskripsi: request.body.deskripsi,
         latitude: parseFloat(request.body.latitude),
         longitude: parseFloat(request.body.longitude),
-        proses_laporan: request.body.proses_laporan
+        proses_laporan: request.body.proses_laporan,
     };
 
     const laporan = validate(createLaporanValidation, laporanData);
 
     const result = await prismaClient.laporan.create({
-        data: laporan,
-        select: {
-            latitude: true,
-            longitude: true,
-            no_sertifikat: true,
-            user_nik: true,
-            deskripsi: true,
-            proses_laporan: true,
-            tanggal_lapor: true
-        }
+        data: laporan
     });
 
     addPhotosToLaporan(no_sertifikat, user_nik, request);
@@ -225,6 +241,74 @@ const updateLaporan = async (request, no_sertifikat, user_nik) => {
     
     return laporan;
 };
+
+const getLaporanById = async (id_laporan, user_voter_nik) => {
+    const laporan = await prismaClient.laporan.findUnique({
+        where: {
+            id: id_laporan
+        },
+        select: {
+            latitude: true,
+            longitude: true,
+            no_sertifikat: true,
+            user_nik: true,
+            deskripsi: true,
+            proses_laporan: true,
+            tanggal_lapor: true,
+            vote: true,
+            id: true,
+            fotos: {
+                select: {
+                    url: true
+                }
+            },
+            komentar_sengketa: {
+                select: {
+                    comment: true,
+                    tanggal_upload: true,
+                    id: true,
+                    user: {
+                        select: {
+                            nama: true,
+                            nik: true,
+                            foto: true
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    if (!laporan) {
+        return "Laporan not found";
+    }
+
+    let countLapor = await prismaClient.laporan.count({
+        where: {
+            no_sertifikat: laporan.no_sertifikat
+        }
+    });
+
+    const isVoted = await prismaClient.voteSengketa.findUnique({
+        where: {
+            no_sertifikat_user_nik_user_voter_nik: {
+                user_nik: laporan.user_nik,
+                no_sertifikat: laporan.no_sertifikat,
+                user_voter_nik: user_voter_nik
+            }
+        }
+    }) ? true : false;
+
+    const transformedLaporans = {
+        ...laporan,
+        fotos: laporan.fotos.map(foto => foto.url),
+        count_lapor: countLapor,
+        is_voted: isVoted
+    }  
+
+
+    return transformedLaporans;
+}
 
 const deleteLaporanPhotos = async (no_sertifikat, user_nik) => {
     const laporanPhotos = await prismaClient.fotoLaporan.findMany({
@@ -405,5 +489,6 @@ export default {
     getAllLaporanSortByVoteCount,
     addCommentLaporan,
     deleteCommentLaporan,
-    getCommentLaporan
+    getCommentLaporan,
+    getLaporanById
 }

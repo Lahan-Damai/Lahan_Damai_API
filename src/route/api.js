@@ -20,6 +20,7 @@ userRouter.put('/api/users/update', multerMiddleware, userController.updateUser)
 
 userRouter.get('/api/map/get', laporanController.getKoordinatSengketa);
 userRouter.get('/api/laporan/:user_nik/:no_sertifikat/get/', laporanController.getLaporanSengketa);
+userRouter.get('/api/laporan/:id/id', laporanController.getLaporanByIdSengketa);
 userRouter.get('/api/laporan/:no_sertifikat/get/', laporanController.getLaporanSengketa);
 userRouter.get('/api/laporan/get/by/vote', laporanController.getAllLaporanSortByVoteCount);
 userRouter.get('/api/laporan/get/user', laporanController.getLaporanSengketaByUser);

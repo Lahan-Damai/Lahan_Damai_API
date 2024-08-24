@@ -46,7 +46,8 @@ model Laporan {
   latitude       Float
   longitude      Float
   tanggal_lapor  DateTime @default(now())
-  vote           Int   @default(0)
+  vote           Int      @default(0)
+  id             String   @unique @db.VarChar(6)
 
   user           User    @relation(fields: [user_nik], references: [nik], onDelete: Cascade)
   

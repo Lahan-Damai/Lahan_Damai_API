@@ -345,6 +345,7 @@
         "fotos": ["https://storage.go ...."],
         "is_voted": false,
         "vote": 10, // jumlah vote
+        "id": "ewradf",
         "komentar_sengketa": [
             {
                 "comment": "isi komen",
@@ -677,7 +678,40 @@
     ]
 }
 ```
+### 16. Get Laporan by laporan id
+- **url:** `/api/laporan/:id/id`  
+- **Method:** `GET`  
+- **Headers:**  
+  - `Authorization: Bearer <token>`
+```json
 
+{
+    "data": {
+        "latitude": -6.966150271,
+        "longitude": 107.6612558,
+        "no_sertifikat": "10.15.2...",
+        "user_nik": "123456...",
+        "deskripsi": "Tanah atas nama Coki, meng...",
+        "proses_laporan": "Diproses",
+        "tanggal_lapor": "2024-05-04T...",
+        "fotos": ["https://storage.go ...."],
+        "is_voted": false,
+        "vote": 10, // jumlah vote
+        "id": "ewradf",
+        "komentar_sengketa": [
+            {
+                "comment": "isi komen",
+                "id": "704ed6f1-cd...",
+                "user": {
+                    "nama": "Daf...",
+                    "nik": "1234..",
+                    "foto": "https://storage.go..."
+                }
+            }
+        ],
+        "count_lapor": 1 // jumlah laporan yang memiliki no sertifikat yang sama
+    }
+}
 
 </details>
 

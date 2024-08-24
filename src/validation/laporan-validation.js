@@ -9,6 +9,7 @@ const createLaporanValidation = Joi.object({
     deskripsi: Joi.string().required(),
     proses_laporan: Joi.string().required(),
     tanggal_lapor: Joi.date().iso(),
+    id: Joi.string().max(6).required(),
 });
 
 const createFotoLaporanValidation = Joi.object({
