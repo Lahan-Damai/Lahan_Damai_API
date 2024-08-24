@@ -348,9 +348,25 @@ const getAllLaporan = async () => {
             deskripsi: true,
             proses_laporan: true,
             tanggal_lapor: true,
+            vote: true,
+            id: true,
             fotos: {
                 select: {
                     url: true
+                }
+            },
+            komentar_sengketa: {
+                select: {
+                    comment: true,
+                    tanggal_upload: true,
+                    id: true,
+                    user: {
+                        select: {
+                            nama: true,
+                            nik: true,
+                            foto: true
+                        }
+                    }
                 }
             }
         }
@@ -381,9 +397,25 @@ const getLaporanByUser = async (nik) => {
             deskripsi: true,
             proses_laporan: true,
             tanggal_lapor: true,
+            vote: true,
+            id: true,
             fotos: {
                 select: {
                     url: true
+                }
+            },
+            komentar_sengketa: {
+                select: {
+                    comment: true,
+                    tanggal_upload: true,
+                    id: true,
+                    user: {
+                        select: {
+                            nama: true,
+                            nik: true,
+                            foto: true
+                        }
+                    }
                 }
             }
         }
