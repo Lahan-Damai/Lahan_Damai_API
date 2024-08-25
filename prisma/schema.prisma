@@ -188,3 +188,12 @@ model KomentarSengketa {
 
   @@map("komentar_sengketa")  
 }
+
+model FileContext {
+  url        String
+  uu_name    String
+  id         String @id @default(uuid())
+  is_inserted Boolean @default(false)
+
+  @@map("file_context")
+}

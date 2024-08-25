@@ -48,9 +48,58 @@ const insertFileToChromaDb = async (req, res, next) => {
     }
 }
 
+
+const postFileToGoogleCloudStorage = async (req, res, next) => {
+    try {
+        const result = await chatbotService.postFileToGoogleCloudStorage(req);
+        res.status(200).json({
+            data: result
+        });
+    } catch (e) {
+        next(e);   
+    }
+};
+
+const deleteAllContextFile = async (req, res, next) => {
+    try {
+        await chatbotService.deleteAllContextFile();
+        res.status(200).json({
+            data: "success"
+        });
+    } catch (e) {
+        next(e);
+    }
+}
+
+const insertAllContextFileToVectorDatabase = async (req, res, next) => {
+    try {
+        await chatbotService.insertAllContextFileToVectorDatabase();
+        res.status(200).json({
+            data: "success"
+        });
+    } catch (e) {
+        next(e);
+    }
+}
+
+const resetCollection = async (req, res, next) => {
+    try {
+        await chatbotService.resetCollection();
+        res.status(200).json({
+            data: "success"
+        });
+    } catch (e) {
+        next(e);
+    }
+}
+
 export default {
     generateAnswer,
     deleteCollection,
     insertFileToChromaDb,
-    createCollection
+    createCollection,
+    postFileToGoogleCloudStorage,
+    deleteAllContextFile,
+    insertAllContextFileToVectorDatabase,
+    resetCollection
 }

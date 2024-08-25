@@ -29,6 +29,10 @@ adminRouter.get('/api/laporan/get/all', laporanController.getAllLaporanSengketa)
 adminRouter.delete('/api/chatbot/delete-collection', chatbotController.deleteCollection);
 adminRouter.post('/api/chatbot/create-collection', chatbotController.createCollection);
 adminRouter.post('/api/chatbot/insert-document', chatbotController.insertFileToChromaDb);
+adminRouter.post('/api/chatbot/context/add', multerMiddleware, chatbotController.postFileToGoogleCloudStorage);
+adminRouter.post('/api/chatbot/context/add-to-vdb/all', multerMiddleware, chatbotController.insertAllContextFileToVectorDatabase);
+adminRouter.delete('/api/chatbot/context/delete/all', chatbotController.deleteAllContextFile);
+adminRouter.delete('/api/chatbot/reset-collection', chatbotController.resetCollection);
 
 export {
     adminRouter

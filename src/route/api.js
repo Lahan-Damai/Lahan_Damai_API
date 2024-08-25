@@ -65,7 +65,6 @@ userRouter.put('/api/forum/reply/:id/update', forumController.updateReplyForum);
 
 userRouter.post('/api/chatbot/generate', chatbotController.generateAnswer);
 
-
 export {
     userRouter
 }
