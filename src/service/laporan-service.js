@@ -335,7 +335,26 @@ const deleteLaporanPhotos = async (no_sertifikat, user_nik) => {
     return "success";
 }
 
-const getAllLaporan = async () => {
+const getAllLaporan = async (user_nik) => {
+    const voteLaporan = await prismaClient.laporan.findMany({
+        select: {
+            no_sertifikat: true,
+            vote_sengketa: {
+                select: {
+                    user_voter_nik: true
+                }
+            }
+        }
+    });
+
+    const listOfNoSertifikatThatUserVoted = voteLaporan.reduce((acc, laporan) => {
+        const isVotedByUser = laporan.vote_sengketa.filter(vote => {return vote.user_voter_nik === user_nik;}).length > 0;
+        if (isVotedByUser) {
+            acc.push(laporan.no_sertifikat);
+        }
+        return acc;
+    }, []);
+
     const laporans = await prismaClient.laporan.findMany({
         orderBy: {
             tanggal_lapor: 'desc'
@@ -374,7 +393,8 @@ const getAllLaporan = async () => {
 
     const transformedLaporans = laporans.map(laporan => ({
         ...laporan,
-        fotos: laporan.fotos.map(photo => photo.url)
+        fotos: laporan.fotos.map(photo => photo.url),
+        is_voted: listOfNoSertifikatThatUserVoted.includes(laporan.no_sertifikat)
     }));
 
     return transformedLaporans;
@@ -421,9 +441,33 @@ const getLaporanByUser = async (nik) => {
         }
     });
 
+    const voteLaporan = await prismaClient.laporan.findMany({
+        where: {
+            user_nik: nik
+        },
+        select: {
+            no_sertifikat: true,
+            vote_sengketa: {
+                select: {
+                    user_voter_nik: true
+                }
+            }
+        }
+    });
+
+
+    const listOfNoSertifikatThatUserVoted = voteLaporan.reduce((acc, laporan) => {
+        const isVotedByUser = laporan.vote_sengketa.filter(vote => {return vote.user_voter_nik === nik;}).length > 0;
+        if (isVotedByUser) {
+            acc.push(laporan.no_sertifikat);
+        }
+        return acc;
+    }, []);
+
     const transformedLaporans = laporans.map(laporan => ({
         ...laporan,
-        fotos: laporan.fotos.map(photo => photo.url)
+        fotos: laporan.fotos.map(photo => photo.url),
+        is_voted: listOfNoSertifikatThatUserVoted.includes(laporan.no_sertifikat)
     }));
 
 

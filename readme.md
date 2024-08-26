@@ -503,19 +503,37 @@
 ```json
 {
   "data": [
-    {
-      "latitude": "string",
-      "longitude": "string",
-      "no_sertifikat": "string",
-      "user_nik": "string",
-      "deskripsi": "string",
-      "proses_laporan": "string",
-      "fotos": ["url1", "url2", ...]
-    },
+      {
+          "latitude": -6....,
+          "longitude": 106...,
+          "no_sertifikat": "10.15.22...",
+          "user_nik": "1234567...",
+          "deskripsi": "Tanah atas nama muh..",
+          "proses_laporan": "Diproses",
+          "tanggal_lapor": "2024-06-...",
+          "vote": 1,
+          "id": "pun..",
+          "fotos": [
+              "https://stora..."
+          ],
+          "komentar_sengketa": [
+            {
+                "comment": "isi komen",
+                "id": "704ed6f1-cd...",
+                "user": {
+                    "nama": "Daf...",
+                    "nik": "1234..",
+                    "foto": "https://storage.go..."
+                }
+            }
+          ],
+          "is_voted": false
+      },
     ...
   ]
 }
 ```
+
 - `500 Internal Server Error`: Kesalahan server.
 
 ---
@@ -537,16 +555,35 @@
 **Responses:**
 ```json
 {
-    "data": {
-        "latitude": "string",
-        "longitude": "string",
-        "no_sertifikat": "string",
-        "user_nik": "string",
-        "deskripsi": "string",
-        "proses_laporan": "string",
-        "tanggal_lapor": "string",
-        "fotos": ["url1", "url2", ...]
-    }
+  "data": [
+      {
+          "latitude": -6....,
+          "longitude": 106...,
+          "no_sertifikat": "10.15.22...",
+          "user_nik": "1234567...",
+          "deskripsi": "Tanah atas nama muh..",
+          "proses_laporan": "Diproses",
+          "tanggal_lapor": "2024-06-...",
+          "vote": 1,
+          "id": "pun..",
+          "fotos": [
+              "https://stora..."
+          ],
+          "komentar_sengketa": [
+            {
+                "comment": "isi komen",
+                "id": "704ed6f1-cd...",
+                "user": {
+                    "nama": "Daf...",
+                    "nik": "1234..",
+                    "foto": "https://storage.go..."
+                }
+            }
+          ],
+          "is_voted": false
+      },
+    ...
+  ]
 }
 ```
 

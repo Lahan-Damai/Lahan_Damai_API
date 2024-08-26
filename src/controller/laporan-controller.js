@@ -96,7 +96,7 @@ const addLaporanPhotos = async (req, res, next) => {
 
 const getAllLaporanSengketa = async (req, res, next) => {
     try {
-        const result = await laporanService.getAllLaporan();
+        const result = await laporanService.getAllLaporan(req.user.nik);
         res.status(200).json({
             data: result
         });
