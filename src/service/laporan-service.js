@@ -500,13 +500,69 @@ const unvoteLaporan = async (user_voter_nik, no_sertifikat, user_nik) => {
 
 
 
-const getAllLaporanSortByVoteCount = async () => { 
+const getAllLaporanSortByVoteCount = async (user_nik) => { 
+    const voteLaporan = await prismaClient.laporan.findMany({
+        select: {
+            no_sertifikat: true,
+            vote_sengketa: {
+                select: {
+                    user_voter_nik: true
+                }
+            }
+        }
+    });
+
+    const listOfNoSertifikatThatUserVoted = voteLaporan.reduce((acc, laporan) => {
+        const isVotedByUser = laporan.vote_sengketa.filter(vote => {return vote.user_voter_nik === user_nik;}).length > 0;
+        if (isVotedByUser) {
+            acc.push(laporan.no_sertifikat);
+        }
+        return acc;
+    }, []);
+
     const laporans = await prismaClient.laporan.findMany({
         orderBy: {
             vote: 'desc'
+        },
+        select: {
+            latitude: true,
+            longitude: true,
+            no_sertifikat: true,
+            user_nik: true,
+            deskripsi: true,
+            proses_laporan: true,
+            tanggal_lapor: true,
+            vote: true,
+            id: true,
+            fotos: {
+                select: {
+                    url: true
+                }
+            },
+            komentar_sengketa: {
+                select: {
+                    comment: true,
+                    tanggal_upload: true,
+                    id: true,
+                    user: {
+                        select: {
+                            nama: true,
+                            nik: true,
+                            foto: true
+                        }
+                    }
+                }
+            }
         }
-    })
-    return laporans;
+    });
+
+    const transformedLaporans = laporans.map(laporan => ({
+        ...laporan,
+        fotos: laporan.fotos.map(photo => photo.url),
+        is_voted: listOfNoSertifikatThatUserVoted.includes(laporan.no_sertifikat)
+    }));
+
+    return transformedLaporans;
 }
 
 const addCommentLaporan = async (user_commenter_nik, user_nik, no_sertifikat, comment) => {

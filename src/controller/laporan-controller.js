@@ -141,7 +141,7 @@ const unvoteLaporanSengketa = async (req, res, next) => {
 
 const getAllLaporanSortByVoteCount = async (req, res, next) => {
     try {
-        const result = await laporanService.getAllLaporanSortByVoteCount();
+        const result = await laporanService.getAllLaporanSortByVoteCount(req.user.nik);
         res.status(200).json({
             data: result
         });
