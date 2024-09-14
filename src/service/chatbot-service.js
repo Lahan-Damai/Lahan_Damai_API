@@ -6,6 +6,15 @@ import { prismaClient } from "../application/database.js";
 const API_KEY = "AIzaSyDZoWiABYgRKzeWRp-z89XDtG8fS_eJ2QU";
 const genAI = new GoogleGenerativeAI(API_KEY);  
 
+/**
+ * Generate an answer to a given question using the Gemini 1.5 flash model.
+ * The answer will be generated based on the context of the question, which
+ * is retrieved from the vector database.
+ *
+ * @param {string} query The question to be answered.
+ * @returns {string} The answer to the question.
+ */
+
 const generateAnswer = async (query) => {
     if (!query) return "Maaf, pertanyaanmu tidak boleh kosong.";
 
@@ -32,6 +41,11 @@ const generateAnswer = async (query) => {
     return result.response.text();
 }
 
+/**
+ * Upload a file to google cloud storage and store the url to the prisma database
+ * @param {Request} req - The request object
+ * @returns {Promise<string>} - The url of the uploaded file
+ */
 const postFileToGoogleCloudStorage = async (req) => {
     if (!req.files) {
         return "no files provided";
@@ -65,6 +79,11 @@ const postFileToGoogleCloudStorage = async (req) => {
     return result;
 }
 
+
+/**
+ * Deletes all context files from google cloud storage and the database
+ * @returns {Promise<void>}
+ */
 const deleteAllContextFile = async () => {
     const contextList = await prismaClient.fileContext.findMany();
 
@@ -79,8 +98,13 @@ const deleteAllContextFile = async () => {
         const blob = bucket.file('UUTanah/'+fileName);
         await blob.delete();
     }
+    await resetCollection();
 }
 
+/**
+ * Inserts all context files that have not been inserted yet into the ChromaDB
+ * @return {Promise<void>} A promise that resolves when all files have been inserted
+ */
 const insertAllContextFileToVectorDatabase = async () => {
     const contextList = await prismaClient.fileContext.findMany({
         where: {
@@ -92,11 +116,34 @@ const insertAllContextFileToVectorDatabase = async () => {
         await vdb.insertFileToChromaDb('UUTanah/'+fileName, context.uu_name);
         await prismaClient.fileContext.update({where: {id: context.id}, data: {is_inserted: true}});
     }
+    await prismaClient.fileContext.updateMany({
+        where: {
+            is_inserted: false
+        },
+        data: {
+            is_inserted: true
+        }
+    });
 }
 
+/**
+ * Resets the ChromaDB collection by clearing the current collection and creating a new one
+ * @return {Promise<void>} A promise that resolves when the collection has been reset
+ */
 const resetCollection = async () => {
     await vdb.clearCollection();
     await vdb.createCollection();
+    console.log("Collection has been reset");
+}
+
+/**
+ * Get all context documents from the database
+ * @return {Promise<Array<Object>>} A promise that resolves with an array of context documents
+ */
+const getContextDocument = async () => {
+    const contextList = await prismaClient.fileContext.findMany();
+
+    return contextList;
 }
 
 export default {
@@ -104,5 +151,6 @@ export default {
     postFileToGoogleCloudStorage,
     deleteAllContextFile,
     insertAllContextFileToVectorDatabase,
-    resetCollection
+    resetCollection,
+    getContextDocument
 }

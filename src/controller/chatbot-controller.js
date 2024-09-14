@@ -93,6 +93,18 @@ const resetCollection = async (req, res, next) => {
     }
 }
 
+
+const getContextDocument = async (req, res, next) => {
+    try {
+        const result = await chatbotService.getContextDocument();
+        res.status(200).json({
+            data: result
+        });
+    } catch (e) {
+        next(e);
+    }
+}
+
 export default {
     generateAnswer,
     deleteCollection,
@@ -101,5 +113,6 @@ export default {
     postFileToGoogleCloudStorage,
     deleteAllContextFile,
     insertAllContextFileToVectorDatabase,
-    resetCollection
+    resetCollection,
+    getContextDocument
 }

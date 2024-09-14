@@ -26,6 +26,7 @@ adminRouter.get('/api/users/:nik/get/', userController.getOtherUsers);
 
 adminRouter.get('/api/laporan/get/all', laporanController.getAllLaporanSengketa);
 
+adminRouter.get('/api/chatbot/get-context', chatbotController.getContextDocument);
 adminRouter.delete('/api/chatbot/delete-collection', chatbotController.deleteCollection);
 adminRouter.post('/api/chatbot/create-collection', chatbotController.createCollection);
 adminRouter.post('/api/chatbot/insert-document', chatbotController.insertFileToChromaDb);
