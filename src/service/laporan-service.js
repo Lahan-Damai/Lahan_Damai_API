@@ -12,11 +12,17 @@ BigInt.prototype.toJSON = function () {
 
 const getMapLaporan = async () => { 
     const koordinatLaporan = await prismaClient.laporan.findMany({
+        where: {
+            NOT: {
+                proses_laporan: "Diproses"
+            }
+        },
         select: {
             no_sertifikat: true,
             latitude: true,
             longitude: true,
-            user_nik: true
+            user_nik: true,
+            proses_laporan: true
         }
     })
 
