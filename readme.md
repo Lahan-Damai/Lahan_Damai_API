@@ -270,6 +270,7 @@
   "longitude": "float",
   "proses_laporan": "string",
   "foto": [<file1>, <file2>, ...],
+  "foto_dokumen": [<file1>, <file2>, ...],
   "tanggal_lapor": "string"
 }
 ```

@@ -3,6 +3,7 @@ import userController from "../controller/user-controller.js";
 import homeController from "../controller/home-controller.js";
 import {authMiddleware} from "../middleware/auth-middleware.js";
 import { multerMiddleware } from "../middleware/multer-middleware.js";
+import { multersMiddleware } from "../middleware/multers-middleware.js";
 import laporanController from "../controller/laporan-controller.js";
 import edukasiController from "../controller/edukasi-controller.js";
 import konsultasiController from "../controller/konsultasi-controller.js";
@@ -30,8 +31,8 @@ userRouter.delete('/api/laporan/photos/delete', laporanController.deleteLaporanP
 userRouter.delete('/api/laporan/unvote', laporanController.unvoteLaporanSengketa);
 userRouter.delete('/api/laporan/comment/delete', laporanController.deleteCommentLaporanSengketa);
 userRouter.put('/api/laporan/update/', laporanController.updateLaporanSengketa);
-userRouter.put('/api/laporan/photos/add', multerMiddleware, laporanController.addLaporanPhotos);
-userRouter.post('/api/laporan/create', multerMiddleware, laporanController.createLaporanSengketa);
+userRouter.put('/api/laporan/photos/add', multersMiddleware, laporanController.addLaporanPhotos);
+userRouter.post('/api/laporan/create', multersMiddleware, laporanController.createLaporanSengketa);
 userRouter.post('/api/laporan/vote', laporanController.voteLaporanSengketa);
 userRouter.post('/api/laporan/comment/add', laporanController.addCommentLaporanSengketa);
 

@@ -52,6 +52,7 @@ model Laporan {
   user           User    @relation(fields: [user_nik], references: [nik], onDelete: Cascade)
   
   fotos             FotoLaporan[]
+  foto_dokumen      FotoDokumenPendukung[]
   vote_sengketa     VoteSengketa[]
   komentar_sengketa KomentarSengketa[]
 
@@ -68,6 +69,17 @@ model FotoLaporan {
   
   @@id([url, no_sertifikat, user_nik])
   @@map("foto_laporan")
+}
+
+model FotoDokumenPendukung {
+  url           String
+  no_sertifikat String
+  user_nik      String
+
+  laporan       Laporan @relation(fields: [no_sertifikat, user_nik], references: [no_sertifikat, user_nik], onDelete: Cascade)
+  
+  @@id([url, no_sertifikat, user_nik])
+  @@map("foto_dokumen_pendukung")
 }
 
 model Thread {

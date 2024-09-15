@@ -102,6 +102,7 @@ const getLaporan = async (no_sertifikat, user_nik, user_voter_nik) => {
 
 const addPhotosToLaporan = async (no_sertifikat, user_nik, req) => {
     let fotoUrls = [];
+    let fotoDokumenUrls = [];
 
     if (!req.files) {
         return "no files provided";
@@ -118,13 +119,13 @@ const addPhotosToLaporan = async (no_sertifikat, user_nik, req) => {
         }
     });
     
-    const countFiles = req.files ? req.files.length : 0;
+    const countFiles = req.files['foto'] ? req.files['foto'].length : 0;
 
     if (countFiles + countPhotos > 5) {
         return "failed to add photos, exceeding limit of 5 photos per laporan";
     }
 
-    for (const file of req.files) {
+    for (const file of req.files['foto']) {
         const blob = bucket.file(`${no_sertifikat}-${file.originalname}`);
         const blobStream = blob.createWriteStream();
 
@@ -146,6 +147,35 @@ const addPhotosToLaporan = async (no_sertifikat, user_nik, req) => {
     
     if (fotoUrls.length > 0) {
         await prismaClient.fotoLaporan.createMany({
+            data: fotoUrls.map(fotoUrl => ({
+                url: fotoUrl,
+                no_sertifikat: no_sertifikat,
+                user_nik: user_nik
+            }))
+        });
+    }
+
+    for (const file of req.files['foto_dokumen']) {
+        const blob = bucket.file(`${no_sertifikat}-${file.originalname}`);
+        const blobStream = blob.createWriteStream();
+
+        await new Promise((resolve, reject) => {
+            blobStream.on('error', (err) => {
+                reject(err);
+            });
+
+            blobStream.on('finish', () => {
+                const fotoDokumenUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
+                fotoDokumenUrls.push(fotoDokumenUrl);
+                resolve();
+            });
+
+            blobStream.end(file.buffer);
+        });
+    }
+
+    if (fotoUrls.length > 0) {
+        await prismaClient.fotoDokumenPendukung.createMany({
             data: fotoUrls.map(fotoUrl => ({
                 url: fotoUrl,
                 no_sertifikat: no_sertifikat,
