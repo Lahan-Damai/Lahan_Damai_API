@@ -97,6 +97,7 @@ const getLaporan = async (no_sertifikat, user_nik, user_voter_nik) => {
     const transformedLaporans = {
         ...laporan,
         fotos: laporan.fotos.map(foto => foto.url),
+        foto_dokumen: laporan.foto_dokumen.map(foto => foto.url),
         count_lapor: countLapor,
         is_voted: isVoted
     }  
