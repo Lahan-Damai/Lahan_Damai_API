@@ -110,47 +110,44 @@ const addPhotosToLaporan = async (no_sertifikat, user_nik, req) => {
     let fotoUrls = [];
     let fotoDokumenUrls = [];
 
-    if (!req.files) {
-        return "no files provided";
-    }
-
     if (!no_sertifikat || !user_nik) {
         return "no no_sertifikat or user_nik provided";
     }
 
-    const countPhotos = await prismaClient.fotoLaporan.count({
-        where: {
-            no_sertifikat: no_sertifikat,
-            user_nik: user_nik
+    // const countPhotos = await prismaClient.fotoLaporan.count({
+    //     where: {
+    //         no_sertifikat: no_sertifikat,
+    //         user_nik: user_nik
+    //     }
+    // });
+    
+    // const countFiles = req.files['foto'] ? req.files['foto'].length : 0;
+
+    // if (countFiles + countPhotos > 5) {
+    //     return "failed to add photos, exceeding limit of 5 photos per laporan";
+    // }
+
+    if (req.files['foto']) {
+        for (const file of req.files['foto']) {
+            const blob = bucket.file(`${no_sertifikat}-${file.originalname}`);
+            const blobStream = blob.createWriteStream();
+    
+            await new Promise((resolve, reject) => {
+                blobStream.on('error', (err) => {
+                    reject(err);
+                });
+    
+                blobStream.on('finish', () => {
+                    const fotoUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
+                    fotoUrls.push(fotoUrl);
+                    resolve();
+                });
+    
+                blobStream.end(file.buffer);
+            });
         }
-    });
-    
-    const countFiles = req.files['foto'] ? req.files['foto'].length : 0;
-
-    if (countFiles + countPhotos > 5) {
-        return "failed to add photos, exceeding limit of 5 photos per laporan";
     }
 
-    for (const file of req.files['foto']) {
-        const blob = bucket.file(`${no_sertifikat}-${file.originalname}`);
-        const blobStream = blob.createWriteStream();
-
-        await new Promise((resolve, reject) => {
-            blobStream.on('error', (err) => {
-                reject(err);
-            });
-
-            blobStream.on('finish', () => {
-                const fotoUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
-                fotoUrls.push(fotoUrl);
-                resolve();
-            });
-
-            blobStream.end(file.buffer);
-        });
-    }
-
-    
     if (fotoUrls.length > 0) {
         await prismaClient.fotoLaporan.createMany({
             data: fotoUrls.map(fotoUrl => ({
@@ -161,28 +158,30 @@ const addPhotosToLaporan = async (no_sertifikat, user_nik, req) => {
         });
     }
 
-    for (const file of req.files['foto_dokumen']) {
-        const blob = bucket.file(`${no_sertifikat}-${file.originalname}`);
-        const blobStream = blob.createWriteStream();
-
-        await new Promise((resolve, reject) => {
-            blobStream.on('error', (err) => {
-                reject(err);
+    if (req.files['foto_dokumen']) {
+        for (const file of req.files['foto_dokumen']) {
+            const blob = bucket.file(`${no_sertifikat}-${file.originalname}`);
+            const blobStream = blob.createWriteStream();
+    
+            await new Promise((resolve, reject) => {
+                blobStream.on('error', (err) => {
+                    reject(err);
+                });
+    
+                blobStream.on('finish', () => {
+                    const fotoDokumenUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
+                    fotoDokumenUrls.push(fotoDokumenUrl);
+                    resolve();
+                });
+    
+                blobStream.end(file.buffer);
             });
-
-            blobStream.on('finish', () => {
-                const fotoDokumenUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
-                fotoDokumenUrls.push(fotoDokumenUrl);
-                resolve();
-            });
-
-            blobStream.end(file.buffer);
-        });
+        }        
     }
 
-    if (fotoUrls.length > 0) {
+    if (fotoDokumenUrls.length > 0) {
         await prismaClient.fotoDokumenPendukung.createMany({
-            data: fotoUrls.map(fotoUrl => ({
+            data: fotoDokumenUrls.map(fotoUrl => ({
                 url: fotoUrl,
                 no_sertifikat: no_sertifikat,
                 user_nik: user_nik
@@ -235,13 +234,25 @@ const createLaporan = async (request) => {
         data: laporan
     });
 
-    addPhotosToLaporan(no_sertifikat, user_nik, request);
+    if (request.files) {
+        addPhotosToLaporan(no_sertifikat, user_nik, request);
+    }
 
     return result;
 }; 
 
 const deleteLaporan = async (no_sertifikat, user_nik) => {
     
+    const isExist = await prismaClient.laporan.findFirst({
+        where: {
+            no_sertifikat: no_sertifikat,
+            user_nik: user_nik
+        }
+    });
+    if (!isExist) {
+        return "laporan not found";
+    }
+
     deleteLaporanPhotos(no_sertifikat, user_nik);
     
     await prismaClient.laporan.delete({
