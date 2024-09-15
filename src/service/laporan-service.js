@@ -68,6 +68,11 @@ const getLaporan = async (no_sertifikat, user_nik, user_voter_nik) => {
                     url: true
                 }
             },
+            foto_dokumen: {
+                select: {
+                    url: true
+                }
+            },
             komentar_sengketa: {
                 select: {
                     comment: true,
