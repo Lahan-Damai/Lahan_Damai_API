@@ -30,6 +30,7 @@ const getMapLaporan = async () => {
 }
 
 const getLaporan = async (no_sertifikat, user_nik, user_voter_nik) => {
+    const pattern = /^\d{4}-\d{2}-\d{2}( \d{2}:\d{2}(:\d{2}(\.\d+)?)?Z?)?$/;
     let countLapor = await prismaClient.laporan.count({
         where: {
             no_sertifikat: no_sertifikat
@@ -99,7 +100,8 @@ const getLaporan = async (no_sertifikat, user_nik, user_voter_nik) => {
         fotos: laporan.fotos.map(foto => foto.url),
         foto_dokumen: laporan.foto_dokumen.map(foto => foto.url),
         count_lapor: countLapor,
-        is_voted: isVoted
+        is_voted: isVoted,
+        no_sertifikat: pattern.test(no_sertifikat) ? '-' : no_sertifikat,
     }  
 
 
@@ -574,6 +576,11 @@ const getAllLaporanSortByVoteCount = async (user_nik) => {
     }, []);
 
     const laporans = await prismaClient.laporan.findMany({
+        where: {
+            NOT: {
+                proses_laporan: "Diproses"
+            }
+        },
         orderBy: {
             vote: 'desc'
         },
